@@ -55,6 +55,9 @@ const home = readFileSync(join(dist, "index.html"), "utf8");
 for (const store of ["apps.apple.com", "apps.garmin.com"]) {
   if (!home.includes(store)) failures.push(`index.html: no link to ${store}`);
 }
+// The official store badges, App Store first as Apple asks.
+const badges = ["/badges/app-store.svg", "/badges/connect-iq.svg"].map((badge) => home.indexOf(`src="${badge}"`));
+if (badges.includes(-1) || badges[0] > badges[1]) failures.push("index.html: official store badges missing or out of order");
 
 /** The entry names of a zip, read from its central directory. */
 function zipEntries(file) {
