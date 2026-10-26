@@ -1,0 +1,187 @@
+---
+import Prose from "../layouts/Prose.astro";
+import LinkCard from "../components/LinkCard.astro";
+import { site } from "../lib/site";
+
+const facts = [
+  { term: "Prix", detail: "Gratuite, sur l'App Store comme sur Connect IQ." },
+  {
+    term: "Appareils",
+    detail: `iPhone (iOS ${site.minimumOS} ou plus récent), Apple Watch (watchOS ${site.minimumOS} ou plus récent) et montres Garmin, avec l'app Connect IQ.`,
+  },
+  { term: "Compte", detail: "Aucun. Pas de serveur non plus : les données restent sur l'iPhone, la montre et dans l'app Santé." },
+  { term: "Code", detail: "Ouvert, sous licence MIT, sur GitHub." },
+  { term: "Langue", detail: "Français." },
+  { term: "Origine", detail: "Conçue et développée en France." },
+];
+
+const texts = [
+  {
+    title: "En une phrase",
+    paragraphs: [
+      "Foulée est une app gratuite pour iPhone, Apple Watch et Garmin qui transforme la marche ou la course du jour en une série qu'on n'a plus envie de casser.",
+    ],
+  },
+  {
+    title: "En un paragraphe",
+    paragraphs: [
+      "Foulée est une app gratuite pour iPhone, Apple Watch et Garmin qui aide à bouger un peu chaque jour. On fixe un objectif de pas et de minutes d'activité, Foulée prévient juste avant le créneau choisi, et chaque journée réussie fait grandir la série. Elle suit la sortie jusqu'au poignet, reconnaît la marche et la course et les enregistre chacune dans Santé. Sans compte ni serveur : les données restent sur les appareils, et le code est ouvert.",
+    ],
+  },
+  {
+    title: "En détail",
+    paragraphs: [
+      "Foulée est une app gratuite pour iPhone et Apple Watch, avec une app Connect IQ pour les montres Garmin. Son idée tient en une phrase : bouger un peu, chaque jour. On fixe un objectif de pas et de minutes d'activité ; chaque jour où il est atteint allonge la série, et le record attend au tournant. Un rappel arrive juste avant le créneau choisi, puis l'app laisse tranquille.",
+      "Pendant une sortie, Foulée reconnaît quand on passe de la marche à la course, et l'inverse : Santé reçoit une marche et une course, chacune sous le bon sport. Une sortie lancée sur l'Apple Watch s'affiche sur l'iPhone avec son parcours, et l'inverse aussi ; une Live Activity garde l'essentiel sur l'écran verrouillé. Sur une Garmin, l'app Connect IQ affiche la série, la met sur le cadran, lance les sorties et les envoie à l'iPhone.",
+      "Le Bilan fait le point sur la semaine ou le mois : minutes, pas, distance, jours réussis et écart avec la période d'avant, sur douze mois. Il se partage en image, au format carré ou story, sans rien qui dise où ni quand on sort. Foulée suit aussi l'hydratation, un verre par tape.",
+      "Foulée n'a ni compte ni serveur : elle lit et écrit dans l'app Santé d'Apple, et rien ne quitte les appareils pour un serveur de Foulée. Son code est ouvert, sous licence MIT. L'app est en français, conçue et développée en France.",
+    ],
+  },
+];
+
+const visuals = [
+  { file: "foulee-icone.png", title: "Icône", detail: "PNG, 1024 × 1024, carrée", preview: "/apercus/icone.webp", wide: false },
+  { file: "foulee-icone-arrondie.png", title: "Icône arrondie", detail: "PNG, 1024 × 1024, fond transparent", preview: "/apercus/icone.webp", wide: false },
+  { file: "foulee-visuel-sombre.png", title: "Visuel, thème sombre", detail: "PNG, 2400 × 1260", preview: "/apercus/visuel-dark.webp", wide: true },
+  { file: "foulee-visuel-clair.png", title: "Visuel, thème clair", detail: "PNG, 2400 × 1260", preview: "/apercus/visuel-light.webp", wide: true },
+] as const;
+---
+
+<Prose title="Presse" description="Le kit presse de Foulée : textes prêts à reprendre, faits clés, icône et visuels à télécharger, et le contact presse.">
+  <h1>Presse</h1>
+  <p class="lead">Tu écris sur Foulée ? Tout ce qu'il te faut est ici : des textes à reprendre, l'icône, des visuels, et une adresse pour nous écrire.</p>
+
+  <div class="cards">
+    <LinkCard href={`mailto:${site.email}`} title="Contact presse" detail={site.email} />
+    <LinkCard href={site.appStore} title="Fiche App Store" detail="Description et captures de l'app" external />
+  </div>
+
+  <h2>Faits clés</h2>
+  <dl class="facts">
+    {
+      facts.map((fact) => (
+        <div>
+          <dt>{fact.term}</dt>
+          <dd>{fact.detail}</dd>
+        </div>
+      ))
+    }
+  </dl>
+
+  <h2>Textes à reprendre</h2>
+  <p>Libres de reprise, tels quels ou raccourcis.</p>
+  {
+    texts.map((text) => (
+      <section class="text">
+        <h3>{text.title}</h3>
+        {text.paragraphs.map((paragraph) => (
+          <p>{paragraph}</p>
+        ))}
+      </section>
+    ))
+  }
+
+  <h2>Icône et visuels</h2>
+  <p>Merci de ne pas modifier l'icône : ni recadrage, ni changement de couleur.</p>
+  <ul class="visuals">
+    {
+      visuals.map((visual) => (
+        <li>
+          <a class:list={["preview", { wide: visual.wide }]} href={`/presse/${visual.file}`} download tabindex="-1" aria-hidden="true">
+            <img src={visual.preview} width={visual.wide ? 800 : 320} height={visual.wide ? 420 : 320} alt="" loading="lazy" decoding="async" />
+          </a>
+          <LinkCard href={`/presse/${visual.file}`} title={visual.title} detail={visual.detail} download />
+        </li>
+      ))
+    }
+  </ul>
+</Prose>
+
+<style>
+  .facts {
+    display: grid;
+    margin: 0;
+    border-top: 0.5px solid var(--hairline);
+  }
+
+  .facts div {
+    display: grid;
+    grid-template-columns: 9rem 1fr;
+    gap: 16px;
+    padding: 12px 0;
+    border-bottom: 0.5px solid var(--hairline);
+  }
+
+  .facts dt {
+    color: var(--text);
+    font-weight: 600;
+  }
+
+  .facts dd {
+    margin: 0;
+  }
+
+  .text {
+    margin-top: 20px;
+    padding: 4px 24px 8px;
+    border-radius: 20px;
+    background: var(--surface);
+    border: 0.5px solid var(--hairline);
+  }
+
+  .text h3 {
+    margin-top: 20px;
+    font-size: 0.8rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-3);
+  }
+
+  .visuals {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    margin: 24px 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .visuals li {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin: 0;
+  }
+
+  .preview {
+    display: grid;
+    place-items: center;
+    aspect-ratio: 40 / 21;
+    border-radius: 20px;
+    background: var(--surface);
+    border: 0.5px solid var(--hairline);
+    overflow: hidden;
+  }
+
+  .preview img {
+    width: 40%;
+    height: auto;
+  }
+
+  .preview.wide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  @media (max-width: 640px) {
+    .visuals {
+      grid-template-columns: 1fr;
+    }
+
+    .facts div {
+      grid-template-columns: 1fr;
+      gap: 2px;
+    }
+  }
+</style>

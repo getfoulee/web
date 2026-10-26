@@ -1,5 +1,6 @@
 ---
 import Prose from "../layouts/Prose.astro";
+import LinkCard from "../components/LinkCard.astro";
 import { site } from "../lib/site";
 
 const faq = [
@@ -37,19 +38,10 @@ const faq = [
   <h1>Assistance</h1>
   <p class="lead">Une question, un souci ? Les réponses les plus courantes sont ici. Sinon, écris-nous, on lit tout.</p>
 
-  <div class="contact">
-    <a class="card" href={`mailto:${site.email}`}>
-      <strong>Écrire un e-mail</strong>
-      <span>{site.email}</span>
-    </a>
-    <a class="card" href={site.issues} rel="noopener">
-      <strong>Signaler un bug</strong>
-      <span>Sur GitHub, en public</span>
-    </a>
-    <a class="card" href="/assistance/garmin">
-      <strong>Montre Garmin</strong>
-      <span>Le guide de dépannage</span>
-    </a>
+  <div class="cards">
+    <LinkCard href={`mailto:${site.email}`} title="Écrire un e-mail" detail={site.email} />
+    <LinkCard href={site.issues} title="Signaler un bug" detail="Sur GitHub, en public" external />
+    <LinkCard href="/assistance/garmin" title="Montre Garmin" detail="Le guide de dépannage" />
   </div>
 
   <h2>Questions fréquentes</h2>
@@ -66,46 +58,6 @@ const faq = [
 </Prose>
 
 <style>
-  .lead {
-    font-size: 1.2rem !important;
-  }
-
-  .contact {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 14px;
-    margin: 36px 0 8px;
-  }
-
-  .card {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    padding: 20px;
-    border-radius: 20px;
-    background: var(--glass);
-    border: 0.5px solid var(--hairline);
-    text-decoration: none;
-    transition:
-      border-color 0.2s,
-      translate 0.2s;
-  }
-
-  .card:hover {
-    translate: 0 -2px;
-    border-color: rgb(217 122 255 / 0.45);
-  }
-
-  .card strong {
-    color: var(--text);
-  }
-
-  .card span {
-    color: var(--text-2);
-    font-size: 0.9rem;
-    overflow-wrap: anywhere;
-  }
-
   .faq {
     display: grid;
     gap: 10px;
@@ -150,9 +102,4 @@ const faq = [
     padding: 0 20px 18px;
   }
 
-  @media (max-width: 640px) {
-    .contact {
-      grid-template-columns: 1fr;
-    }
-  }
 </style>
