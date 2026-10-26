@@ -26,6 +26,8 @@ function resolves(target) {
 }
 
 const jsonLd = new Map();
+/** Share image → the pages that point to it: one image per page. */
+const shareImages = new Map();
 
 /** The JSON-LD objects found on a page so far. */
 function structuredData(page) {
@@ -64,6 +66,20 @@ for (const file of htmlFiles(dist)) {
     if (!html.includes(tag)) failures.push(`${page}: missing ${tag}`);
   }
 
+  // The canonical address is the one Cloudflare serves, without .html.
+  const address = `https://getfoulee.app/${page.replaceAll("\\", "/").replace(/(index)?\.html$/, "")}`;
+  if (!html.includes(`<link rel="canonical" href="${address}">`)) failures.push(`${page}: canonical is not ${address}`);
+
+  // Its own share card, a 1200 × 630 PNG (width and height from the IHDR chunk).
+  const image = html.match(/<meta property="og:image" content="https:\/\/getfoulee\.app(\/[^"]+\.png)"/)?.[1];
+  if (!image || !existsSync(join(dist, image))) {
+    failures.push(`${page}: share image ${image ?? "missing"} not built`);
+  } else {
+    const png = readFileSync(join(dist, image));
+    if (png.readUInt32BE(16) !== 1200 || png.readUInt32BE(20) !== 630) failures.push(`${page}: share image ${image} is not 1200 × 630`);
+  }
+  shareImages.set(image, [...(shareImages.get(image) ?? []), page]);
+
   for (const [, json] of html.matchAll(/<script type="application\/ld\+json">(.*?)<\/script>/gs)) {
     try {
       structuredData(page).push(JSON.parse(json));
@@ -75,6 +91,10 @@ for (const file of htmlFiles(dist)) {
 
   // The audience beacon ships with the production build only.
   if (html.includes("cloudflareinsights.com") !== analytics) failures.push(`${page}: analytics beacon ${analytics ? "missing" : "outside production"}`);
+}
+
+for (const [image, sharing] of shareImages) {
+  if (image && sharing.length > 1) failures.push(`${sharing.join(", ")}: same share image ${image}`);
 }
 
 const home = readFileSync(join(dist, "index.html"), "utf8");
