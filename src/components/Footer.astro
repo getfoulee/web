@@ -1,0 +1,121 @@
+---
+import { site } from "../lib/site";
+
+const year = new Date().getFullYear();
+---
+
+<footer class="footer">
+  <div class="container grid">
+    <div class="about">
+      <a class="brand" href="/">
+        <img src="/app-icon-128.png" alt="" width="36" height="36" />
+        <span>Foulée</span>
+      </a>
+      <p>{site.tagline}</p>
+      <p class="made">Conçue et développée en France.</p>
+    </div>
+
+    <nav aria-label="L'app">
+      <h2>L'app</h2>
+      <a href={site.appStore} rel="noopener">App Store</a>
+      <a href={site.connectIQ} rel="noopener">Garmin Connect IQ</a>
+      <a href={site.repository} rel="noopener">Code source</a>
+    </nav>
+
+    <nav aria-label="Aide">
+      <h2>Aide</h2>
+      <a href="/assistance">Assistance</a>
+      <a href={`mailto:${site.email}`}>{site.email}</a>
+      <a href={site.issues} rel="noopener">Signaler un bug</a>
+    </nav>
+
+    <nav aria-label="Informations légales">
+      <h2>Légal</h2>
+      <a href="/confidentialite">Confidentialité</a>
+      <a href="/mentions-legales">Mentions légales</a>
+    </nav>
+  </div>
+
+  <div class="container fineprint">
+    <p>© {year} Foulée. Apple, Apple Watch, iPhone et App Store sont des marques d'Apple Inc. Garmin et Connect IQ sont des marques de Garmin Ltd.</p>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    margin-top: 40px;
+    padding: 64px 0 calc(32px + env(safe-area-inset-bottom));
+    border-top: 0.5px solid var(--hairline);
+    background: linear-gradient(to bottom, transparent, rgb(42 10 74 / 0.25));
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: 2fr repeat(3, 1fr);
+    gap: 40px;
+  }
+
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 700;
+    font-size: 1.2rem;
+    text-decoration: none;
+  }
+
+  .brand img {
+    border-radius: 9px;
+  }
+
+  .about p {
+    margin: 12px 0 0;
+    color: var(--text-2);
+  }
+
+  .about .made {
+    color: var(--text-3);
+    font-size: 0.9rem;
+  }
+
+  nav {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  h2 {
+    margin: 0 0 4px;
+    font-size: 0.8rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-3);
+  }
+
+  nav a {
+    color: var(--text-2);
+    text-decoration: none;
+    font-size: 0.95rem;
+    overflow-wrap: anywhere;
+  }
+
+  nav a:hover {
+    color: var(--text);
+  }
+
+  .fineprint {
+    margin-top: 48px;
+    color: var(--text-3);
+    font-size: 0.8rem;
+  }
+
+  @media (max-width: 820px) {
+    .grid {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .about {
+      grid-column: 1 / -1;
+    }
+  }
+</style>

@@ -1,0 +1,375 @@
+---
+import Icon from "./Icon.astro";
+
+/* The app's home screen, redrawn in HTML: the dual ring (steps outside,
+   minutes inside), the streak badge, the stat tiles and hydration card.
+   Everything is sized in em so the phone scales as one piece. */
+const ring = (radius: number) => 2 * Math.PI * radius;
+const outer = ring(52);
+const inner = ring(38);
+---
+
+<div class="phone" role="img" aria-label="L'écran Aujourd'hui de Foulée : une série de 42 jours, 7 842 pas et 22 minutes d'activité.">
+  <div class="screen">
+    <div class="wallpaper" aria-hidden="true">
+      <span></span><span></span><span></span><span></span>
+    </div>
+
+    <div class="status" aria-hidden="true">
+      <span class="numeric">12:24</span>
+      <span class="island"></span>
+      <span class="signal">
+        <i></i><i></i><i></i><i></i>
+        <b></b>
+      </span>
+    </div>
+
+    <div class="content">
+      <div class="top">
+        <div>
+          <p class="date">Mardi 14 octobre</p>
+          <p class="title">Aujourd'hui</p>
+        </div>
+        <span class="streak numeric"><Icon name="flame" size={14} />42</span>
+      </div>
+
+      <div class="card hero">
+        <svg class="rings" viewBox="0 0 128 128" aria-hidden="true">
+          <defs>
+            <linearGradient id="phone-accent" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#d97aff"></stop>
+              <stop offset="0.5" stop-color="#bf5af2"></stop>
+              <stop offset="1" stop-color="#7c3aed"></stop>
+            </linearGradient>
+            <linearGradient id="phone-activity" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#5be36b"></stop>
+              <stop offset="0.5" stop-color="#30d158"></stop>
+              <stop offset="1" stop-color="#1fa845"></stop>
+            </linearGradient>
+          </defs>
+          <circle cx="64" cy="64" r="52" class="track"></circle>
+          <circle cx="64" cy="64" r="38" class="track"></circle>
+          <circle cx="64" cy="64" r="52" class="arc outer" stroke="url(#phone-accent)" style={`--len:${outer};--to:${outer * 0.22}`}></circle>
+          <circle cx="64" cy="64" r="38" class="arc inner" stroke="url(#phone-activity)" style={`--len:${inner};--to:${inner * 0.27}`}></circle>
+        </svg>
+        <div class="hero-text">
+          <p class="lead">Encore <strong class="minutes">8 min</strong> d'activité</p>
+          <p class="sub">Ton créneau : 12:15 – 13:30</p>
+        </div>
+      </div>
+
+      <div class="tiles">
+        <div class="card tile"><Icon name="shoe" size={15} class="steps" /><strong class="numeric">7 842</strong><span>pas</span></div>
+        <div class="card tile"><Icon name="timer" size={15} class="minutes" /><strong class="numeric">22</strong><span>min</span></div>
+        <div class="card tile"><Icon name="pin" size={15} class="distance" /><strong class="numeric">5,4</strong><span>km</span></div>
+        <div class="card tile"><Icon name="flame" size={15} class="calories" /><strong class="numeric">312</strong><span>kcal</span></div>
+      </div>
+
+      <div class="card water">
+        <div class="water-head">
+          <span><Icon name="drop" size={13} /> Hydratation</span>
+          <span class="numeric">1,25 L</span>
+        </div>
+        <div class="glasses" aria-hidden="true">
+          {Array.from({ length: 8 }, (_, index) => <i class:list={{ full: index < 5 }} style={`--i:${index}`}></i>)}
+        </div>
+      </div>
+
+      <div class="start"><Icon name="play" size={14} /> Commencer une sortie</div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .phone {
+    --frame: #1c1726;
+    position: relative;
+    width: 20em;
+    aspect-ratio: 9 / 19.5;
+    padding: 0.6em;
+    border-radius: 3.2em;
+    background: linear-gradient(145deg, #3a3346, #15111d 40%, #2a2433);
+    box-shadow:
+      0 0 0 0.12em #4b4358,
+      0 3em 6em -1em rgb(0 0 0 / 0.75),
+      0 0 8em rgb(191 90 242 / 0.25);
+  }
+
+  .screen {
+    position: relative;
+    height: 100%;
+    overflow: hidden;
+    border-radius: 2.65em;
+    background: #000;
+    isolation: isolate;
+  }
+
+  .wallpaper {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+  }
+
+  .wallpaper span {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(2.5em);
+  }
+
+  .wallpaper span:nth-child(1) { width: 17em; height: 17em; left: -6em; top: -5em; background: #2a0a4a; opacity: 0.95; }
+  .wallpaper span:nth-child(2) { width: 14em; height: 14em; right: -5em; top: 7em; background: #350a30; opacity: 0.85; }
+  .wallpaper span:nth-child(3) { width: 13em; height: 13em; left: -5em; bottom: 2em; background: #1a0a3a; opacity: 0.9; }
+  .wallpaper span:nth-child(4) { width: 12em; height: 12em; right: -4em; bottom: -3em; background: #061030; opacity: 0.9; }
+
+  .status {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 2.9em;
+    padding: 0 1.6em;
+    font-size: 0.85em;
+    font-weight: 600;
+  }
+
+  .island {
+    width: 6.2em;
+    height: 1.9em;
+    border-radius: 1em;
+    background: #000;
+  }
+
+  .signal {
+    display: flex;
+    align-items: flex-end;
+    gap: 0.12em;
+  }
+
+  .signal i {
+    width: 0.22em;
+    border-radius: 0.1em;
+    background: var(--text);
+  }
+
+  .signal i:nth-child(1) { height: 0.35em; }
+  .signal i:nth-child(2) { height: 0.5em; }
+  .signal i:nth-child(3) { height: 0.65em; }
+  .signal i:nth-child(4) { height: 0.8em; }
+
+  .signal b {
+    width: 1.5em;
+    height: 0.75em;
+    margin-left: 0.35em;
+    border-radius: 0.25em;
+    background: linear-gradient(90deg, var(--text) 78%, rgb(255 255 255 / 0.35) 78%);
+  }
+
+  .content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.7em;
+    padding: 0.6em 1em 1em;
+  }
+
+  .top {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+  }
+
+  .date {
+    margin: 0;
+    font-size: 0.72em;
+    font-weight: 600;
+    color: var(--text-3);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  .title {
+    margin: 0;
+    font-size: 1.85em;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+  }
+
+  .streak {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25em;
+    padding: 0.3em 0.7em;
+    border-radius: 1em;
+    background: var(--streak-gradient);
+    font-size: 0.9em;
+    font-weight: 700;
+    box-shadow: 0 0.3em 1em rgb(255 107 0 / 0.4);
+  }
+
+  .card {
+    background: rgb(255 255 255 / 0.07);
+    border: 0.03em solid rgb(255 255 255 / 0.12);
+    border-radius: 1.4em;
+    backdrop-filter: blur(1em);
+    -webkit-backdrop-filter: blur(1em);
+  }
+
+  .hero {
+    display: flex;
+    align-items: center;
+    gap: 0.9em;
+    padding: 1em;
+  }
+
+  .rings {
+    flex: none;
+    width: 6.4em;
+    height: 6.4em;
+    transform: rotate(-90deg);
+  }
+
+  .track {
+    fill: none;
+    stroke: rgb(255 255 255 / 0.08);
+    stroke-width: 9;
+  }
+
+  .arc {
+    fill: none;
+    stroke-width: 9;
+    stroke-linecap: round;
+    stroke-dasharray: var(--len);
+    stroke-dashoffset: var(--to);
+    animation: ring-fill 1.8s cubic-bezier(0.3, 0.7, 0.2, 1) both 0.4s;
+  }
+
+  .arc.inner {
+    animation-delay: 0.65s;
+  }
+
+  @keyframes ring-fill {
+    from { stroke-dashoffset: var(--len); }
+    to { stroke-dashoffset: var(--to); }
+  }
+
+  .lead {
+    margin: 0;
+    font-size: 1.05em;
+    font-weight: 600;
+    line-height: 1.25;
+  }
+
+  .sub {
+    margin: 0.35em 0 0;
+    font-size: 0.72em;
+    color: var(--text-2);
+  }
+
+  .minutes { color: var(--minutes); }
+  .steps { color: var(--steps); }
+  .distance { color: var(--distance); }
+  .calories { color: var(--calories); }
+
+  .tiles {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.55em;
+  }
+
+  .tile {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    align-items: center;
+    column-gap: 0.4em;
+    padding: 0.65em 0.8em;
+  }
+
+  .tile strong {
+    grid-column: 1 / -1;
+    font-size: 1.35em;
+    line-height: 1.2;
+  }
+
+  .tile span {
+    grid-column: 1 / -1;
+    margin-top: -0.2em;
+    font-size: 0.7em;
+    color: var(--text-2);
+  }
+
+  .tile :global(svg) {
+    grid-column: 1;
+    width: 1.1em;
+    height: 1.1em;
+  }
+
+  .water {
+    padding: 0.8em 0.9em;
+  }
+
+  .water-head {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.75em;
+    font-weight: 600;
+    color: var(--water);
+  }
+
+  .water-head span:first-child {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3em;
+  }
+
+  .water-head :global(svg) {
+    width: 1.1em;
+    height: 1.1em;
+  }
+
+  .glasses {
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    gap: 0.35em;
+    margin-top: 0.6em;
+  }
+
+  .glasses i {
+    height: 1.7em;
+    border: 0.08em solid rgb(64 203 224 / 0.45);
+    border-radius: 0.2em 0.2em 0.45em 0.45em;
+    background: linear-gradient(to top, var(--water) var(--fill, 0%), transparent var(--fill, 0%));
+  }
+
+  .glasses i.full {
+    animation: glass-fill 0.6s ease-out both;
+    animation-delay: calc(1.2s + var(--i) * 0.12s);
+  }
+
+  @property --fill {
+    syntax: "<percentage>";
+    inherits: false;
+    initial-value: 0%;
+  }
+
+  @keyframes glass-fill {
+    to { --fill: 85%; }
+  }
+
+  .start {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.45em;
+    margin-top: 0.1em;
+    padding: 0.85em;
+    border-radius: 1.2em;
+    background: var(--accent-gradient);
+    font-size: 0.9em;
+    font-weight: 600;
+    box-shadow: 0 0.6em 1.5em rgb(191 90 242 / 0.4);
+  }
+
+  .start :global(svg) {
+    width: 1em;
+    height: 1em;
+  }
+</style>

@@ -1,0 +1,119 @@
+---
+import Base from "./Base.astro";
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description } = Astro.props;
+---
+
+<Base title={title} description={description}>
+  <div class="glow" aria-hidden="true"></div>
+  <article class="container prose">
+    <slot />
+  </article>
+</Base>
+
+<style>
+  .glow {
+    position: absolute;
+    inset: 0 0 auto;
+    height: 520px;
+    z-index: -1;
+    background:
+      radial-gradient(ellipse at 20% 0%, rgb(59 15 110 / 0.7), transparent 60%),
+      radial-gradient(ellipse at 90% 10%, rgb(90 20 80 / 0.4), transparent 50%);
+    pointer-events: none;
+  }
+
+  .prose {
+    max-width: calc(760px + 2 * var(--gutter));
+    padding-block: clamp(48px, 8vw, 96px) 40px;
+    color: var(--text-2);
+  }
+
+  .prose :global(h1) {
+    margin: 0 0 12px;
+    color: var(--text);
+    font-size: clamp(2.2rem, 5vw, 3.4rem);
+    font-weight: 800;
+    line-height: 1.05;
+    letter-spacing: -0.035em;
+    text-wrap: balance;
+  }
+
+  .prose :global(h2) {
+    margin: 56px 0 14px;
+    color: var(--text);
+    font-size: clamp(1.4rem, 2.6vw, 1.75rem);
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+  }
+
+  .prose :global(h3) {
+    margin: 32px 0 10px;
+    color: var(--text);
+    font-size: 1.15rem;
+  }
+
+  .prose :global(p),
+  .prose :global(li) {
+    font-size: 1.05rem;
+  }
+
+  .prose :global(strong) {
+    color: var(--text);
+  }
+
+  .prose :global(a) {
+    color: var(--accent-start);
+    text-underline-offset: 3px;
+  }
+
+  .prose :global(ul),
+  .prose :global(ol) {
+    padding-left: 1.3em;
+  }
+
+  .prose :global(li + li) {
+    margin-top: 6px;
+  }
+
+  .prose :global(code) {
+    padding: 2px 6px;
+    border-radius: 6px;
+    background: rgb(255 255 255 / 0.08);
+    color: var(--text);
+    font-size: 0.9em;
+  }
+
+  .prose :global(blockquote) {
+    margin: 24px 0;
+    padding: 4px 20px;
+    border-left: 3px solid var(--accent-mid);
+    background: rgb(255 255 255 / 0.03);
+    border-radius: 0 12px 12px 0;
+  }
+
+  .prose :global(table) {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.95rem;
+  }
+
+  .prose :global(th),
+  .prose :global(td) {
+    padding: 10px 12px;
+    border-bottom: 0.5px solid var(--hairline);
+    text-align: left;
+    vertical-align: top;
+  }
+
+  .prose :global(hr) {
+    margin: 48px 0;
+    border: 0;
+    border-top: 0.5px solid var(--hairline);
+  }
+</style>

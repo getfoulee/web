@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://getfoulee.app/sitemap-index.xml

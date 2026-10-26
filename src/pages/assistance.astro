@@ -1,0 +1,158 @@
+---
+import Prose from "../layouts/Prose.astro";
+import { site } from "../lib/site";
+
+const faq = [
+  {
+    question: "Sur quels appareils fonctionne Foulée ?",
+    answer:
+      "Sur iPhone avec iOS 26, et sur Apple Watch avec watchOS 26. Si tu as une montre Garmin, l'app Connect IQ de Foulée s'installe depuis le store Garmin, et Garmin Connect fait aussi remonter tes pas et tes séances dans Santé.",
+  },
+  {
+    question: "Est-ce que Foulée est gratuite ?",
+    answer: "Oui, Foulée est gratuite sur l'App Store, comme son app Connect IQ.",
+  },
+  {
+    question: "Faut-il créer un compte ?",
+    answer: "Non. Foulée n'a ni compte ni serveur : tes données restent sur ton iPhone, ta montre et dans l'app Santé.",
+  },
+  {
+    question: "Pourquoi Foulée demande-t-elle l'accès à Santé ?",
+    answer:
+      "Ta série, tes pas, tes minutes d'activité et tes sorties viennent de Santé. Foulée y enregistre aussi tes sorties et ton eau, si tu l'acceptes. Tu peux revoir ces autorisations à tout moment dans Réglages › Santé › Accès aux données et appareils › Foulée.",
+  },
+  {
+    question: "Je ne reçois plus les rappels.",
+    answer:
+      "Ouvre Réglages dans Foulée (l'engrenage sur l'accueil), puis Notifications : la page indique si iOS bloque les notifications de Foulée, et comment les réactiver.",
+  },
+  {
+    question: "Foulée existe-t-elle dans d'autres langues ?",
+    answer: "Pas encore : l'app est en français pour l'instant.",
+  },
+];
+---
+
+<Prose title="Assistance" description="Les réponses aux questions fréquentes sur Foulée, et comment nous écrire.">
+  <h1>Assistance</h1>
+  <p class="lead">Une question, un souci ? Les réponses les plus courantes sont ici. Sinon, écris-nous, on lit tout.</p>
+
+  <div class="contact">
+    <a class="card" href={`mailto:${site.email}`}>
+      <strong>Écrire un e-mail</strong>
+      <span>{site.email}</span>
+    </a>
+    <a class="card" href={site.issues} rel="noopener">
+      <strong>Signaler un bug</strong>
+      <span>Sur GitHub, en public</span>
+    </a>
+    <a class="card" href="/assistance/garmin">
+      <strong>Montre Garmin</strong>
+      <span>Le guide de dépannage</span>
+    </a>
+  </div>
+
+  <h2>Questions fréquentes</h2>
+  <div class="faq">
+    {
+      faq.map((item) => (
+        <details>
+          <summary>{item.question}</summary>
+          <p>{item.answer}</p>
+        </details>
+      ))
+    }
+  </div>
+</Prose>
+
+<style>
+  .lead {
+    font-size: 1.2rem !important;
+  }
+
+  .contact {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+    margin: 36px 0 8px;
+  }
+
+  .card {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 20px;
+    border-radius: 20px;
+    background: var(--glass);
+    border: 0.5px solid var(--hairline);
+    text-decoration: none;
+    transition:
+      border-color 0.2s,
+      translate 0.2s;
+  }
+
+  .card:hover {
+    translate: 0 -2px;
+    border-color: rgb(217 122 255 / 0.45);
+  }
+
+  .card strong {
+    color: var(--text);
+  }
+
+  .card span {
+    color: var(--text-2);
+    font-size: 0.9rem;
+    overflow-wrap: anywhere;
+  }
+
+  .faq {
+    display: grid;
+    gap: 10px;
+  }
+
+  details {
+    border-radius: 18px;
+    background: rgb(255 255 255 / 0.04);
+    border: 0.5px solid var(--hairline);
+  }
+
+  summary {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 18px 20px;
+    color: var(--text);
+    font-weight: 600;
+    cursor: pointer;
+    list-style: none;
+  }
+
+  summary::-webkit-details-marker {
+    display: none;
+  }
+
+  summary::after {
+    content: "+";
+    flex: none;
+    color: var(--accent-start);
+    font-size: 1.3rem;
+    line-height: 1;
+    transition: rotate 0.2s;
+  }
+
+  details[open] summary::after {
+    rotate: 45deg;
+  }
+
+  details p {
+    margin: 0;
+    padding: 0 20px 18px;
+  }
+
+  @media (max-width: 640px) {
+    .contact {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

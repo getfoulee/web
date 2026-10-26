@@ -1,0 +1,31 @@
+---
+import Prose from "../layouts/Prose.astro";
+import { site } from "../lib/site";
+---
+
+<Prose title="Mentions légales" description="L'éditeur et l'hébergeur de getfoulee.app.">
+  <h1>Mentions légales</h1>
+
+  <h2>Éditeur</h2>
+  <p>
+    Ce site est édité par Matthieu Marquette, développeur de l'application Foulée, à titre personnel.<br />
+    Contact : <a href={`mailto:${site.email}`}>{site.email}</a>
+  </p>
+
+  <h2>Hébergeur</h2>
+  <p>
+    Cloudflare, Inc.<br />
+    101 Townsend St, San Francisco, CA 94107, États-Unis<br />
+    <a href="https://www.cloudflare.com" rel="noopener">cloudflare.com</a>
+  </p>
+
+  <h2>Propriété intellectuelle</h2>
+  <p>
+    Le nom Foulée, son icône et les contenus de ce site appartiennent à leur auteur. Le code source de l'application est publié sous licence MIT sur
+    <a href={site.repository} rel="noopener">GitHub</a>. Apple, Apple Watch, iPhone et App Store sont des marques d'Apple Inc. Garmin et Connect IQ sont des
+    marques de Garmin Ltd.
+  </p>
+
+  <h2>Données personnelles</h2>
+  <p>Ce site ne collecte aucune donnée personnelle. Tout est détaillé dans la <a href="/confidentialite">politique de confidentialité</a>.</p>
+</Prose>

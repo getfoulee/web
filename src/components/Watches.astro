@@ -1,0 +1,258 @@
+---
+import Icon from "./Icon.astro";
+---
+
+<div class="watches">
+  <figure class="apple" role="img" aria-label="Une séance de course en cours sur l'Apple Watch : 24 minutes, 3,48 km, 147 battements par minute.">
+    <div class="band top" aria-hidden="true"></div>
+    <div class="case">
+      <div class="crown" aria-hidden="true"></div>
+      <div class="screen">
+        <div class="head">
+          <span class="sport"><Icon name="run" size={14} /> Course</span>
+          <span class="numeric clock">12:48</span>
+        </div>
+        <p class="elapsed numeric">24:31<small>,08</small></p>
+        <p class="metric numeric">3,48<small>KM</small></p>
+        <p class="metric numeric pace">5'52"<small>/KM</small></p>
+        <p class="metric numeric heart"><Icon name="heart" size={13} />147<small>BPM</small></p>
+      </div>
+    </div>
+    <div class="band bottom" aria-hidden="true"></div>
+  </figure>
+
+  <figure class="garmin" role="img" aria-label="L'app Foulée sur une montre Garmin : une série de 42 jours, 7 842 pas et 22 minutes d'activité.">
+    <div class="bezel">
+      <div class="screen">
+        <span class="g-flame"><Icon name="flame" size={22} /></span>
+        <p class="g-streak numeric">42</p>
+        <p class="g-label">jours de série</p>
+        <div class="g-bars">
+          <span><i style="--w:78%; --c:var(--steps)"></i></span>
+          <span><i style="--w:73%; --c:var(--minutes)"></i></span>
+        </div>
+        <p class="g-figures numeric"><b>7 842</b> pas · <b>22</b> min</p>
+      </div>
+    </div>
+    <span class="button b1" aria-hidden="true"></span>
+    <span class="button b2" aria-hidden="true"></span>
+    <span class="button b3" aria-hidden="true"></span>
+  </figure>
+</div>
+
+<style>
+  .watches {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: clamp(12px, 5vw, 56px);
+    font-size: min(16px, 2.9vw);
+  }
+
+  figure {
+    margin: 0;
+  }
+
+  /* Apple Watch */
+  .apple {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transform: rotate(-6deg);
+  }
+
+  .band {
+    width: 9.5em;
+    height: 4.5em;
+    background: linear-gradient(90deg, #2b2240, #3d2f5c 50%, #2b2240);
+  }
+
+  .band.top {
+    border-radius: 1.5em 1.5em 0 0;
+    mask: linear-gradient(to top, #000 40%, transparent);
+  }
+
+  .band.bottom {
+    border-radius: 0 0 1.5em 1.5em;
+    mask: linear-gradient(to bottom, #000 40%, transparent);
+  }
+
+  .case {
+    position: relative;
+    width: 12.5em;
+    height: 15em;
+    padding: 0.7em;
+    border-radius: 3.4em;
+    background: linear-gradient(145deg, #4a4256, #1a1622 45%, #3a3346);
+    box-shadow:
+      0 2em 4em rgb(0 0 0 / 0.6),
+      0 0 5em rgb(255 159 10 / 0.12);
+  }
+
+  .crown {
+    position: absolute;
+    right: -0.55em;
+    top: 3.2em;
+    width: 0.8em;
+    height: 2.4em;
+    border-radius: 0.4em;
+    background: linear-gradient(90deg, #2a2433, #5a5266);
+  }
+
+  .apple .screen {
+    height: 100%;
+    padding: 1.1em 1.2em;
+    border-radius: 2.8em;
+    background: #000;
+  }
+
+  .head {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.8em;
+    font-weight: 600;
+  }
+
+  .sport {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25em;
+    color: var(--run);
+  }
+
+  .clock {
+    color: var(--text-2);
+  }
+
+  .elapsed {
+    margin: 0.4em 0 0.2em;
+    color: #ffd60a;
+    font-size: 2.3em;
+    font-weight: 600;
+    line-height: 1;
+  }
+
+  .elapsed small {
+    font-size: 0.6em;
+  }
+
+  .metric {
+    display: flex;
+    align-items: baseline;
+    gap: 0.2em;
+    margin: 0;
+    font-size: 1.55em;
+    font-weight: 600;
+    line-height: 1.2;
+  }
+
+  .metric small {
+    font-size: 0.55em;
+    color: var(--text-2);
+  }
+
+  .pace {
+    color: var(--walk);
+  }
+
+  .heart {
+    color: #ff375f;
+    align-items: center;
+  }
+
+  /* Garmin */
+  .garmin {
+    position: relative;
+    transform: rotate(5deg) translateY(1.5em);
+  }
+
+  .bezel {
+    width: 14em;
+    height: 14em;
+    padding: 1.1em;
+    border-radius: 50%;
+    background:
+      repeating-conic-gradient(from 0deg, rgb(255 255 255 / 0.18) 0 0.4deg, transparent 0.4deg 6deg),
+      linear-gradient(145deg, #3c3c44, #121216 50%, #2c2c34);
+    box-shadow:
+      0 2em 4em rgb(0 0 0 / 0.6),
+      inset 0 0 0 0.15em #55555f;
+  }
+
+  .garmin .screen {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    border-radius: 50%;
+    background: radial-gradient(circle at 50% 30%, #1d1030, #000 70%);
+    text-align: center;
+  }
+
+  .g-flame {
+    color: var(--streak-start);
+  }
+
+  .g-streak {
+    margin: 0;
+    font-size: 3.1em;
+    font-weight: 700;
+    line-height: 1;
+    background: var(--streak-gradient);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .g-label {
+    margin: 0.1em 0 0.6em;
+    font-size: 0.7em;
+    color: var(--text-2);
+  }
+
+  .g-bars {
+    display: grid;
+    gap: 0.3em;
+    width: 7em;
+  }
+
+  .g-bars span {
+    height: 0.35em;
+    border-radius: 1em;
+    background: rgb(255 255 255 / 0.1);
+    overflow: hidden;
+  }
+
+  .g-bars i {
+    display: block;
+    width: var(--w);
+    height: 100%;
+    border-radius: inherit;
+    background: var(--c);
+  }
+
+  .g-figures {
+    margin: 0.6em 0 0;
+    font-size: 0.7em;
+    color: var(--text-2);
+  }
+
+  .g-figures b {
+    color: var(--text);
+  }
+
+  .button {
+    position: absolute;
+    width: 0.7em;
+    height: 1.8em;
+    border-radius: 0.3em;
+    background: linear-gradient(90deg, #2c2c34, #55555f);
+  }
+
+  .b1 { right: -0.45em; top: 3.2em; transform: rotate(-30deg); }
+  .b2 { right: -0.45em; bottom: 3.2em; transform: rotate(30deg); }
+  .b3 { left: -0.45em; top: 6.1em; transform: scaleX(-1); }
+</style>

@@ -1,0 +1,116 @@
+---
+import { site } from "../lib/site";
+---
+
+<a class="skip" href="#contenu">Aller au contenu</a>
+<header class="header">
+  <div class="container bar">
+    <a class="brand" href="/" aria-label="Foulée, accueil">
+      <img src="/app-icon-128.png" alt="" width="32" height="32" />
+      <span>Foulée</span>
+    </a>
+    <nav aria-label="Navigation principale">
+      <a href="/#fonctionnalites">Fonctionnalités</a>
+      <a href="/#montres">Montres</a>
+      <a href="/assistance">Assistance</a>
+    </nav>
+    <a class="cta" href={site.appStore} rel="noopener">Télécharger</a>
+  </div>
+</header>
+
+<style>
+  .skip {
+    position: absolute;
+    left: 12px;
+    top: -60px;
+    z-index: 100;
+    padding: 10px 16px;
+    border-radius: 12px;
+    background: var(--text);
+    color: var(--bg);
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  .skip:focus {
+    top: 12px;
+  }
+
+  .header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    padding-top: env(safe-area-inset-top);
+    background: rgb(7 4 14 / 0.6);
+    backdrop-filter: blur(20px) saturate(160%);
+    -webkit-backdrop-filter: blur(20px) saturate(160%);
+    border-bottom: 0.5px solid rgb(255 255 255 / 0.08);
+  }
+
+  .bar {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    height: 64px;
+  }
+
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 700;
+    font-size: 1.1rem;
+    letter-spacing: -0.01em;
+    text-decoration: none;
+  }
+
+  .brand img {
+    border-radius: 8px;
+  }
+
+  nav {
+    display: flex;
+    gap: 28px;
+    margin-left: auto;
+  }
+
+  nav a {
+    color: var(--text-2);
+    font-size: 0.95rem;
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  nav a:hover {
+    color: var(--text);
+  }
+
+  .cta {
+    padding: 8px 18px;
+    border-radius: var(--radius-pill);
+    background: var(--accent-gradient);
+    color: white;
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-decoration: none;
+    box-shadow: 0 4px 18px rgb(191 90 242 / 0.35);
+    transition:
+      transform 0.2s,
+      box-shadow 0.2s;
+  }
+
+  .cta:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 26px rgb(191 90 242 / 0.5);
+  }
+
+  @media (max-width: 720px) {
+    nav {
+      display: none;
+    }
+
+    .cta {
+      margin-left: auto;
+    }
+  }
+</style>
