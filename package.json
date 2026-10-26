@@ -11,6 +11,7 @@
     "preview": "astro preview",
     "astro": "astro",
     "assets": "node scripts/generate-assets.mjs",
+    "screenshots": "node scripts/fetch-screenshots.mjs",
     "check": "astro check",
     "test": "node scripts/check-site.mjs"
   },
