@@ -143,6 +143,21 @@ if (!kit) {
   }
 }
 
+// Search engines index getfoulee.app only: the pages.dev hosts say noindex.
+const rules = new Map(
+  readFileSync(join(dist, "_headers"), "utf8")
+    .split(/\n\s*\n/)
+    .map((block) => block.split("\n").filter((line) => line.trim() && !line.startsWith("#")))
+    .filter((lines) => lines.length > 0)
+    .map(([pattern, ...headers]) => [pattern.trim(), headers.map((header) => header.trim())]),
+);
+for (const host of ["https://:project.pages.dev/*", "https://:version.:project.pages.dev/*"]) {
+  if (!rules.get(host)?.includes("X-Robots-Tag: noindex")) failures.push(`_headers: ${host} is not noindex`);
+}
+for (const [pattern, headers] of rules) {
+  if (!pattern.includes("pages.dev") && headers.some((header) => header.startsWith("X-Robots-Tag"))) failures.push(`_headers: ${pattern} hides getfoulee.app from search engines`);
+}
+
 if (failures.length > 0) {
   console.error(failures.join("\n"));
   process.exit(1);
