@@ -23,7 +23,8 @@ const ogImage = new URL("/og.png", site.url).href;
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
-    <meta name="theme-color" content="#07040e" />
+    <meta name="theme-color" content="#fbf7ff" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#07040e" media="(prefers-color-scheme: dark)" />
 
     <meta name="apple-itunes-app" content={`app-id=${site.appStoreId}`} />
 
@@ -42,7 +43,13 @@ const ogImage = new URL("/og.png", site.url).href;
     <meta name="twitter:card" content="summary_large_image" />
 
     <script is:inline>
+      // Before the first paint: mark JavaScript as on, and apply the theme the
+      // visitor picked, if any. Without one, the CSS follows the device.
       document.documentElement.classList.add("js");
+      try {
+        const theme = localStorage.getItem("theme");
+        if (theme === "light" || theme === "dark") document.documentElement.dataset.theme = theme;
+      } catch {}
     </script>
     <slot name="head" />
   </head>
