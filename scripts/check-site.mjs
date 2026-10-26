@@ -36,6 +36,12 @@ for (const file of htmlFiles(dist)) {
     if (!resolves(target)) failures.push(`${page}: broken link ${target}`);
   }
 
+  for (const [, set] of html.matchAll(/srcset="([^"]*)"/g)) {
+    for (const target of set.split(",").map((candidate) => candidate.trim().split(/\s+/)[0])) {
+      if (target.startsWith("/") && !resolves(target)) failures.push(`${page}: broken image ${target}`);
+    }
+  }
+
   for (const tag of ["<title>", 'name="description"', 'rel="canonical"', 'property="og:image"', '<html lang="fr"']) {
     if (!html.includes(tag)) failures.push(`${page}: missing ${tag}`);
   }

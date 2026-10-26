@@ -7,6 +7,7 @@ import Icon from "../components/Icon.astro";
 import RouteMap from "../components/RouteMap.astro";
 import ShareCard from "../components/ShareCard.astro";
 import { site } from "../lib/site";
+import { screenshots } from "../lib/screenshots";
 
 const more = [
   {
@@ -250,6 +251,35 @@ const more = [
           ))
         }
       </div>
+    </div>
+  </section>
+
+  <!-- Screenshots -->
+  <section class="section">
+    <div class="container">
+      <div class="center-copy" data-reveal>
+        <p class="kicker">Captures</p>
+        <h2>La vraie app,<br />écran par écran.</h2>
+        <p>Les captures de la fiche App Store, telles que tu les verras avant d'installer.</p>
+      </div>
+      <ul class="shots" tabindex="0" aria-label="Captures de l'app, à faire défiler" data-reveal style="--delay:0.1s">
+        {
+          screenshots.map((shot) => (
+            <li>
+              <img
+                src={`/captures/${shot.name}-300.webp`}
+                srcset={`/captures/${shot.name}-300.webp 300w, /captures/${shot.name}-600.webp 600w`}
+                sizes="(max-width: 560px) 200px, 240px"
+                width="300"
+                height="652"
+                alt={shot.alt}
+                loading="lazy"
+                decoding="async"
+              />
+            </li>
+          ))
+        }
+      </ul>
     </div>
   </section>
 
@@ -892,6 +922,32 @@ const more = [
     letter-spacing: -0.01em;
   }
 
+  /* ---------- Screenshots ---------- */
+  .shots {
+    display: flex;
+    gap: 18px;
+    margin: 0;
+    padding: 0 0 16px;
+    list-style: none;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: thin;
+  }
+
+  .shots li {
+    flex: 0 0 240px;
+    scroll-snap-align: start;
+  }
+
+  .shots img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 24px;
+    border: 0.5px solid var(--hairline);
+  }
+
   .more-card p {
     margin: 0;
     color: var(--text-2);
@@ -1069,6 +1125,10 @@ const more = [
   @media (max-width: 560px) {
     .more-grid {
       grid-template-columns: 1fr;
+    }
+
+    .shots li {
+      flex-basis: 200px;
     }
 
     .seg {
