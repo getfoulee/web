@@ -13,7 +13,8 @@
     "assets": "node scripts/generate-assets.mjs",
     "screenshots": "node scripts/fetch-screenshots.mjs",
     "check": "astro check",
-    "test": "node scripts/check-site.mjs"
+    "test": "node scripts/check-site.mjs",
+    "lighthouse": "lhci autorun && lhci autorun --collect.settings.preset=desktop --upload.outputDir=.lighthouseci/desktop"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.4",
@@ -21,6 +22,7 @@
   },
   "devDependencies": {
     "@astrojs/check": "0.9.12",
+    "@lhci/cli": "0.15.1",
     "sharp": "0.34.5",
     "typescript": "6.0.3",
     "wrangler": "4.152.0"

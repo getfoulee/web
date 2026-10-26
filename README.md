@@ -52,7 +52,10 @@ Every build draws each page's share card (1200 × 630) in `dist/partage/`, from 
 npm run check     # astro check: types and templates
 npm run build
 npm test          # the built site: every page present, every internal link resolves, metadata on each page
+npm run lighthouse  # every page, mobile then desktop: performance, accessibility, best practices and SEO at 95 or more
 ```
+
+`npm run lighthouse` needs Chrome; point `CHROME_PATH` at another Chromium browser (Edge) if Chrome is not installed. The reports land in `.lighthouseci/`, and CI keeps them as the `lighthouse` artifact of each run.
 
 ## Deploy
 
