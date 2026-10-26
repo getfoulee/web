@@ -4,9 +4,11 @@ import PhoneToday from "../components/PhoneToday.astro";
 import Watches from "../components/Watches.astro";
 import StoreButtons from "../components/StoreButtons.astro";
 import Icon from "../components/Icon.astro";
+import JsonLd from "../components/JsonLd.astro";
 import RouteMap from "../components/RouteMap.astro";
 import ShareCard from "../components/ShareCard.astro";
 import { site } from "../lib/site";
+import { mobileApplication } from "../lib/structured-data";
 import { screenshots } from "../lib/screenshots";
 
 const more = [
@@ -34,6 +36,7 @@ const more = [
 ---
 
 <Base>
+  <JsonLd slot="head" data={mobileApplication} />
   <!-- Hero -->
   <section class="hero">
     <div class="aurora" aria-hidden="true"><span></span><span></span><span></span></div>
