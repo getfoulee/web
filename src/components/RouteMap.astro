@@ -1,0 +1,268 @@
+---
+/* An outing on a dark map, drawn like the app's route map: a loop that
+   follows the streets, cuts through the park, comes back along the river,
+   with a marker at each kilometre and arrows for the direction. The route
+   is one polyline; the walk is its first stretch, the run the rest. The
+   markers and arrows are placed along it here, so they sit on the route
+   whatever its shape. */
+
+type Point = [number, number];
+
+const walk: Point[] = [
+  [70, 200],
+  [70, 140],
+  [150, 140],
+  [150, 70],
+];
+
+const run: Point[] = [
+  [150, 70],
+  [230, 70],
+  [238, 69],
+  [252, 61],
+  [272, 53],
+  [295, 50],
+  [318, 53],
+  [338, 63],
+  [353, 79],
+  [362, 99],
+  [363, 120],
+  [356, 140],
+  [342, 157],
+  [324, 169],
+  [303, 177],
+  [282, 182],
+  [263, 189],
+  [249, 200],
+  [241, 214],
+  [236, 228],
+  [226, 236],
+  [190, 238],
+  [150, 238],
+  [110, 234],
+  [76, 231],
+  [70, 222],
+  [70, 200],
+];
+
+const route = [...walk, ...run.slice(1)];
+const kilometres = 4.2;
+
+const segments = route.slice(1).map((end, index) => {
+  const start = route[index];
+  return { start, end, length: Math.hypot(end[0] - start[0], end[1] - start[1]) };
+});
+const total = segments.reduce((sum, segment) => sum + segment.length, 0);
+
+/** The point at distance `s` along the route, and the heading there. */
+function along(s: number) {
+  let left = s;
+  for (const { start, end, length } of segments) {
+    if (left <= length) {
+      const t = left / length;
+      return {
+        x: start[0] + (end[0] - start[0]) * t,
+        y: start[1] + (end[1] - start[1]) * t,
+        angle: (Math.atan2(end[1] - start[1], end[0] - start[0]) * 180) / Math.PI,
+      };
+    }
+    left -= length;
+  }
+  const [x, y] = route[route.length - 1];
+  return { x, y, angle: 0 };
+}
+
+const perKilometre = total / kilometres;
+const markers = [1, 2, 3, 4].map((km) => ({ km, ...along(km * perKilometre) }));
+const arrows = [0.5, 1.5, 2.5, 3.5].map((km) => along(km * perKilometre));
+
+/** The park path the run takes, from the gate on the street to the quay. */
+const parkTrail = run.slice(1, 21);
+
+const toPath = (points: Point[]) => `M${points.map(([x, y]) => `${x} ${y}`).join("L")}`;
+
+/* City blocks between the 12-wide streets at x = 70, 150, 230 and
+   y = 70, 140, 200, down to the quay. The park starts past x = 236. */
+const columns = [
+  [-10, 64],
+  [76, 144],
+  [156, 224],
+];
+const rows = [
+  [-10, 64],
+  [76, 134],
+  [146, 194],
+  [206, 222],
+];
+const blocks = columns.flatMap(([left, right]) =>
+  rows.map(([top, bottom]) => ({ x: left, y: top, width: right - left, height: bottom - top })),
+);
+
+/* A lane through every other block, across or along, so the grid reads as
+   a neighbourhood rather than a chessboard. */
+const lanes = blocks
+  .filter((block) => block.height > 30)
+  .map((block, index) =>
+    index % 2 === 0
+      ? { x1: block.x + block.width / 2, y1: block.y, x2: block.x + block.width / 2, y2: block.y + block.height }
+      : { x1: block.x, y1: block.y + block.height / 2, x2: block.x + block.width, y2: block.y + block.height / 2 },
+  );
+---
+
+<svg viewBox="0 0 400 280" class="route-map" aria-hidden="true">
+  <rect width="400" height="280" class="road"></rect>
+
+  {blocks.map((block) => <rect class="block" x={block.x} y={block.y} width={block.width} height={block.height} rx="5" />)}
+  {lanes.map((lane) => <line class="lane" {...lane} />)}
+
+  <path class="park" d="M236 -10H410V194C380 196 330 198 300 204S256 220 246 226H236Z"></path>
+  <path class="park-path" d="M236 120C270 112 300 118 320 104S352 70 372 60"></path>
+  <path class="park-path" d="M300 -10C304 30 290 60 296 90S320 150 330 200"></path>
+  <path class="park-path trail" d={toPath(parkTrail)}></path>
+  <ellipse class="pond" cx="300" cy="118" rx="22" ry="14"></ellipse>
+
+  <path class="quay" d="M-10 232C70 228 140 242 230 236S360 226 410 232"></path>
+  <path class="river" d="M-10 246C80 236 150 256 230 246S360 232 410 240V330H-10Z"></path>
+
+  <path class="casing" d={toPath(route)}></path>
+  <path class="route walk-route" pathLength="1" d={toPath(walk)}></path>
+  <path class="route run-route" pathLength="1" d={toPath(run)}></path>
+
+  <g class="arrows">
+    {arrows.map(({ x, y, angle }) => <path d="M-4 -4.5L5 0L-4 4.5Z" transform={`translate(${x.toFixed(1)} ${y.toFixed(1)}) rotate(${angle.toFixed(0)})`} />)}
+  </g>
+  <g class="km">
+    {
+      markers.map(({ km, x, y }) => (
+        <g transform={`translate(${x.toFixed(1)} ${y.toFixed(1)})`}>
+          <circle r="10" />
+          <text y="4">{km}</text>
+        </g>
+      ))
+    }
+  </g>
+  <circle class="start-dot" cx={walk[0][0]} cy={walk[0][1]} r="7"></circle>
+</svg>
+
+<style>
+  .route-map {
+    width: 100%;
+    height: auto;
+    border-radius: 18px;
+  }
+
+  .road {
+    fill: var(--map-road);
+  }
+
+  .block {
+    fill: var(--map-block);
+  }
+
+  .lane {
+    stroke: var(--map-lane);
+    stroke-width: 3;
+  }
+
+  .park {
+    fill: var(--map-park);
+  }
+
+  .park-path {
+    fill: none;
+    stroke: var(--map-park-path);
+    stroke-width: 4;
+    stroke-linecap: round;
+  }
+
+  .trail {
+    stroke-width: 9;
+    stroke-linejoin: round;
+  }
+
+  .pond {
+    fill: var(--map-water);
+  }
+
+  .quay {
+    fill: none;
+    stroke: var(--map-road);
+    stroke-width: 12;
+  }
+
+  .river {
+    fill: var(--map-water);
+  }
+
+  .casing {
+    fill: none;
+    stroke: var(--map-casing);
+    stroke-width: 10;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .route {
+    fill: none;
+    stroke-width: 5.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-dasharray: 1;
+    stroke-dashoffset: 0;
+  }
+
+  .walk-route {
+    stroke: var(--map-walk);
+  }
+
+  .run-route {
+    stroke: var(--map-run);
+  }
+
+  :global(.js) .route-map .route {
+    stroke-dashoffset: 1;
+    transition: stroke-dashoffset 1.2s cubic-bezier(0.5, 0, 0.3, 1);
+  }
+
+  :global(.js) .route-map .run-route {
+    transition-delay: 1.1s;
+    transition-duration: 2.2s;
+  }
+
+  :global(.is-visible) .route-map .route {
+    stroke-dashoffset: 0;
+  }
+
+  .arrows path {
+    fill: #fff;
+  }
+
+  .km circle {
+    fill: #fff;
+    stroke: rgb(0 0 0 / 0.35);
+    stroke-width: 1;
+  }
+
+  .km text {
+    font: 700 11px var(--font-rounded);
+    fill: #000;
+    text-anchor: middle;
+  }
+
+  :global(.js) .route-map .km,
+  :global(.js) .route-map .arrows {
+    opacity: 0;
+    transition: opacity 0.6s 3.2s;
+  }
+
+  :global(.is-visible) .route-map .km,
+  :global(.is-visible) .route-map .arrows {
+    opacity: 1;
+  }
+
+  .start-dot {
+    fill: #fff;
+    stroke: var(--map-walk);
+    stroke-width: 3.5;
+  }
+</style>
