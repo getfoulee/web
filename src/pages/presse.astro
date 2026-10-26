@@ -57,29 +57,6 @@ import { archive, facts, texts, visuals } from "../lib/press";
 </Prose>
 
 <style>
-  .facts {
-    display: grid;
-    margin: 0;
-    border-top: 0.5px solid var(--hairline);
-  }
-
-  .facts div {
-    display: grid;
-    grid-template-columns: 9rem 1fr;
-    gap: 16px;
-    padding: 12px 0;
-    border-bottom: 0.5px solid var(--hairline);
-  }
-
-  .facts dt {
-    color: var(--text);
-    font-weight: 600;
-  }
-
-  .facts dd {
-    margin: 0;
-  }
-
   .text {
     margin-top: 20px;
     padding: 4px 24px 8px;
@@ -136,11 +113,6 @@ import { archive, facts, texts, visuals } from "../lib/press";
   @media (max-width: 640px) {
     .visuals {
       grid-template-columns: 1fr;
-    }
-
-    .facts div {
-      grid-template-columns: 1fr;
-      gap: 2px;
     }
   }
 </style>
