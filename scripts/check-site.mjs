@@ -46,6 +46,34 @@ for (const store of ["apps.apple.com", "apps.garmin.com"]) {
   if (!home.includes(store)) failures.push(`index.html: no link to ${store}`);
 }
 
+/** The entry names of a zip, read from its central directory. */
+function zipEntries(file) {
+  const zip = readFileSync(file);
+  const end = zip.lastIndexOf(Buffer.from([0x50, 0x4b, 0x05, 0x06]));
+  if (end < 0) return [];
+  const names = [];
+  let at = zip.readUInt32LE(end + 16);
+  for (let i = 0; i < zip.readUInt16LE(end + 10); i++) {
+    const length = zip.readUInt16LE(at + 28);
+    names.push(zip.toString("utf8", at + 46, at + 46 + length));
+    at += 46 + length + zip.readUInt16LE(at + 30) + zip.readUInt16LE(at + 32);
+  }
+  return names;
+}
+
+// The press kit archive holds every visual /presse offers, and the texts.
+const press = readFileSync(join(dist, "presse.html"), "utf8");
+const kit = press.match(/href="\/presse\/([^"]+)\.zip"/)?.[1];
+if (!kit) {
+  failures.push("presse.html: no link to the press kit archive");
+} else if (existsSync(join(dist, "presse", `${kit}.zip`))) {
+  const entries = zipEntries(join(dist, "presse", `${kit}.zip`));
+  const expected = [...new Set([...press.matchAll(/href="\/presse\/([^"/]+\.png)"/g)].map(([, file]) => file)), "foulee-textes.md"];
+  for (const file of expected) {
+    if (!entries.includes(`${kit}/${file}`)) failures.push(`${kit}.zip: missing ${file}`);
+  }
+}
+
 if (failures.length > 0) {
   console.error(failures.join("\n"));
   process.exit(1);
