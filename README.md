@@ -2,7 +2,7 @@
 
 The marketing site of [Foulée](https://github.com/getfoulee/foulee), the iPhone, Apple Watch and Garmin app that keeps a daily walking and running streak going.
 
-Static [Astro](https://astro.build) site, French only like the app, hosted on Cloudflare.
+Static [Astro](https://astro.build) site, French only like the app, hosted on Cloudflare. Light and dark themes, like the app: it follows the device, and the switch in the header overrides it (remembered in localStorage until it lands back on the device's theme).
 
 ## Run locally
 

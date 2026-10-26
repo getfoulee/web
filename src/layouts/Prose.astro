@@ -23,8 +23,8 @@ const { title, description } = Astro.props;
     height: 520px;
     z-index: -1;
     background:
-      radial-gradient(ellipse at 20% 0%, rgb(59 15 110 / 0.7), transparent 60%),
-      radial-gradient(ellipse at 90% 10%, rgb(90 20 80 / 0.4), transparent 50%);
+      radial-gradient(ellipse at 20% 0%, color-mix(in srgb, var(--blob-1) 70%, transparent), transparent 60%),
+      radial-gradient(ellipse at 90% 10%, color-mix(in srgb, var(--blob-2) 45%, transparent), transparent 50%);
     pointer-events: none;
   }
 
@@ -68,7 +68,7 @@ const { title, description } = Astro.props;
   }
 
   .prose :global(a) {
-    color: var(--accent-start);
+    color: var(--accent-text);
     text-underline-offset: 3px;
   }
 
@@ -84,7 +84,7 @@ const { title, description } = Astro.props;
   .prose :global(code) {
     padding: 2px 6px;
     border-radius: 6px;
-    background: rgb(255 255 255 / 0.08);
+    background: var(--surface-2);
     color: var(--text);
     font-size: 0.9em;
   }
@@ -93,7 +93,7 @@ const { title, description } = Astro.props;
     margin: 24px 0;
     padding: 4px 20px;
     border-left: 3px solid var(--accent-mid);
-    background: rgb(255 255 255 / 0.03);
+    background: var(--surface);
     border-radius: 0 12px 12px 0;
   }
 

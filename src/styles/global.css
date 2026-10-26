@@ -1,9 +1,10 @@
 /* Foulée's palette, taken from the app's design system (FouleeColor,
-   MetricPalette, ActivityPalette, Wallpaper). The site uses the app's dark
-   theme: deep purple wallpaper, glass cards, the accent gradient. */
+   MetricPalette, ActivityPalette, Wallpaper, GlassCard). The brand colors
+   are the same in both themes; the surfaces follow the app's two
+   wallpapers: deep purple and navy in dark, pastel pinks and lavenders in
+   light. The theme follows the device unless the visitor picks one, which
+   the head script stores as data-theme on <html>. */
 :root {
-  color-scheme: dark;
-
   --accent-start: #d97aff;
   --accent-mid: #bf5af2;
   --accent-end: #7c3aed;
@@ -24,16 +25,6 @@
   --run: #ff9f0a;
   --water: #40cbe0;
 
-  --bg: #07040e;
-  --bg-raised: #0f0a1c;
-  --text: #f7f3ff;
-  --text-2: rgb(235 228 255 / 0.68);
-  --text-3: rgb(235 228 255 / 0.45);
-  --hairline: rgb(255 255 255 / 0.12);
-
-  --glass: rgb(38 26 62 / 0.55);
-  --glass-strong: rgb(46 32 74 / 0.75);
-
   --radius-card: 28px;
   --radius-pill: 999px;
 
@@ -43,6 +34,102 @@
 
   --gutter: clamp(20px, 5vw, 48px);
   --max: 1200px;
+}
+
+/* Dark: the default, and the scope of the showcase pieces (watch screens,
+   the map, the share card) that stay dark in both themes, as in the app. */
+:root,
+.theme-dark {
+  color-scheme: dark;
+
+  --bg: #07040e;
+  --bg-raised: #0f0a1c;
+  --text: #f7f3ff;
+  --text-2: rgb(235 228 255 / 0.68);
+  --text-3: rgb(235 228 255 / 0.45);
+  --hairline: rgb(255 255 255 / 0.12);
+  --glass: rgb(38 26 62 / 0.55);
+  --glass-border: rgb(255 255 255 / 0.12);
+  --surface: rgb(255 255 255 / 0.04);
+  --surface-2: rgb(255 255 255 / 0.07);
+  --shadow: 0 6px 24px rgb(0 0 0 / 0.4);
+  --header-bg: rgb(7 4 14 / 0.6);
+  --footer-tint: rgb(42 10 74 / 0.25);
+  --accent-text: #d97aff;
+  --water-text: #40cbe0;
+  --track: rgb(255 255 255 / 0.08);
+  --screen: #000;
+  --blob-1: #3b0f6e;
+  --blob-2: #5a1450;
+  --blob-3: #12205a;
+  --wall-1: #2a0a4a;
+  --wall-2: #350a30;
+  --wall-3: #1a0a3a;
+  --wall-4: #061030;
+}
+
+.theme-dark {
+  color: var(--text);
+}
+
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) {
+    color-scheme: light;
+
+    --bg: #fbf7ff;
+    --bg-raised: #ffffff;
+    --text: #1d1233;
+    --text-2: rgb(29 18 51 / 0.7);
+    --text-3: rgb(29 18 51 / 0.5);
+    --hairline: rgb(76 40 130 / 0.12);
+    --glass: rgb(255 255 255 / 0.6);
+    --glass-border: rgb(255 255 255 / 0.8);
+    --surface: rgb(255 255 255 / 0.55);
+    --surface-2: rgb(255 255 255 / 0.72);
+    --shadow: 0 6px 24px rgb(80 40 140 / 0.1);
+    --header-bg: rgb(251 247 255 / 0.72);
+    --footer-tint: rgb(233 212 255 / 0.5);
+    --accent-text: #7c3aed;
+    --water-text: #0e8ea3;
+    --track: rgb(0 0 0 / 0.06);
+    --screen: #fff;
+    --blob-1: #f7d6ff;
+    --blob-2: #ffe6f3;
+    --blob-3: #d6e4ff;
+    --wall-1: #f7d6ff;
+    --wall-2: #e9d4ff;
+    --wall-3: #d6e4ff;
+    --wall-4: #ffe6f3;
+  }
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+
+  --bg: #fbf7ff;
+  --bg-raised: #ffffff;
+  --text: #1d1233;
+  --text-2: rgb(29 18 51 / 0.7);
+  --text-3: rgb(29 18 51 / 0.5);
+  --hairline: rgb(76 40 130 / 0.12);
+  --glass: rgb(255 255 255 / 0.6);
+  --glass-border: rgb(255 255 255 / 0.8);
+  --surface: rgb(255 255 255 / 0.55);
+  --surface-2: rgb(255 255 255 / 0.72);
+  --shadow: 0 6px 24px rgb(80 40 140 / 0.1);
+  --header-bg: rgb(251 247 255 / 0.72);
+  --footer-tint: rgb(233 212 255 / 0.5);
+  --accent-text: #7c3aed;
+  --water-text: #0e8ea3;
+  --track: rgb(0 0 0 / 0.06);
+  --screen: #fff;
+  --blob-1: #f7d6ff;
+  --blob-2: #ffe6f3;
+  --blob-3: #d6e4ff;
+  --wall-1: #f7d6ff;
+  --wall-2: #e9d4ff;
+  --wall-3: #d6e4ff;
+  --wall-4: #ffe6f3;
 }
 
 *,
@@ -80,7 +167,7 @@ a {
 }
 
 :focus-visible {
-  outline: 2px solid var(--accent-start);
+  outline: 2px solid var(--accent-text);
   outline-offset: 3px;
   border-radius: 6px;
 }
@@ -105,11 +192,11 @@ a {
 
 .glass {
   background: var(--glass);
-  border: 0.5px solid var(--hairline);
+  border: 0.5px solid var(--glass-border);
   border-radius: var(--radius-card);
   backdrop-filter: blur(24px) saturate(150%);
   -webkit-backdrop-filter: blur(24px) saturate(150%);
-  box-shadow: 0 6px 24px rgb(0 0 0 / 0.4);
+  box-shadow: var(--shadow);
 }
 
 .kicker {
@@ -120,7 +207,7 @@ a {
   font-weight: 700;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--accent-start);
+  color: var(--accent-text);
 }
 
 .numeric {
