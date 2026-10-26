@@ -66,6 +66,15 @@
   --wall-2: #350a30;
   --wall-3: #1a0a3a;
   --wall-4: #061030;
+  --map-road: #2b2438;
+  --map-block: #17121f;
+  --map-lane: #241e30;
+  --map-park: #143222;
+  --map-park-path: #23493a;
+  --map-water: #0f2547;
+  --map-casing: rgb(0 0 0 / 0.45);
+  --map-walk: #64d2ff;
+  --map-run: #ff9f0a;
 }
 
 .theme-dark {
@@ -100,6 +109,15 @@
     --wall-2: #e9d4ff;
     --wall-3: #d6e4ff;
     --wall-4: #ffe6f3;
+    --map-road: #ffffff;
+    --map-block: #ece7f3;
+    --map-lane: #f6f3fa;
+    --map-park: #d4ecd2;
+    --map-park-path: #bfe1bc;
+    --map-water: #a9d1f3;
+    --map-casing: rgb(40 20 80 / 0.18);
+    --map-walk: #32ade6;
+    --map-run: #ff9500;
   }
 }
 
@@ -130,6 +148,15 @@
   --wall-2: #e9d4ff;
   --wall-3: #d6e4ff;
   --wall-4: #ffe6f3;
+  --map-road: #ffffff;
+  --map-block: #ece7f3;
+  --map-lane: #f6f3fa;
+  --map-park: #d4ecd2;
+  --map-park-path: #bfe1bc;
+  --map-water: #a9d1f3;
+  --map-casing: rgb(40 20 80 / 0.18);
+  --map-walk: #32ade6;
+  --map-run: #ff9500;
 }
 
 *,

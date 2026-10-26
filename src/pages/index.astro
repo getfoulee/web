@@ -4,6 +4,7 @@ import PhoneToday from "../components/PhoneToday.astro";
 import Watches from "../components/Watches.astro";
 import StoreButtons from "../components/StoreButtons.astro";
 import Icon from "../components/Icon.astro";
+import RouteMap from "../components/RouteMap.astro";
 import { site } from "../lib/site";
 
 const week = [
@@ -186,32 +187,8 @@ const more = [
           l'arrivée se rejoignent, et les flèches montrent dans quel sens tu as tourné.
         </p>
       </div>
-      <div class="map glass theme-dark" data-reveal style="--delay:0.1s" role="img" aria-label="Le tracé d'une boucle de 4 kilomètres, avec un repère à chaque kilomètre.">
-        <svg viewBox="0 0 400 320" aria-hidden="true">
-          <defs>
-            <pattern id="streets" width="40" height="40" patternUnits="userSpaceOnUse" patternTransform="rotate(12)">
-              <path d="M0 20h40M20 0v40" stroke="rgb(255 255 255 / 0.05)" stroke-width="6"></path>
-            </pattern>
-          </defs>
-          <rect width="400" height="320" fill="url(#streets)"></rect>
-          <path class="park" d="M250 40c40 0 90 20 100 60s-20 70-60 70-70-30-75-70 0-60 35-60z"></path>
-          <path class="water-way" d="M-10 290c80-30 140 10 210-10s140-60 210-40"></path>
-          <path class="route walk-route" pathLength="1" d="M90 230c-30-30-40-80-10-120s90-50 130-40"></path>
-          <path class="route run-route" pathLength="1" d="M210 70c50 10 110 30 120 80s-30 90-80 100-110 10-160-20"></path>
-          <g class="arrows">
-            <path d="M-5 -5.5L6 0L-5 5.5Z" transform="translate(124 92) rotate(-30)"></path>
-            <path d="M-5 -5.5L6 0L-5 5.5Z" transform="translate(286 92) rotate(24)"></path>
-            <path d="M-5 -5.5L6 0L-5 5.5Z" transform="translate(296 222) rotate(125)"></path>
-            <path d="M-5 -5.5L6 0L-5 5.5Z" transform="translate(148 252) rotate(190)"></path>
-          </g>
-          <g class="km">
-            <circle cx="72" cy="150" r="11"></circle><text x="72" y="154">1</text>
-            <circle cx="178" cy="66" r="11"></circle><text x="178" y="70">2</text>
-            <circle cx="330" cy="150" r="11"></circle><text x="330" y="154">3</text>
-            <circle cx="228" cy="252" r="11"></circle><text x="228" y="256">4</text>
-          </g>
-          <circle class="start-dot" cx="90" cy="230" r="8"></circle>
-        </svg>
+      <div class="map glass" data-reveal style="--delay:0.1s" role="img" aria-label="Une boucle de 4,2 km : une marche dans les rues, puis une course à travers le parc et le long du fleuve, avec un repère à chaque kilomètre.">
+        <RouteMap />
         <div class="map-legend">
           <span><i class="walk-dot"></i>Marche</span>
           <span><i class="run-dot"></i>Course</span>
@@ -812,84 +789,6 @@ const more = [
     overflow: hidden;
   }
 
-  .map svg {
-    width: 100%;
-    height: auto;
-    border-radius: 18px;
-    background: #110c1d;
-  }
-
-  .park {
-    fill: rgb(48 209 88 / 0.08);
-  }
-
-  .water-way {
-    fill: none;
-    stroke: rgb(10 132 255 / 0.18);
-    stroke-width: 16;
-    stroke-linecap: round;
-  }
-
-  .route {
-    fill: none;
-    stroke-width: 7;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-    stroke-dasharray: 1;
-    stroke-dashoffset: 0;
-  }
-
-  .walk-route { stroke: var(--walk); filter: drop-shadow(0 0 6px rgb(100 210 255 / 0.6)); }
-  .run-route { stroke: var(--run); filter: drop-shadow(0 0 6px rgb(255 159 10 / 0.6)); }
-
-  .js .map .route {
-    stroke-dashoffset: 1;
-    transition: stroke-dashoffset 1.4s cubic-bezier(0.5, 0, 0.3, 1);
-  }
-
-  .js .map .run-route {
-    transition-delay: 1.3s;
-    transition-duration: 2s;
-  }
-
-  .js .map.is-visible .route {
-    stroke-dashoffset: 0;
-  }
-
-  .km circle {
-    fill: #fff;
-  }
-
-  .km text {
-    font: 700 12px var(--font-rounded);
-    fill: #000;
-    text-anchor: middle;
-  }
-
-  .js .map .km,
-  .js .map .arrows {
-    opacity: 0;
-    transition: opacity 0.6s 3.1s;
-  }
-
-  .js .map.is-visible .km,
-  .js .map.is-visible .arrows {
-    opacity: 1;
-  }
-
-  .arrows path {
-    fill: #fff;
-    stroke: #110c1d;
-    stroke-width: 1.5;
-    stroke-linejoin: round;
-  }
-
-  .start-dot {
-    fill: #fff;
-    stroke: var(--walk);
-    stroke-width: 4;
-  }
-
   .map-legend {
     display: flex;
     flex-wrap: wrap;
@@ -917,8 +816,8 @@ const more = [
     border-radius: 2px;
   }
 
-  .walk-dot { background: var(--walk); }
-  .run-dot { background: var(--run); }
+  .walk-dot { background: var(--map-walk); }
+  .run-dot { background: var(--map-run); }
 
   /* ---------- Bilan share card ---------- */
   .share-wrap {
