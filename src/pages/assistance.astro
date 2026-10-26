@@ -1,12 +1,13 @@
 ---
 import Prose from "../layouts/Prose.astro";
 import { site } from "../lib/site";
+import { requirements } from "../lib/requirements";
 
 const faq = [
   {
     question: "Sur quels appareils fonctionne Foulée ?",
     answer:
-      "Sur iPhone avec iOS 26, et sur Apple Watch avec watchOS 26. Si tu as une montre Garmin, l'app Connect IQ de Foulée s'installe depuis le store Garmin, et Garmin Connect fait aussi remonter tes pas et tes séances dans Santé.",
+      `Sur iPhone avec ${requirements.ios} ou plus récent, et sur Apple Watch avec ${requirements.watchOS} ou plus récent. Si tu as une montre Garmin, l'app Connect IQ de Foulée s'installe depuis le store Garmin, et Garmin Connect fait aussi remonter tes pas et tes séances dans Santé.`,
   },
   {
     question: "Est-ce que Foulée est gratuite ?",

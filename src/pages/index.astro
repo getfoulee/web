@@ -5,6 +5,7 @@ import Watches from "../components/Watches.astro";
 import StoreButtons from "../components/StoreButtons.astro";
 import Icon from "../components/Icon.astro";
 import { site } from "../lib/site";
+import { requirements } from "../lib/requirements";
 
 const week = [
   { day: "L", minutes: 34 },
@@ -58,7 +59,7 @@ const more = [
           jusqu'au poignet, et la journée est validée.
         </p>
         <div data-reveal="load" style="--delay:0.24s"><StoreButtons /></div>
-        <p class="hero-note" data-reveal="load" style="--delay:0.3s">Gratuite · iOS 26 et watchOS 26 · Sans compte</p>
+        <p class="hero-note" data-reveal="load" style="--delay:0.3s">Gratuite · {requirements.ios} et {requirements.watchOS} ou plus récents · Sans compte</p>
       </div>
 
       <div class="hero-visual">
