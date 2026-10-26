@@ -14,4 +14,9 @@ export const site = {
   issues: "https://github.com/getfoulee/foulee/issues/new",
   garminFAQ: "https://github.com/getfoulee/foulee/blob/main/docs/faq-garmin.md",
   email: "contact@getfoulee.app",
+  /** Cloudflare Web Analytics: cookieless, loaded on production builds only. */
+  analytics: {
+    beacon: "https://static.cloudflareinsights.com/beacon.min.js",
+    token: "b9063e7d935c463aa4888d37c83e4686",
+  },
 } as const;

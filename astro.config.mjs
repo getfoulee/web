@@ -1,5 +1,5 @@
 // @ts-check
-import { defineConfig } from "astro/config";
+import { defineConfig, envField } from "astro/config";
 import sitemap from "@astrojs/sitemap";
 import pressKit from "./src/integrations/press-kit";
 
@@ -10,6 +10,12 @@ export default defineConfig({
     format: "file",
   },
   integrations: [sitemap(), pressKit()],
+  env: {
+    schema: {
+      // Set by CI on main only, so previews and local builds are never counted.
+      ANALYTICS: envField.boolean({ context: "server", access: "public", default: false }),
+    },
+  },
   devToolbar: {
     enabled: false,
   },

@@ -7,6 +7,7 @@ import { join, relative } from "node:path";
 const dist = "dist";
 const pages = ["index.html", "assistance.html", "assistance/garmin.html", "confidentialite.html", "mentions-legales.html", "presse.html", "404.html"];
 const failures = [];
+const analytics = process.env.ANALYTICS === "true";
 
 function htmlFiles(directory) {
   return readdirSync(directory).flatMap((name) => {
@@ -45,6 +46,9 @@ for (const file of htmlFiles(dist)) {
   for (const tag of ["<title>", 'name="description"', 'rel="canonical"', 'property="og:image"', '<html lang="fr"']) {
     if (!html.includes(tag)) failures.push(`${page}: missing ${tag}`);
   }
+
+  // The audience beacon ships with the production build only.
+  if (html.includes("cloudflareinsights.com") !== analytics) failures.push(`${page}: analytics beacon ${analytics ? "missing" : "outside production"}`);
 }
 
 const home = readFileSync(join(dist, "index.html"), "utf8");

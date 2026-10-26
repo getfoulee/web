@@ -2,6 +2,7 @@
 import "../styles/global.css";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
+import { ANALYTICS } from "astro:env/server";
 import { site } from "../lib/site";
 
 interface Props {
@@ -74,5 +75,10 @@ const ogImage = new URL("/og.png", site.url).href;
       );
       for (const element of document.querySelectorAll("[data-reveal]:not([data-reveal=load])")) observer.observe(element);
     </script>
+    {
+      ANALYTICS && (
+        <script is:inline type="module" src={site.analytics.beacon} data-cf-beacon={JSON.stringify({ token: site.analytics.token })} />
+      )
+    }
   </body>
 </html>
