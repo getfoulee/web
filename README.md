@@ -40,9 +40,11 @@ The app repository is the source of truth:
 
 Copy them again when they change in the app.
 
-## Icons and social card
+## Icons and share cards
 
-`npm run assets` regenerates the favicons, the touch icon and `public/og.png` (1200 × 630) from `assets/app-icon.png`. The outputs are committed.
+`npm run assets` regenerates the favicons, the touch icon and the press kit visuals from `assets/app-icon.png`. The outputs are committed.
+
+Every build draws each page's share card (1200 × 630) in `dist/partage/`, from the page's title and address (`src/integrations/share-images.ts`). A new page gets its card with nothing to add.
 
 ## Checks
 
