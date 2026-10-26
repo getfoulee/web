@@ -1,5 +1,8 @@
 # Keep the workflow actions and the npm packages current, grouped into one
-# pull request each per week.
+# pull request each per week. npm majors are left out: they come with peer
+# ranges and Node minimums to settle by hand (TypeScript 7 is outside
+# @astrojs/check's peer range, Astro 7 needs Node 22.23.4), and one of them
+# in the group blocks every other update.
 version: 2
 updates:
   - package-ecosystem: "github-actions"
@@ -29,6 +32,9 @@ updates:
       npm:
         patterns:
           - "*"
+    ignore:
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
     commit-message:
       prefix: "chore"
     labels:
