@@ -5,19 +5,8 @@ import Watches from "../components/Watches.astro";
 import StoreButtons from "../components/StoreButtons.astro";
 import Icon from "../components/Icon.astro";
 import RouteMap from "../components/RouteMap.astro";
+import ShareCard from "../components/ShareCard.astro";
 import { site } from "../lib/site";
-
-const week = [
-  { day: "L", minutes: 34 },
-  { day: "M", minutes: 28 },
-  { day: "M", minutes: 41 },
-  { day: "J", minutes: 31 },
-  { day: "V", minutes: 36 },
-  { day: "S", minutes: 52 },
-  { day: "D", minutes: 30 },
-];
-const goal = 30;
-const longest = Math.max(...week.map((entry) => entry.minutes));
 
 const more = [
   {
@@ -31,12 +20,12 @@ const more = [
     text: "Choisis tes jours et ton créneau. Foulée te fait signe juste avant, puis te laisse tranquille.",
   },
   {
-    icon: "watch",
+    icon: "widgets",
     title: "Widgets et complications",
     text: "Ta série sur l'écran d'accueil, l'écran verrouillé et le cadran de ta montre.",
   },
   {
-    icon: "chart",
+    icon: "merge",
     title: "Une sortie coupée en deux ?",
     text: "Un arrêt par erreur, une app relancée en route : réunis les deux morceaux en une seule sortie, et reviens en arrière quand tu veux.",
   },
@@ -211,27 +200,7 @@ const more = [
         <p class="aside">Chaque dimanche soir et chaque 1er du mois, une notification te l'annonce.</p>
       </div>
       <div class="share-wrap" data-reveal style="--delay:0.1s">
-        <div class="share-card theme-dark" role="img" aria-label="Un bilan de semaine à partager : 4 h 12 d'activité, l'objectif atteint 6 jours sur 7.">
-          <p class="share-head"><img src="/app-icon-128.png" alt="" width="22" height="22" /> Ma semaine sur Foulée</p>
-          <p class="share-big numeric">4 h 12</p>
-          <p class="share-sub">d'activité · <span class="up">+18 %</span> par rapport à la semaine dernière</p>
-          <div class="bars">
-            {
-              week.map((entry, index) => (
-                <div class="bar-col">
-                  <span class:list={["bar", { met: entry.minutes >= goal }]} style={`--h:${(entry.minutes / longest) * 100}%; --i:${index}`} />
-                  <small>{entry.day}</small>
-                </div>
-              ))
-            }
-            <span class="goal-line" style={`--g:${(goal / longest) * 100}`}></span>
-          </div>
-          <div class="share-stats">
-            <span><b class="numeric">6/7</b>jours réussis</span>
-            <span><b class="numeric">58 410</b>pas</span>
-            <span><b class="numeric">41,2</b>km</span>
-          </div>
-        </div>
+        <ShareCard />
       </div>
     </div>
   </section>
@@ -826,135 +795,6 @@ const more = [
     perspective: 1200px;
   }
 
-  .share-card {
-    width: min(360px, 100%);
-    padding: 28px;
-    border-radius: 32px;
-    background:
-      radial-gradient(circle at 20% 0%, rgb(217 122 255 / 0.55), transparent 55%),
-      radial-gradient(circle at 100% 100%, rgb(94 92 230 / 0.5), transparent 50%),
-      linear-gradient(160deg, #2a0a4a, #120826);
-    border: 0.5px solid rgb(255 255 255 / 0.18);
-    box-shadow:
-      0 40px 80px -20px rgb(0 0 0 / 0.7),
-      0 0 80px rgb(191 90 242 / 0.25);
-    transform: rotateY(-10deg) rotateX(4deg);
-    transition: transform 0.6s cubic-bezier(0.2, 0.7, 0.2, 1);
-  }
-
-  .share-card:hover {
-    transform: rotateY(0) rotateX(0);
-  }
-
-  .share-head {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin: 0;
-    font-size: 0.85rem;
-    font-weight: 600;
-    color: var(--text-2);
-  }
-
-  .share-head img {
-    border-radius: 6px;
-  }
-
-  .share-big {
-    margin: 18px 0 0;
-    font-size: 3.4rem;
-    font-weight: 800;
-    line-height: 1;
-    letter-spacing: -0.03em;
-  }
-
-  .share-sub {
-    margin: 6px 0 22px;
-    color: var(--text-2);
-    font-size: 0.9rem;
-  }
-
-  .up {
-    color: var(--minutes);
-    font-weight: 700;
-  }
-
-  .bars {
-    position: relative;
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    gap: 10px;
-    height: 150px;
-    padding-bottom: 22px;
-  }
-
-  .bar-col {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    align-items: center;
-  }
-
-  .bar {
-    width: 100%;
-    height: var(--h);
-    border-radius: 8px;
-    background: rgb(255 255 255 / 0.18);
-  }
-
-  .bar.met {
-    background: var(--activity-gradient);
-  }
-
-  .js .share-wrap .bar {
-    height: 0;
-    transition: height 0.8s cubic-bezier(0.3, 1.2, 0.4, 1);
-    transition-delay: calc(0.3s + var(--i) * 0.07s);
-  }
-
-  .js .share-wrap.is-visible .bar {
-    height: var(--h);
-  }
-
-  .bar-col small {
-    position: absolute;
-    bottom: -22px;
-    color: var(--text-3);
-    font-size: 0.75rem;
-    font-weight: 600;
-  }
-
-  .goal-line {
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: calc(22px + (100% - 22px) * var(--g) / 100);
-    z-index: 1;
-    border-top: 1.5px dashed rgb(255 255 255 / 0.5);
-  }
-
-  .share-stats {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 8px;
-    margin-top: 26px;
-    padding-top: 18px;
-    border-top: 0.5px solid rgb(255 255 255 / 0.15);
-  }
-
-  .share-stats span {
-    display: flex;
-    flex-direction: column;
-    font-size: 0.75rem;
-    color: var(--text-2);
-  }
-
-  .share-stats b {
-    font-size: 1.2rem;
-    color: var(--text);
-  }
-
   /* ---------- Hydration ---------- */
   .hydration {
     display: grid;
@@ -1043,6 +883,7 @@ const more = [
     border-radius: 14px;
     background: var(--accent-gradient);
     box-shadow: 0 6px 18px rgb(191 90 242 / 0.35);
+    color: #fff;
   }
 
   .more-card h3 {

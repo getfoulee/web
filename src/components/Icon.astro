@@ -1,7 +1,7 @@
 ---
 /** A handful of SF Symbol look-alikes, drawn on a 24-point grid. */
 interface Props {
-  name: "shoe" | "timer" | "pin" | "flame" | "drop" | "play" | "heart" | "walk" | "run" | "lock" | "server" | "health" | "bell" | "sparkles" | "watch" | "chart" | "check" | "map";
+  name: "shoe" | "timer" | "pin" | "flame" | "drop" | "play" | "heart" | "walk" | "run" | "lock" | "server" | "health" | "bell" | "sparkles" | "watch" | "chart" | "check" | "map" | "widgets" | "merge";
   size?: number;
   class?: string;
 }
@@ -27,5 +27,7 @@ const { name, size = 24, class: className } = Astro.props;
   {name === "watch" && <><rect x="6" y="6" width="12" height="12" rx="3.5" /><path d="M9 6l.6-3h4.8L15 6M9 18l.6 3h4.8l.6-3" /></>}
   {name === "chart" && <path d="M5 20V12M10 20V6M15 20v-9M20 20V9" />}
   {name === "check" && <path d="M5 12.5l4.5 4.5L19 7.5" />}
+  {name === "widgets" && <><rect x="3.5" y="3.5" width="7.5" height="7.5" rx="2" /><rect x="13" y="3.5" width="7.5" height="7.5" rx="2" /><rect x="3.5" y="13" width="17" height="7.5" rx="2" /></>}
+  {name === "merge" && <path d="M6 3.5v4.5c0 2.5 1.5 4 4 5.2L12 14l2-0.8c2.5-1.2 4-2.7 4-5.2V3.5M12 14v6.5M9.5 18l2.5 2.5 2.5-2.5" />}
   {name === "map" && <path d="M3.5 6.5l5.5-2.5 6 2.5 5.5-2.5v13.5L15 20l-6-2.5-5.5 2.5zM9 4v13.5M15 6.5V20" />}
 </svg>
