@@ -1,7 +1,9 @@
 ---
 import Prose from "../layouts/Prose.astro";
 import LinkCard from "../components/LinkCard.astro";
+import JsonLd from "../components/JsonLd.astro";
 import { site } from "../lib/site";
+import { faqPage } from "../lib/structured-data";
 
 const faq = [
   {
@@ -35,6 +37,7 @@ const faq = [
 ---
 
 <Prose title="Assistance" description="Les réponses aux questions fréquentes sur Foulée, et comment nous écrire.">
+  <JsonLd slot="head" data={faqPage(faq)} />
   <h1>Assistance</h1>
   <p class="lead">Une question, un souci ? Les réponses les plus courantes sont ici. Sinon, écris-nous, on lit tout.</p>
 

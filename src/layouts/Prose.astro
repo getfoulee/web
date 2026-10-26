@@ -10,6 +10,7 @@ const { title, description } = Astro.props;
 ---
 
 <Base title={title} description={description}>
+  <slot name="head" slot="head" />
   <div class="glow" aria-hidden="true"></div>
   <article class="container prose">
     <slot />

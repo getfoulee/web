@@ -2,8 +2,10 @@
 import "../styles/global.css";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
+import JsonLd from "../components/JsonLd.astro";
 import { ANALYTICS } from "astro:env/server";
 import { site } from "../lib/site";
+import { organization } from "../lib/structured-data";
 
 interface Props {
   title?: string;
@@ -52,6 +54,7 @@ const ogImage = new URL("/og.png", site.url).href;
         if (theme === "light" || theme === "dark") document.documentElement.dataset.theme = theme;
       } catch {}
     </script>
+    <JsonLd data={organization} />
     <slot name="head" />
   </head>
   <body>
