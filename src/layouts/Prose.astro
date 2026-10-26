@@ -56,6 +56,13 @@ const { title, description } = Astro.props;
     margin: 36px 0 8px;
   }
 
+  /* A device mockup between the lead and the text. */
+  .prose :global(.device) {
+    display: grid;
+    place-items: center;
+    padding: 24px 0 8px;
+  }
+
   .prose :global(h2) {
     margin: 56px 0 14px;
     color: var(--text);
@@ -121,6 +128,37 @@ const { title, description } = Astro.props;
     border-bottom: 0.5px solid var(--hairline);
     text-align: left;
     vertical-align: top;
+  }
+
+  /* A list of terms and their details, one row each. */
+  .prose :global(.facts) {
+    display: grid;
+    margin: 0;
+    border-top: 0.5px solid var(--hairline);
+  }
+
+  .prose :global(.facts div) {
+    display: grid;
+    grid-template-columns: 9rem 1fr;
+    gap: 16px;
+    padding: 12px 0;
+    border-bottom: 0.5px solid var(--hairline);
+  }
+
+  .prose :global(.facts dt) {
+    color: var(--text);
+    font-weight: 600;
+  }
+
+  .prose :global(.facts dd) {
+    margin: 0;
+  }
+
+  @media (max-width: 640px) {
+    .prose :global(.facts div) {
+      grid-template-columns: 1fr;
+      gap: 2px;
+    }
   }
 
   .prose :global(hr) {

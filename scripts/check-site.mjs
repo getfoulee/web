@@ -5,7 +5,7 @@ import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
 import { join, relative } from "node:path";
 
 const dist = "dist";
-const pages = ["index.html", "assistance.html", "assistance/garmin.html", "confidentialite.html", "mentions-legales.html", "presse.html", "404.html"];
+const pages = ["index.html", "assistance.html", "assistance/garmin.html", "confidentialite.html", "mentions-legales.html", "presse.html", "apple-watch.html", "garmin.html", "404.html"];
 const failures = [];
 const analytics = process.env.ANALYTICS === "true";
 
@@ -103,6 +103,11 @@ for (const store of ["apps.apple.com", "apps.garmin.com"]) {
 }
 const app = requireData("index.html", "MobileApplication", ["name", "operatingSystem", "applicationCategory", "offers"]);
 if (app && app.offers.price !== "0") failures.push("index.html: MobileApplication is not free");
+
+// The watch pages are reached from the home page, not only from the footer.
+for (const watch of ["/apple-watch", "/garmin"]) {
+  if (!home.includes(`class="read-more" href="${watch}"`)) failures.push(`index.html: no link to ${watch} in the watches section`);
+}
 
 // One structured question per question shown, each with its answer.
 const faq = requireData("assistance.html", "FAQPage", ["mainEntity"]);

@@ -1,43 +1,58 @@
 ---
 import Icon from "./Icon.astro";
+
+interface Props {
+  /** One watch alone, for its own page; both side by side otherwise. */
+  only?: "apple" | "garmin";
+}
+
+const { only } = Astro.props;
 ---
 
 <div class="watches">
-  <figure class="apple theme-dark" role="img" aria-label="Une séance de course en cours sur l'Apple Watch : 24 minutes, 3,48 km, 147 battements par minute.">
-    <div class="band top" aria-hidden="true"></div>
-    <div class="case">
-      <div class="crown" aria-hidden="true"></div>
-      <div class="screen">
-        <div class="head">
-          <span class="sport"><Icon name="run" size={14} /> Course</span>
-          <span class="numeric clock">12:48</span>
+  {
+    only !== "garmin" && (
+      <figure class="apple theme-dark" role="img" aria-label="Une séance de course en cours sur l'Apple Watch : 24 minutes, 3,48 km, 147 battements par minute.">
+        <div class="band top" aria-hidden="true"></div>
+        <div class="case">
+          <div class="crown" aria-hidden="true"></div>
+          <div class="screen">
+            <div class="head">
+              <span class="sport"><Icon name="run" size={14} /> Course</span>
+              <span class="numeric clock">12:48</span>
+            </div>
+            <p class="elapsed numeric">24:31<small>,08</small></p>
+            <p class="metric numeric">3,48<small>KM</small></p>
+            <p class="metric numeric pace">5'52"<small>/KM</small></p>
+            <p class="metric numeric heart"><Icon name="heart" size={13} />147<small>BPM</small></p>
+          </div>
         </div>
-        <p class="elapsed numeric">24:31<small>,08</small></p>
-        <p class="metric numeric">3,48<small>KM</small></p>
-        <p class="metric numeric pace">5'52"<small>/KM</small></p>
-        <p class="metric numeric heart"><Icon name="heart" size={13} />147<small>BPM</small></p>
-      </div>
-    </div>
-    <div class="band bottom" aria-hidden="true"></div>
-  </figure>
+        <div class="band bottom" aria-hidden="true"></div>
+      </figure>
+    )
+  }
 
-  <figure class="garmin theme-dark" role="img" aria-label="L'app Foulée sur une montre Garmin : une série de 42 jours, 7 842 pas et 22 minutes d'activité.">
-    <div class="bezel">
-      <div class="screen">
-        <span class="g-flame"><Icon name="flame" size={22} /></span>
-        <p class="g-streak numeric">42</p>
-        <p class="g-label">jours de série</p>
-        <div class="g-bars">
-          <span><i style="--w:78%; --c:var(--steps)"></i></span>
-          <span><i style="--w:73%; --c:var(--minutes)"></i></span>
+  {
+    only !== "apple" && (
+      <figure class="garmin theme-dark" role="img" aria-label="L'app Foulée sur une montre Garmin : une série de 42 jours, 7 842 pas et 22 minutes d'activité.">
+        <div class="bezel">
+          <div class="screen">
+            <span class="g-flame"><Icon name="flame" size={22} /></span>
+            <p class="g-streak numeric">42</p>
+            <p class="g-label">jours de série</p>
+            <div class="g-bars">
+              <span><i style="--w:78%; --c:var(--steps)"></i></span>
+              <span><i style="--w:73%; --c:var(--minutes)"></i></span>
+            </div>
+            <p class="g-figures numeric"><b>7 842</b> pas · <b>22</b> min</p>
+          </div>
         </div>
-        <p class="g-figures numeric"><b>7 842</b> pas · <b>22</b> min</p>
-      </div>
-    </div>
-    <span class="button b1" aria-hidden="true"></span>
-    <span class="button b2" aria-hidden="true"></span>
-    <span class="button b3" aria-hidden="true"></span>
-  </figure>
+        <span class="button b1" aria-hidden="true"></span>
+        <span class="button b2" aria-hidden="true"></span>
+        <span class="button b3" aria-hidden="true"></span>
+      </figure>
+    )
+  }
 </div>
 
 <style>

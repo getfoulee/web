@@ -154,13 +154,17 @@ const more = [
           Sur l'Apple Watch, tu suis ta sortie du poignet : chrono, distance, allure, fréquence cardiaque. L'iPhone l'affiche avec son parcours, et
           l'inverse marche aussi. Pendant ce temps, une Live Activity garde l'essentiel sur l'écran verrouillé et dans la Dynamic Island.
         </p>
+        <a class="read-more" href="/apple-watch">Foulée sur Apple Watch →</a>
         <div class="garmin-card glass">
           <p class="garmin-title">Une Garmin au poignet ?</p>
           <p>
             L'app Connect IQ affiche ta série et tes compteurs du jour, met ta série sur ton cadran, lance tes marches et tes courses, et envoie tout à ton
             iPhone.
           </p>
-          <a href={site.connectIQ} rel="noopener">Voir sur Connect IQ →</a>
+          <div class="more-links">
+            <a class="read-more" href="/garmin">Foulée sur Garmin →</a>
+            <a class="read-more" href={site.connectIQ} rel="noopener">Voir sur Connect IQ →</a>
+          </div>
         </div>
       </div>
       <div data-reveal style="--delay:0.1s">
@@ -298,7 +302,7 @@ const more = [
           <li><Icon name="server" size={18} /><span><b>Aucun serveur à nous</b>Rien ne quitte tes appareils pour atterrir chez nous.</span></li>
           <li><Icon name="health" size={18} /><span><b>Tout passe par Santé</b>Tes sorties et tes verres d'eau restent dans l'app Santé d'Apple.</span></li>
         </ul>
-        <a class="privacy-link" href="/confidentialite">Lire la politique de confidentialité →</a>
+        <a class="read-more" href="/confidentialite">Lire la politique de confidentialité →</a>
       </div>
     </div>
   </section>
@@ -775,14 +779,10 @@ const more = [
     font-weight: 700;
   }
 
-  .garmin-card a {
-    color: var(--accent-text);
-    font-weight: 600;
-    text-decoration: none;
-  }
-
-  .garmin-card a:hover {
-    text-decoration: underline;
+  .more-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 24px;
   }
 
   /* ---------- Route map ---------- */
@@ -1021,13 +1021,14 @@ const more = [
     font-size: 1rem;
   }
 
-  .privacy-link {
+  /* A « read more » link under a block of copy. */
+  .read-more {
     color: var(--accent-text);
     font-weight: 600;
     text-decoration: none;
   }
 
-  .privacy-link:hover {
+  .read-more:hover {
     text-decoration: underline;
   }
 
