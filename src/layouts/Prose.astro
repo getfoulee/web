@@ -44,6 +44,17 @@ const { title, description } = Astro.props;
     text-wrap: balance;
   }
 
+  .prose :global(.lead) {
+    font-size: 1.2rem;
+  }
+
+  .prose :global(.cards) {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 14px;
+    margin: 36px 0 8px;
+  }
+
   .prose :global(h2) {
     margin: 56px 0 14px;
     color: var(--text);

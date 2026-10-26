@@ -1,0 +1,50 @@
+---
+/** A glass card that is one link: a bold title and a line of detail. */
+interface Props {
+  href: string;
+  title: string;
+  detail: string;
+  /** For outside links, which come from site.ts. */
+  external?: boolean;
+  /** Same-origin files only: the browser saves them instead of opening them. */
+  download?: boolean;
+}
+
+const { href, title, detail, external = false, download = false } = Astro.props;
+---
+
+<a class="card" href={href} rel={external ? "noopener" : undefined} download={download || undefined}>
+  <strong>{title}</strong>
+  <span>{detail}</span>
+</a>
+
+<style>
+  .card {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 20px;
+    border-radius: 20px;
+    background: var(--glass);
+    border: 0.5px solid var(--hairline);
+    text-decoration: none;
+    transition:
+      border-color 0.2s,
+      translate 0.2s;
+  }
+
+  .card:hover {
+    translate: 0 -2px;
+    border-color: color-mix(in srgb, var(--accent-start) 45%, transparent);
+  }
+
+  .card strong {
+    color: var(--text);
+  }
+
+  .card span {
+    color: var(--text-2);
+    font-size: 0.9rem;
+    overflow-wrap: anywhere;
+  }
+</style>
