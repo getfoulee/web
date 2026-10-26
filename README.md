@@ -62,3 +62,7 @@ GitHub Actions (`.github/workflows/ci.yml`) runs the checks above on every push 
 The workflow needs two repository secrets: `CLOUDFLARE_API_TOKEN` (a token with the **Account › Cloudflare Pages › Edit** permission) and `CLOUDFLARE_ACCOUNT_ID`. The first run creates the Pages project; the custom domain `getfoulee.app` is attached once, by hand, in the project's **Custom domains** tab.
 
 `public/_headers` sets the security headers and the long cache on `/_astro/*`.
+
+## Working with Claude Code
+
+`CLAUDE.md` holds the repository's rules; `.claude/skills/` holds the commands (`/work-issue <n>`, `/next-issue`, `/security-audit-run`) and the vendored `security-audit` and `caveman` skills. See `.claude/skills/README.md`.
