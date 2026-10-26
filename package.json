@@ -10,10 +10,17 @@
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "assets": "node scripts/generate-assets.mjs"
+    "assets": "node scripts/generate-assets.mjs",
+    "check": "astro check",
+    "test": "node scripts/check-site.mjs"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.4",
     "astro": "6.4.8"
+  },
+  "devDependencies": {
+    "@astrojs/check": "0.9.12",
+    "typescript": "6.0.3",
+    "wrangler": "4.152.0"
   }
 }

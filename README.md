@@ -44,6 +44,21 @@ Copy them again when they change in the app.
 
 `npm run assets` regenerates the favicons, the touch icon and `public/og.png` (1200 × 630) from `assets/app-icon.png`. The outputs are committed.
 
+## Checks
+
+```sh
+npm run check     # astro check: types and templates
+npm run build
+npm test          # the built site: every page present, every internal link resolves, metadata on each page
+```
+
 ## Deploy
 
-Cloudflare Workers & Pages builds every push to `main`: build command `npm run build`, output directory `dist`. `public/_headers` sets the security headers and the long cache on `/_astro/*`.
+GitHub Actions (`.github/workflows/ci.yml`) runs the checks above on every push and pull request, then deploys `dist/` to the Cloudflare Pages project `getfoulee` with Wrangler:
+
+- a push to `main` goes to production, getfoulee.app;
+- a pull request gets a preview URL, shown in the run summary and on the `preview` environment.
+
+The workflow needs two repository secrets: `CLOUDFLARE_API_TOKEN` (a token with the **Account › Cloudflare Pages › Edit** permission) and `CLOUDFLARE_ACCOUNT_ID`. The first run creates the Pages project; the custom domain `getfoulee.app` is attached once, by hand, in the project's **Custom domains** tab.
+
+`public/_headers` sets the security headers and the long cache on `/_astro/*`.
