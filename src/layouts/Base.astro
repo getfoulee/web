@@ -6,20 +6,20 @@ import JsonLd from "../components/JsonLd.astro";
 import { ANALYTICS } from "astro:env/server";
 import { site } from "../lib/site";
 import { organization } from "../lib/structured-data";
-import { alternates, defaultLocale, locales, type Locale } from "../lib/i18n";
+import { alternates, locales, pageLocale } from "../lib/i18n";
 
 interface Props {
   title?: string;
   description?: string;
 }
 
-const { title, description = site.description } = Astro.props;
-const fullTitle = title ? `${title} · ${site.name}` : `${site.name} · ${site.tagline}`;
+const locale = pageLocale(Astro.currentLocale);
+const { title, description = locales[locale].description } = Astro.props;
+const fullTitle = title ? `${title} · ${site.name}` : `${site.name} · ${locales[locale].tagline}`;
 // The address a page is served at: the build writes /assistance.html and
 // /index.html, Cloudflare serves them as /assistance and /.
 const path = Astro.url.pathname.replace(/(index)?\.html$/, "").replace(/(.)\/$/, "$1");
 const canonical = new URL(path, site.url).href;
-const locale = (Astro.currentLocale ?? defaultLocale) as Locale;
 // The same page in the other language, when it is published in both.
 const translated = alternates(path);
 // The page's share card, drawn at build by src/integrations/share-images.ts.
