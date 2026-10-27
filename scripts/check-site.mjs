@@ -30,6 +30,8 @@ function resolves(target) {
 const jsonLd = new Map();
 /** Share image → the pages that point to it: one image per page. */
 const shareImages = new Map();
+/** Page address → its hreflang links, language → address. */
+const hreflang = new Map();
 
 /** The JSON-LD objects found on a page so far. */
 function structuredData(page) {
@@ -63,9 +65,17 @@ for (const page of htmlFiles) {
     }
   }
 
-  for (const tag of ["<title>", 'name="description"', 'rel="canonical"', 'property="og:image"', '<html lang="fr"', 'data-scheme="light"', 'data-scheme="dark"']) {
+  for (const tag of ["<title>", 'name="description"', 'rel="canonical"', 'property="og:image"', 'data-scheme="light"', 'data-scheme="dark"']) {
     if (!html.includes(tag)) failures.push(`${page}: missing ${tag}`);
   }
+
+  // French at the root, English under /en, each with its own language tags.
+  const locale = /^en([\\/.]|$)/.test(page) ? "en" : "fr";
+  if (!html.includes(`<html lang="${locale}"`)) failures.push(`${page}: missing <html lang="${locale}"`);
+  if (!html.includes(`<meta property="og:locale" content="${locale === "en" ? "en_US" : "fr_FR"}">`)) failures.push(`${page}: og:locale is not ${locale}`);
+  const languages = new Map([...html.matchAll(/<link rel="alternate" hreflang="([^"]+)" href="https:\/\/getfoulee\.app(\/[^"]*)">/g)].map(([, lang, path]) => [lang, path]));
+  if (languages.size > 0) hreflang.set(address(page).replace(/(.)\/$/, "$1"), languages);
+  else if (locale === "en") failures.push(`${page}: English page without hreflang links to its French page`);
 
   // The canonical address is the one Cloudflare serves, without .html.
   const canonical = `https://getfoulee.app${address(page)}`;
@@ -97,6 +107,18 @@ for (const page of htmlFiles) {
 
   // The audience beacon ships with the production build only.
   if (html.includes("cloudflareinsights.com") !== analytics) failures.push(`${page}: analytics beacon ${analytics ? "missing" : "outside production"}`);
+}
+
+// Each translation points back: the French and English pages list the same pair.
+for (const [path, languages] of hreflang) {
+  if (!["fr", "en", "x-default"].every((lang) => languages.has(lang))) failures.push(`${path}: hreflang without fr, en and x-default`);
+  if (languages.get("x-default") !== languages.get("fr")) failures.push(`${path}: x-default is not the French page`);
+  if (![...languages.values()].includes(path)) failures.push(`${path}: hreflang links leave out the page itself`);
+  for (const [lang, target] of languages) {
+    const back = hreflang.get(target);
+    if (!back) failures.push(`${path}: hreflang ${lang} points to ${target}, which does not link back`);
+    else if ([...languages].some(([key, value]) => back.get(key) !== value)) failures.push(`${path} and ${target}: hreflang links differ`);
+  }
 }
 
 for (const [image, sharing] of shareImages) {
