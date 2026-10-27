@@ -14,7 +14,8 @@
     "screenshots": "node scripts/fetch-screenshots.mjs",
     "check": "astro check",
     "test": "node scripts/check-site.mjs",
-    "lighthouse": "lhci autorun && lhci autorun --collect.settings.preset=desktop --upload.outputDir=.lighthouseci/desktop"
+    "lighthouse": "lhci autorun && lhci autorun --collect.settings.preset=desktop --upload.outputDir=.lighthouseci/desktop",
+    "test:a11y": "playwright test"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.4",
@@ -22,7 +23,9 @@
   },
   "devDependencies": {
     "@astrojs/check": "0.9.12",
+    "@axe-core/playwright": "4.14.0",
     "@lhci/cli": "0.15.1",
+    "@playwright/test": "1.64.1",
     "sharp": "0.34.5",
     "typescript": "6.0.3",
     "wrangler": "4.152.0"

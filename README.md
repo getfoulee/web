@@ -53,9 +53,12 @@ npm run check     # astro check: types and templates
 npm run build
 npm test          # the built site: every page present, every internal link resolves, metadata on each page
 npm run lighthouse  # every page, mobile then desktop: performance, accessibility, best practices and SEO at 95 or more
+npm run test:a11y   # axe on every page and the keyboard paths, light and dark (Playwright)
 ```
 
 `npm run lighthouse` needs Chrome; point `CHROME_PATH` at another Chromium browser (Edge) if Chrome is not installed. The reports land in `.lighthouseci/`, and CI keeps them as the `lighthouse` artifact of each run.
+
+`npm run test:a11y` serves `dist/` with `astro preview` on port 4322. The first time, download its browser with `npx playwright install chromium`.
 
 ## Deploy
 

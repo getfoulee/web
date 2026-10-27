@@ -46,7 +46,7 @@
   --bg-raised: #0f0a1c;
   --text: #f7f3ff;
   --text-2: rgb(235 228 255 / 0.68);
-  --text-3: rgb(235 228 255 / 0.45);
+  --text-3: rgb(235 228 255 / 0.55);
   --hairline: rgb(255 255 255 / 0.12);
   --glass: rgb(38 26 62 / 0.55);
   --glass-border: rgb(255 255 255 / 0.12);
@@ -89,7 +89,7 @@
     --bg-raised: #ffffff;
     --text: #1d1233;
     --text-2: rgb(29 18 51 / 0.7);
-    --text-3: rgb(29 18 51 / 0.5);
+    --text-3: rgb(29 18 51 / 0.62);
     --hairline: rgb(76 40 130 / 0.12);
     --glass: rgb(255 255 255 / 0.6);
     --glass-border: rgb(255 255 255 / 0.8);
@@ -128,7 +128,7 @@
   --bg-raised: #ffffff;
   --text: #1d1233;
   --text-2: rgb(29 18 51 / 0.7);
-  --text-3: rgb(29 18 51 / 0.5);
+  --text-3: rgb(29 18 51 / 0.62);
   --hairline: rgb(76 40 130 / 0.12);
   --glass: rgb(255 255 255 / 0.6);
   --glass-border: rgb(255 255 255 / 0.8);
@@ -297,12 +297,16 @@ a {
   *::before,
   *::after {
     animation-duration: 0.01ms !important;
+    animation-delay: 0s !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+    transition-delay: 0s !important;
   }
 
+  /* No rise at all: even at 0.01ms it starts from opacity 0. */
   .js [data-reveal] {
     opacity: 1;
     transform: none;
+    animation: none;
   }
 }
