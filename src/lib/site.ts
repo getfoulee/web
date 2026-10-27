@@ -12,6 +12,7 @@ export const site = {
   connectIQ: "https://apps.garmin.com/apps/8c11aa2c-7fc7-4e3d-8441-b2771626cbc7",
   repository: "https://github.com/getfoulee/foulee",
   issues: "https://github.com/getfoulee/foulee/issues/new",
+  releases: "https://github.com/getfoulee/foulee/releases",
   garminFAQ: "https://github.com/getfoulee/foulee/blob/main/docs/faq-garmin.md",
   email: "contact@getfoulee.app",
   /** Cloudflare Web Analytics: cookieless, loaded on production builds only. */

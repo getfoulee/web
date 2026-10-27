@@ -7,7 +7,7 @@ import { address, htmlFiles } from "./pages.mjs";
 import { inlineScriptHashes, policyLine } from "../src/lib/csp.mjs";
 
 const dist = "dist";
-const pages = ["index.html", "assistance.html", "assistance/garmin.html", "confidentialite.html", "mentions-legales.html", "presse.html", "apple-watch.html", "garmin.html", "404.html"];
+const pages = ["index.html", "assistance.html", "assistance/garmin.html", "confidentialite.html", "mentions-legales.html", "presse.html", "apple-watch.html", "garmin.html", "nouveautes.html", "404.html"];
 const failures = [];
 const analytics = process.env.ANALYTICS === "true";
 const headers = readFileSync(join(dist, "_headers"), "utf8");

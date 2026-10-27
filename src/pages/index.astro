@@ -10,6 +10,7 @@ import ShareCard from "../components/ShareCard.astro";
 import { site } from "../lib/site";
 import { mobileApplication } from "../lib/structured-data";
 import { screenshots } from "../lib/screenshots";
+import { latest } from "../lib/releases";
 
 const more = [
   {
@@ -53,6 +54,16 @@ const more = [
         </p>
         <div data-reveal="load" style="--delay:0.24s"><StoreButtons /></div>
         <p class="hero-note" data-reveal="load" style="--delay:0.3s">Gratuite · iOS {site.minimumOS} et watchOS {site.minimumOS} ou plus récents · Sans compte</p>
+        {
+          latest && (
+            <a class="eyebrow news" href="/nouveautes" data-reveal="load" style="--delay:0.36s">
+              <span class="news-tag">Nouveau</span>
+              <span>
+                Foulée {latest.version} · {latest.highlights[0].title.replace(/\.$/, "")}
+              </span>
+            </a>
+          )
+        }
       </div>
 
       <div class="hero-visual">
@@ -439,6 +450,27 @@ const more = [
     margin: 20px 0 0;
     color: var(--text-3);
     font-size: 0.9rem;
+  }
+
+  /* The newest version, under the store buttons: an eyebrow that is a link. */
+  .news {
+    margin: 20px 0 0;
+    padding: 6px 14px 6px 6px;
+    text-decoration: none;
+    transition: border-color 0.2s;
+  }
+
+  .news:hover {
+    border-color: color-mix(in srgb, var(--accent-start) 45%, transparent);
+    color: var(--text);
+  }
+
+  .news-tag {
+    flex: none;
+    padding: 3px 10px;
+    border-radius: var(--radius-pill);
+    background: var(--accent-gradient);
+    color: white;
   }
 
   .hero-visual {
