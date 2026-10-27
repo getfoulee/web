@@ -1,15 +1,10 @@
 // axe on every page of the build, and the keyboard paths a visitor relies on:
 // the skip link, the theme switch and the FAQ. Each test runs once per theme
 // (the projects in playwright.config.ts).
-import { readdirSync } from "node:fs";
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test, type Locator, type Page } from "@playwright/test";
+import { pages } from "./pages";
 
-/** Every page in dist/, as the address it is served at: `/`, `/assistance/garmin`. */
-const pages = readdirSync("dist", { recursive: true, encoding: "utf8" })
-  .filter((file) => file.endsWith(".html"))
-  .map((file) => `/${file.replaceAll("\\", "/").replace(/(index)?\.html$/, "")}`)
-  .sort();
 
 for (const path of pages) {
   test(`axe: ${path}`, async ({ page }) => {

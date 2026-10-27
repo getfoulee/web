@@ -1,7 +1,8 @@
 name: CI
 
 # Every push and pull request type-checks, builds and tests the site, audits
-# each page with Lighthouse and checks its accessibility. A push to main then
+# each page with Lighthouse, checks its accessibility and compares each page
+# with its reference screenshots. A push to main then
 # deploys it to Cloudflare Pages (getfoulee.app); a pull request gets its own
 # preview URL, posted in the run summary.
 on:
@@ -9,6 +10,11 @@ on:
     branches: [main]
   pull_request:
   workflow_dispatch:
+    inputs:
+      update-screenshots:
+        description: Capture new reference screenshots (artifact `screenshots`) instead of comparing
+        type: boolean
+        default: false
 
 concurrency:
   group: ci-${{ github.ref }}
@@ -85,10 +91,15 @@ jobs:
           include-hidden-files: true
           retention-days: 7
 
-  a11y:
-    name: Accessibility
+  browser:
+    name: ${{ matrix.suite == 'a11y' && 'Accessibility' || 'Screenshots' }}
     needs: build
     runs-on: ubuntu-latest
+    # Both suites run in Playwright, side by side; one failing does not cancel the other.
+    strategy:
+      fail-fast: false
+      matrix:
+        suite: [a11y, visual]
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
@@ -108,8 +119,27 @@ jobs:
       - name: Install Chromium
         run: npx playwright install --with-deps --only-shell chromium
 
-      - name: axe and keyboard checks, light and dark
-        run: npm run test:a11y
+      # a11y: axe and keyboard checks. visual: each page at 375 px and 1440 px
+      # against its reference screenshot; a run started by hand with
+      # update-screenshots rewrites the references instead. Both in light and dark.
+      - name: Run the ${{ matrix.suite }} tests
+        run: npm run test:${{ matrix.suite }} -- ${{ matrix.suite == 'visual' && inputs.update-screenshots && '--update-snapshots' || '' }}
+
+      # The new references, to download and commit.
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        if: ${{ matrix.suite == 'visual' && inputs.update-screenshots }}
+        with:
+          name: screenshots
+          path: tests/__screenshots__/
+          retention-days: 7
+
+      # The actual capture and its difference with the reference, for each failure.
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        if: ${{ matrix.suite == 'visual' && failure() }}
+        with:
+          name: screenshot-diffs
+          path: test-results/
+          retention-days: 7
 
   deploy:
     name: Deploy to Cloudflare

@@ -1,5 +1,6 @@
-// Accessibility checks of the built site (tests/), in light and in dark. The
-// pages are served from dist/ by `astro preview`: run `npm run build` first.
+// Accessibility checks and reference screenshots of the built site (tests/), in
+// light and in dark. The pages are served from dist/ by `astro preview`: run
+// `npm run build` first.
 import { defineConfig, devices } from "@playwright/test";
 
 const port = 4322;
@@ -10,6 +11,9 @@ export default defineConfig({
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   reporter: process.env.CI ? [["github"], ["list"]] : "list",
+  // One reference per theme, with no platform suffix: the references are the
+  // Linux rendering of CI, which fonts and anti-aliasing make differ elsewhere.
+  snapshotPathTemplate: "{testDir}/__screenshots__/{projectName}/{arg}{ext}",
   use: {
     ...devices["Desktop Chrome"],
     baseURL,
