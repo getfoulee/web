@@ -23,6 +23,7 @@ const pages = [
   "en/support/garmin.html",
   "en/privacy.html",
   "en/legal-notice.html",
+  "en/404.html",
 ];
 const failures = [];
 const analytics = process.env.ANALYTICS === "true";
@@ -91,7 +92,7 @@ for (const page of htmlFiles) {
   if (!html.includes(`<meta property="og:locale" content="${locale === "en" ? "en_US" : "fr_FR"}">`)) failures.push(`${page}: og:locale is not ${locale}`);
   const languages = new Map([...html.matchAll(/<link rel="alternate" hreflang="([^"]+)" href="https:\/\/getfoulee\.app(\/[^"]*)">/g)].map(([, lang, path]) => [lang, path]));
   if (languages.size > 0) hreflang.set(address(page).replace(/(.)\/$/, "$1"), languages);
-  else if (locale === "en") failures.push(`${page}: English page without hreflang links to its French page`);
+  else if (locale === "en" && !page.endsWith("404.html")) failures.push(`${page}: English page without hreflang links to its French page`);
 
   // The language switch, in the header and the footer, keeps the page: its translation, or the other language's home.
   const other = locale === "en" ? "fr" : "en";

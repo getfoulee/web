@@ -13,8 +13,8 @@ const target = switchTarget(servedPath(Astro.url.pathname), pageLocale(Astro.cur
 const name = names[target.locale];
 ---
 
-<a class:list={["language", { full }]} href={target.path} hreflang={target.locale} lang={target.locale} aria-label={full ? undefined : name} data-language-switch>
-  {full ? name : target.locale.toUpperCase()}
+<a class:list={["language", { full }]} href={target.path} hreflang={target.locale} lang={target.locale} data-language-switch>
+  {full ? name : <><span aria-hidden="true">{target.locale.toUpperCase()}</span><span class="visually-hidden">{name}</span></>}
 </a>
 
 <style>
