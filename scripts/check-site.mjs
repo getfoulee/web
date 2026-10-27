@@ -93,6 +93,15 @@ for (const page of htmlFiles) {
   if (languages.size > 0) hreflang.set(address(page).replace(/(.)\/$/, "$1"), languages);
   else if (locale === "en") failures.push(`${page}: English page without hreflang links to its French page`);
 
+  // The language switch, in the header and the footer, keeps the page: its translation, or the other language's home.
+  const other = locale === "en" ? "fr" : "en";
+  const target = languages.get(other) ?? (other === "en" ? "/en" : "/");
+  const switches = [...html.matchAll(/<a [^>]*href="([^"]*)" hreflang="([^"]+)"[^>]*data-language-switch/g)];
+  if (switches.length !== 2) failures.push(`${page}: ${switches.length} language switches instead of 2`);
+  for (const [, href, lang] of switches) {
+    if (href !== target || lang !== other) failures.push(`${page}: language switch leads to ${href} (${lang}) instead of ${target} (${other})`);
+  }
+
   // The canonical address is the one Cloudflare serves, without .html.
   const canonical = `https://getfoulee.app${address(page)}`;
   if (!html.includes(`<link rel="canonical" href="${canonical}">`)) failures.push(`${page}: canonical is not ${canonical}`);

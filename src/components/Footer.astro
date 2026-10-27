@@ -1,4 +1,5 @@
 ---
+import LanguageSwitch from "./LanguageSwitch.astro";
 import { site } from "../lib/site";
 import { localePath, locales, pageLocale } from "../lib/i18n";
 
@@ -82,6 +83,7 @@ const copy = {
 
   <div class="container fineprint">
     <p>© {year} Foulée. {copy.trademarks}</p>
+    <LanguageSwitch full />
   </div>
 </footer>
 
@@ -148,6 +150,11 @@ const copy = {
   }
 
   .fineprint {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px 32px;
     margin-top: 48px;
     color: var(--text-3);
     font-size: 0.8rem;

@@ -1,0 +1,51 @@
+---
+import { pageLocale, servedPath, switchTarget } from "../lib/i18n";
+
+interface Props {
+  /** Spells the language out (« English ») instead of its code (« EN »). */
+  full?: boolean;
+}
+
+const { full = false } = Astro.props;
+// The link reads in the language it leads to, so it is named in that language.
+const names = { fr: "Français", en: "English" };
+const target = switchTarget(servedPath(Astro.url.pathname), pageLocale(Astro.currentLocale));
+const name = names[target.locale];
+---
+
+<a class:list={["language", { full }]} href={target.path} hreflang={target.locale} lang={target.locale} aria-label={full ? undefined : name} data-language-switch>
+  {full ? name : target.locale.toUpperCase()}
+</a>
+
+<style>
+  .language {
+    color: var(--text-2);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .language:hover {
+    color: var(--text);
+  }
+
+  .language:not(.full) {
+    display: grid;
+    place-items: center;
+    min-width: 38px;
+    height: 38px;
+    border: 0.5px solid var(--hairline);
+    border-radius: var(--radius-pill);
+    background: var(--surface);
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+  }
+
+  .language:not(.full):hover {
+    background: var(--surface-2);
+  }
+
+  .full {
+    font-size: 0.95rem;
+  }
+</style>
