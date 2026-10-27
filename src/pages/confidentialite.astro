@@ -1,18 +1,8 @@
 ---
 import Prose from "../layouts/Prose.astro";
 import { Content } from "../content/privacy.md";
-import { site } from "../lib/site";
 ---
 
 <Prose title="Politique de confidentialité" description="Ce que Foulée lit, écrit et garde : tout reste sur tes appareils, sans compte ni serveur.">
   <Content />
-
-  <hr />
-
-  <h2>Et ce site ?</h2>
-  <p>
-    getfoulee.app ne dépose aucun cookie et n'embarque aucun traceur publicitaire ni outil d'analyse tiers. Il n'a ni formulaire ni compte. Il est hébergé par
-    Cloudflare, qui traite techniquement les requêtes (adresse IP, navigateur, page demandée) pour servir et protéger le site. Pour toute question :
-    <a href={`mailto:${site.email}`}>{site.email}</a>.
-  </p>
 </Prose>

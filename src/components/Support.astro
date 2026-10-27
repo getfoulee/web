@@ -1,0 +1,239 @@
+---
+import Prose from "../layouts/Prose.astro";
+import LinkCard from "./LinkCard.astro";
+import JsonLd from "./JsonLd.astro";
+import { site } from "../lib/site";
+import { faqPage } from "../lib/structured-data";
+import { localePath, pageLocale } from "../lib/i18n";
+
+/* The support page in each language, served at /assistance and /en/support.
+   The answers name the app's screens as the app shows them in that language. */
+const locale = pageLocale(Astro.currentLocale);
+
+const copy = {
+  fr: {
+    title: "Assistance",
+    description: "Les réponses aux questions fréquentes sur Foulée, et comment nous écrire.",
+    lead: "Une question, un souci ? Les réponses les plus courantes sont ici. Sinon, écris-nous, on lit tout.",
+    email: "Écrire un e-mail",
+    bug: ["Signaler un bug", "Sur GitHub, en public"],
+    garmin: ["Montre Garmin", "Le guide de dépannage"],
+    faqTitle: "Questions fréquentes",
+    faq: [
+      {
+        question: "Sur quels appareils fonctionne Foulée ?",
+        answer: `Sur iPhone avec iOS ${site.minimumOS} ou plus récent, et sur Apple Watch avec watchOS ${site.minimumOS} ou plus récent. Si tu as une montre Garmin, l'app Connect IQ de Foulée s'installe depuis le store Garmin, et Garmin Connect fait aussi remonter tes pas et tes séances dans Santé.`,
+      },
+      {
+        question: "Est-ce que Foulée est gratuite ?",
+        answer: "Oui, Foulée est gratuite sur l'App Store, comme son app Connect IQ.",
+      },
+      {
+        question: "Faut-il créer un compte ?",
+        answer: "Non. Foulée n'a ni compte ni serveur : tes données restent sur ton iPhone, ta montre et dans l'app Santé.",
+      },
+      {
+        question: "Foulée existe-t-elle dans d'autres langues ?",
+        answer: "Oui, en anglais. Si ton iPhone est réglé en anglais, l'app, la montre, les widgets et les notifications le sont aussi.",
+      },
+      {
+        question: "Pourquoi Foulée demande-t-elle l'accès à Santé ?",
+        answer:
+          "Ta série, tes pas, tes minutes d'activité et tes sorties viennent de Santé. Foulée y enregistre aussi tes sorties et ton eau, si tu l'acceptes. Tu peux revoir ces autorisations à tout moment dans Réglages › Santé › Accès aux données et appareils › Foulée.",
+      },
+      {
+        question: "Qu'est-ce qui compte pour ma série ?",
+        answer:
+          "Un jour compte quand tes minutes d'activité atteignent ton objectif d'activité, réglé dans Réglages › Objectifs. Tes pas n'entrent pas en compte, et toutes tes activités comptent, marche ou course. Un jour que tu n'as pas coché dans Réglages › Planning › Jours actifs ne casse jamais ta série.",
+      },
+      {
+        question: "Mes minutes ne sont pas les mêmes que dans l'app Forme.",
+        answer:
+          "Foulée retient le plus grand de deux chiffres : tes minutes d'exercice dans Santé, ou la durée des séances que tu as enregistrées. Une marche comptée seulement en pas ne donne pas de minutes : pour qu'elle compte, lance une sortie dans Foulée ou sur ta montre.",
+      },
+      {
+        question: "Mes pas ne correspondent pas à ceux de ma montre.",
+        answer:
+          "Foulée lit tes pas dans Santé, qui choisit entre ton iPhone et tes montres selon l'ordre de ses sources. Pour le changer : Santé › Parcourir › Activité › Pas › Sources de données et accès › Modifier, puis place ta montre en premier.",
+      },
+      {
+        question: "Comment Foulée sait-elle si je marche ou si je cours ?",
+        answer:
+          "Tu choisis Marche, Course ou Les deux dans Réglages › Objectifs › Activité. Avec Les deux, Foulée reconnaît seule les portions de marche et de course grâce aux capteurs de mouvement. Dans le doute, elle compte de la marche.",
+      },
+      {
+        question: "Mon widget n'est pas à jour.",
+        answer:
+          "Les widgets se mettent à jour toutes les 10 minutes entre 8 h et 20 h, dans la limite qu'iOS leur accorde, et après chaque sortie ou chaque verre d'eau. Ouvre Foulée : tous tes widgets se mettent à jour aussitôt.",
+      },
+      {
+        question: "L'app Apple Watch fonctionne-t-elle sans iPhone ?",
+        answer:
+          "Il faut l'app iPhone : c'est elle qui envoie à la montre ta série, tes objectifs et tes réglages. Une fois la montre synchronisée, tu peux lancer une sortie au poignet sans ton iPhone. Si la montre affiche « Ouvre Foulée sur ton iPhone pour synchroniser », fais-le, montre à proximité.",
+      },
+      {
+        question: "Mes verres d'eau ne s'enregistrent pas.",
+        answer:
+          "Foulée écrit ton eau dans Santé. Si la carte Hydratation affiche « Autorise l'eau dans Santé pour compter tes verres », touche Ouvrir Santé et autorise Foulée à écrire l'eau.",
+      },
+      {
+        question: "Je ne reçois plus les rappels.",
+        answer:
+          "Le rappel de sortie arrive 10 minutes avant le début de ta fenêtre horaire (Réglages › Planning), et seulement les jours actifs. Si rien n'arrive, ouvre Réglages dans Foulée (l'engrenage sur l'accueil), puis Notifications : la page indique si iOS bloque les notifications de Foulée, et comment les réactiver.",
+      },
+      {
+        question: "Comment effacer mes données ?",
+        answer:
+          "Tes réglages restent sur ton iPhone et partent avec l'app quand tu la supprimes. Tes sorties et ton eau sont dans Santé : elles y restent après la suppression de l'app, et tu les gères depuis l'app Santé.",
+      },
+    ],
+  },
+  en: {
+    title: "Support",
+    description: "Answers to the common questions about Foulée, and how to write to us.",
+    lead: "A question, a problem? The most common answers are here. Otherwise, write to us: we read everything.",
+    email: "Send an email",
+    bug: ["Report a bug", "On GitHub, in public"],
+    garmin: ["Garmin watch", "The troubleshooting guide"],
+    faqTitle: "Frequently asked questions",
+    faq: [
+      {
+        question: "Which devices does Foulée run on?",
+        answer: `On iPhone with iOS ${site.minimumOS} or later, and on Apple Watch with watchOS ${site.minimumOS} or later. If you have a Garmin watch, Foulée's Connect IQ app installs from the Garmin store, and Garmin Connect also brings your steps and workouts into Health.`,
+      },
+      {
+        question: "Is Foulée free?",
+        answer: "Yes, Foulée is free on the App Store, and so is its Connect IQ app.",
+      },
+      {
+        question: "Do I need an account?",
+        answer: "No. Foulée has no account and no server: your data stays on your iPhone, your watch and in the Health app.",
+      },
+      {
+        question: "Is Foulée available in other languages?",
+        answer: "Foulée speaks English and French. When your iPhone is set to English, the app, the watch, the widgets and the notifications are in English too.",
+      },
+      {
+        question: "Why does Foulée ask for access to Health?",
+        answer:
+          "Your streak, your steps, your activity minutes and your workouts come from Health. Foulée also saves your workouts and your water there, if you allow it. You can review these permissions at any time in Settings › Health › Data Access & Devices › Foulée.",
+      },
+      {
+        question: "What counts for my streak?",
+        answer:
+          "A day counts when your activity minutes reach your activity goal, set in Settings › Goals. Your steps don't count towards it, and every activity counts, walk or run. A day you didn't tick in Settings › Schedule › Active days never breaks your streak.",
+      },
+      {
+        question: "My minutes don't match the Fitness app.",
+        answer:
+          "Foulée keeps the larger of two numbers: your exercise minutes in Health, or the length of the workouts you recorded. A walk counted only in steps gives no minutes: for it to count, start a workout in Foulée or on your watch.",
+      },
+      {
+        question: "My steps don't match my watch.",
+        answer:
+          "Foulée reads your steps from Health, which picks between your iPhone and your watches in the order of its sources. To change it: Health › Browse › Activity › Steps › Data Sources & Access › Edit, then move your watch to the top.",
+      },
+      {
+        question: "How does Foulée know whether I walk or run?",
+        answer:
+          "You choose Walk, Run or Both in Settings › Goals › Activity. With Both, Foulée recognises the walking and running stretches on its own, with the motion sensors. When in doubt, it counts a walk.",
+      },
+      {
+        question: "My widget is out of date.",
+        answer:
+          "Widgets update every 10 minutes between 8 am and 8 pm, within the limit iOS gives them, and after each workout or glass of water. Open Foulée: all your widgets update straight away.",
+      },
+      {
+        question: "Does the Apple Watch app work without an iPhone?",
+        answer:
+          "You need the iPhone app: it sends your streak, your goals and your settings to the watch. Once the watch is synced, you can start a workout from your wrist without your iPhone. If the watch shows “Open Foulée on your iPhone to sync”, do so with the watch nearby.",
+      },
+      {
+        question: "My glasses of water aren't saved.",
+        answer:
+          "Foulée writes your water to Health. If the Hydration card shows “Allow water in Health to count your glasses”, tap Open Health and allow Foulée to write water.",
+      },
+      {
+        question: "I no longer get reminders.",
+        answer:
+          "The workout reminder comes 10 minutes before your time window starts (Settings › Schedule), and only on active days. If nothing comes, open Settings in Foulée (the gear on its main screen), then Notifications: the page tells you whether iOS blocks Foulée's notifications, and how to turn them back on.",
+      },
+      {
+        question: "How do I delete my data?",
+        answer:
+          "Your settings stay on your iPhone and go with the app when you delete it. Your workouts and your water are in Health: they stay there after you delete the app, and you manage them from the Health app.",
+      },
+    ],
+  },
+}[locale];
+---
+
+<Prose title={copy.title} description={copy.description}>
+  <JsonLd slot="head" data={faqPage(copy.faq)} />
+  <h1>{copy.title}</h1>
+  <p class="lead">{copy.lead}</p>
+
+  <div class="cards">
+    <LinkCard href={`mailto:${site.email}`} title={copy.email} detail={site.email} />
+    <LinkCard href={site.issues} title={copy.bug[0]} detail={copy.bug[1]} external />
+    <LinkCard href={localePath("/assistance/garmin", locale)} title={copy.garmin[0]} detail={copy.garmin[1]} />
+  </div>
+
+  <h2>{copy.faqTitle}</h2>
+  <div class="faq">
+    {
+      copy.faq.map((item) => (
+        <details>
+          <summary>{item.question}</summary>
+          <p>{item.answer}</p>
+        </details>
+      ))
+    }
+  </div>
+</Prose>
+
+<style>
+  .faq {
+    display: grid;
+    gap: 10px;
+  }
+
+  details {
+    border-radius: 18px;
+    background: var(--surface);
+    border: 0.5px solid var(--hairline);
+  }
+
+  summary {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 18px 20px;
+    color: var(--text);
+    font-weight: 600;
+    cursor: pointer;
+    list-style: none;
+  }
+
+  summary::-webkit-details-marker {
+    display: none;
+  }
+
+  summary::after {
+    content: "+";
+    flex: none;
+    color: var(--accent-text);
+    font-size: 1.3rem;
+    line-height: 1;
+    transition: rotate 0.2s;
+  }
+
+  details[open] summary::after {
+    rotate: 45deg;
+  }
+
+  details p {
+    margin: 0;
+    padding: 0 20px 18px;
+  }
+</style>

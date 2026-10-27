@@ -17,6 +17,8 @@ export const site = {
   releases: "https://github.com/getfoulee/foulee/releases",
   garminFAQ: "https://github.com/getfoulee/foulee/blob/main/docs/faq-garmin.md",
   email: "contact@getfoulee.app",
+  /** The site's host, named in the legal notice. */
+  host: "https://www.cloudflare.com",
   /** Cloudflare Web Analytics: cookieless, loaded on production builds only. */
   analytics: {
     beacon: "https://static.cloudflareinsights.com/beacon.min.js",

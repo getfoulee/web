@@ -7,7 +7,23 @@ import { address, htmlFiles } from "./pages.mjs";
 import { inlineScriptHashes, policyLine } from "../src/lib/csp.mjs";
 
 const dist = "dist";
-const pages = ["index.html", "assistance.html", "assistance/garmin.html", "confidentialite.html", "mentions-legales.html", "presse.html", "apple-watch.html", "garmin.html", "nouveautes.html", "404.html", "en.html"];
+const pages = [
+  "index.html",
+  "assistance.html",
+  "assistance/garmin.html",
+  "confidentialite.html",
+  "mentions-legales.html",
+  "presse.html",
+  "apple-watch.html",
+  "garmin.html",
+  "nouveautes.html",
+  "404.html",
+  "en.html",
+  "en/support.html",
+  "en/support/garmin.html",
+  "en/privacy.html",
+  "en/legal-notice.html",
+];
 const failures = [];
 const analytics = process.env.ANALYTICS === "true";
 const headers = readFileSync(join(dist, "_headers"), "utf8");
@@ -70,7 +86,7 @@ for (const page of htmlFiles) {
   }
 
   // French at the root, English under /en, each with its own language tags.
-  const locale = /^en([\\/.]|$)/.test(page) ? "en" : "fr";
+  const locale = /^en[/.]/.test(page) ? "en" : "fr";
   if (!html.includes(`<html lang="${locale}"`)) failures.push(`${page}: missing <html lang="${locale}"`);
   if (!html.includes(`<meta property="og:locale" content="${locale === "en" ? "en_US" : "fr_FR"}">`)) failures.push(`${page}: og:locale is not ${locale}`);
   const languages = new Map([...html.matchAll(/<link rel="alternate" hreflang="([^"]+)" href="https:\/\/getfoulee\.app(\/[^"]*)">/g)].map(([, lang, path]) => [lang, path]));
@@ -147,11 +163,13 @@ for (const [page, appStoreBadge] of [
   if (badges.includes(-1) || badges[0] > badges[1]) failures.push(`${page}: official store badges missing or out of order`);
 }
 
-// One structured question per question shown, each with its answer.
-const faq = requireData("assistance.html", "FAQPage", ["mainEntity"]);
-const shown = readFileSync(join(dist, "assistance.html"), "utf8").match(/<details/g)?.length ?? 0;
-if (faq && (faq.mainEntity.length !== shown || faq.mainEntity.some((item) => !item.name || !item.acceptedAnswer?.text))) {
-  failures.push("assistance.html: FAQPage does not match the questions on the page");
+// One structured question per question shown, each with its answer, in each language.
+for (const page of ["assistance.html", "en/support.html"]) {
+  const faq = requireData(page, "FAQPage", ["mainEntity"]);
+  const shown = readFileSync(join(dist, page), "utf8").match(/<details/g)?.length ?? 0;
+  if (faq && (faq.mainEntity.length !== shown || faq.mainEntity.some((item) => !item.name || !item.acceptedAnswer?.text))) {
+    failures.push(`${page}: FAQPage does not match the questions on the page`);
+  }
 }
 
 /** The entry names of a zip, read from its central directory. */

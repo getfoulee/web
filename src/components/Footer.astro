@@ -1,6 +1,6 @@
 ---
 import { site } from "../lib/site";
-import { locales, pageLocale } from "../lib/i18n";
+import { localePath, locales, pageLocale } from "../lib/i18n";
 
 const year = new Date().getFullYear();
 const locale = pageLocale(Astro.currentLocale);
@@ -68,15 +68,15 @@ const copy = {
 
     <nav aria-label={copy.help}>
       <h2>{copy.help}</h2>
-      <a href="/assistance">{copy.support}</a>
+      <a href={localePath("/assistance", locale)}>{copy.support}</a>
       <a href={`mailto:${site.email}`}>{site.email}</a>
       <a href={site.issues} rel="noopener">{copy.bug}</a>
     </nav>
 
     <nav aria-label={copy.legalNav}>
       <h2>{copy.legal}</h2>
-      <a href="/confidentialite">{copy.privacy}</a>
-      <a href="/mentions-legales">{copy.notice}</a>
+      <a href={localePath("/confidentialite", locale)}>{copy.privacy}</a>
+      <a href={localePath("/mentions-legales", locale)}>{copy.notice}</a>
     </nav>
   </div>
 
