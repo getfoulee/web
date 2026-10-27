@@ -6,6 +6,7 @@ import JsonLd from "../components/JsonLd.astro";
 import { ANALYTICS } from "astro:env/server";
 import { site } from "../lib/site";
 import { organization } from "../lib/structured-data";
+import { alternates, defaultLocale, locales, type Locale } from "../lib/i18n";
 
 interface Props {
   title?: string;
@@ -18,18 +19,27 @@ const fullTitle = title ? `${title} · ${site.name}` : `${site.name} · ${site.t
 // /index.html, Cloudflare serves them as /assistance and /.
 const path = Astro.url.pathname.replace(/(index)?\.html$/, "").replace(/(.)\/$/, "$1");
 const canonical = new URL(path, site.url).href;
+const locale = (Astro.currentLocale ?? defaultLocale) as Locale;
+// The same page in the other language, when it is published in both.
+const translated = alternates(path);
 // The page's share card, drawn at build by src/integrations/share-images.ts.
 const ogImage = new URL(`/partage${path === "/" ? "/accueil" : path}.png`, site.url).href;
 ---
 
 <!doctype html>
-<html lang="fr">
+<html lang={locale}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
+    {
+      translated.map((alternate) => (
+        <link rel="alternate" hreflang={alternate.locale} href={new URL(alternate.path, site.url).href} />
+      ))
+    }
+    {translated.length > 0 && <link rel="alternate" hreflang="x-default" href={new URL(translated[0].path, site.url).href} />}
     <meta name="theme-color" content="#fbf7ff" media="(prefers-color-scheme: light)" data-scheme="light" />
     <meta name="theme-color" content="#07040e" media="(prefers-color-scheme: dark)" data-scheme="dark" />
 
@@ -39,7 +49,12 @@ const ogImage = new URL(`/partage${path === "/" ? "/accueil" : path}.png`, site.
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 
     <meta property="og:type" content="website" />
-    <meta property="og:locale" content="fr_FR" />
+    <meta property="og:locale" content={locales[locale].og} />
+    {
+      translated
+        .filter((alternate) => alternate.locale !== locale)
+        .map((alternate) => <meta property="og:locale:alternate" content={locales[alternate.locale].og} />)
+    }
     <meta property="og:site_name" content={site.name} />
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={description} />
