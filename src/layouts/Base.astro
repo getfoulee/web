@@ -30,8 +30,8 @@ const ogImage = new URL(`/partage${path === "/" ? "/accueil" : path}.png`, site.
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
-    <meta name="theme-color" content="#fbf7ff" media="(prefers-color-scheme: light)" />
-    <meta name="theme-color" content="#07040e" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#fbf7ff" media="(prefers-color-scheme: light)" data-scheme="light" />
+    <meta name="theme-color" content="#07040e" media="(prefers-color-scheme: dark)" data-scheme="dark" />
 
     <meta name="apple-itunes-app" content={`app-id=${site.appStoreId}`} />
 
@@ -53,11 +53,25 @@ const ogImage = new URL(`/partage${path === "/" ? "/accueil" : path}.png`, site.
     <script is:inline>
       // Before the first paint: mark JavaScript as on, and apply the theme the
       // visitor picked, if any. Without one, the CSS follows the device.
-      document.documentElement.classList.add("js");
+      const root = document.documentElement;
+      root.classList.add("js");
       try {
         const theme = localStorage.getItem("theme");
-        if (theme === "light" || theme === "dark") document.documentElement.dataset.theme = theme;
+        if (theme === "light" || theme === "dark") root.dataset.theme = theme;
       } catch {}
+
+      // The browser's bar colour follows the same theme: a picked theme turns
+      // its meta on and the other off, no pick gives the device back the choice.
+      const metas = document.querySelectorAll('meta[name="theme-color"]');
+      const syncThemeColor = () => {
+        const theme = root.dataset.theme;
+        for (const meta of metas) {
+          const scheme = meta.dataset.scheme;
+          meta.media = theme ? (scheme === theme ? "all" : "not all") : `(prefers-color-scheme: ${scheme})`;
+        }
+      };
+      syncThemeColor();
+      new MutationObserver(syncThemeColor).observe(root, { attributeFilter: ["data-theme"] });
     </script>
     <JsonLd data={organization} />
     <slot name="head" />

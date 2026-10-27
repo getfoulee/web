@@ -54,7 +54,7 @@ for (const page of htmlFiles) {
     }
   }
 
-  for (const tag of ["<title>", 'name="description"', 'rel="canonical"', 'property="og:image"', '<html lang="fr"']) {
+  for (const tag of ["<title>", 'name="description"', 'rel="canonical"', 'property="og:image"', '<html lang="fr"', 'data-scheme="light"', 'data-scheme="dark"']) {
     if (!html.includes(tag)) failures.push(`${page}: missing ${tag}`);
   }
 
