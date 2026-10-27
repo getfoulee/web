@@ -14,6 +14,7 @@
     "screenshots": "node scripts/fetch-screenshots.mjs",
     "check": "astro check",
     "test": "node scripts/check-site.mjs",
+    "links": "node scripts/check-links.mjs",
     "lighthouse": "npm run lighthouse:mobile && npm run lighthouse:desktop",
     "lighthouse:mobile": "lhci autorun",
     "lighthouse:desktop": "lhci autorun --collect.settings.preset=desktop --upload.outputDir=.lighthouseci/desktop",

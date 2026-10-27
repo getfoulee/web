@@ -1,21 +1,14 @@
 // Checks the built site in dist/: every page we publish is there, every
 // internal link and asset it points to exists, and each page carries the
 // metadata a share or a search needs. Run after `npm run build`.
-import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
-import { join, relative } from "node:path";
+import { existsSync, readFileSync } from "node:fs";
+import { join } from "node:path";
+import { address, htmlFiles } from "./pages.mjs";
 
 const dist = "dist";
 const pages = ["index.html", "assistance.html", "assistance/garmin.html", "confidentialite.html", "mentions-legales.html", "presse.html", "apple-watch.html", "garmin.html", "404.html"];
 const failures = [];
 const analytics = process.env.ANALYTICS === "true";
-
-function htmlFiles(directory) {
-  return readdirSync(directory).flatMap((name) => {
-    const path = join(directory, name);
-    if (statSync(path).isDirectory()) return htmlFiles(path);
-    return name.endsWith(".html") ? [path] : [];
-  });
-}
 
 /** `/assistance` is served from assistance.html, `/` from index.html. */
 function resolves(target) {
@@ -48,9 +41,8 @@ for (const page of pages) {
   if (!existsSync(join(dist, page))) failures.push(`missing page: ${page}`);
 }
 
-for (const file of htmlFiles(dist)) {
-  const html = readFileSync(file, "utf8");
-  const page = relative(dist, file);
+for (const page of htmlFiles) {
+  const html = readFileSync(join(dist, page), "utf8");
 
   for (const [, target] of html.matchAll(/(?:href|src)="(\/[^"]*)"/g)) {
     if (!resolves(target)) failures.push(`${page}: broken link ${target}`);
@@ -67,8 +59,8 @@ for (const file of htmlFiles(dist)) {
   }
 
   // The canonical address is the one Cloudflare serves, without .html.
-  const address = `https://getfoulee.app/${page.replaceAll("\\", "/").replace(/(index)?\.html$/, "")}`;
-  if (!html.includes(`<link rel="canonical" href="${address}">`)) failures.push(`${page}: canonical is not ${address}`);
+  const canonical = `https://getfoulee.app${address(page)}`;
+  if (!html.includes(`<link rel="canonical" href="${canonical}">`)) failures.push(`${page}: canonical is not ${canonical}`);
 
   // Its own share card, a 1200 × 630 PNG (width and height from the IHDR chunk).
   const image = html.match(/<meta property="og:image" content="https:\/\/getfoulee\.app(\/[^"]+\.png)"/)?.[1];
@@ -168,4 +160,4 @@ if (failures.length > 0) {
   process.exit(1);
 }
 
-console.log(`Site OK: ${htmlFiles(dist).length} pages, every internal link resolves.`);
+console.log(`Site OK: ${htmlFiles.length} pages, every internal link resolves.`);
