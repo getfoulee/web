@@ -94,7 +94,9 @@ jobs:
   browser:
     name: ${{ matrix.suite == 'a11y' && 'Accessibility' || 'Screenshots' }}
     needs: build
-    runs-on: ubuntu-latest
+    # A fixed image: the reference screenshots are its rendering, and a new
+    # Ubuntu would change the fonts under them. Moving it means new references.
+    runs-on: ubuntu-24.04
     # Both suites run in Playwright, side by side; one failing does not cancel the other.
     strategy:
       fail-fast: false
