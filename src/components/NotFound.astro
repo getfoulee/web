@@ -1,0 +1,71 @@
+---
+import Base from "../layouts/Base.astro";
+import { locales, pageLocale } from "../lib/i18n";
+
+/* The error page in each language. Cloudflare serves the closest 404.html,
+   so /en/404 answers every missing address under /en and /404 the others. */
+const locale = pageLocale(Astro.currentLocale);
+const copy = {
+  fr: {
+    title: "Page introuvable",
+    heading: "Ce chemin ne mène nulle part.",
+    lead: "La page que tu cherches n'existe pas, ou plus. Pas grave : fais demi-tour.",
+    back: "Retour à l'accueil",
+  },
+  en: {
+    title: "Page not found",
+    heading: "This path leads nowhere.",
+    lead: "The page you're looking for doesn't exist, or not anymore. No big deal: turn around.",
+    back: "Back to the home page",
+  },
+}[locale];
+---
+
+<Base title={copy.title}>
+  <section class="container lost">
+    <p class="code numeric">404</p>
+    <h1>{copy.heading}</h1>
+    <p>{copy.lead}</p>
+    <a class="back" href={locales[locale].home}>{copy.back}</a>
+  </section>
+</Base>
+
+<style>
+  .lost {
+    padding-block: clamp(80px, 14vw, 180px);
+    text-align: center;
+  }
+
+  .code {
+    margin: 0;
+    font-size: clamp(6rem, 20vw, 11rem);
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -0.05em;
+    background: var(--accent-gradient);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  h1 {
+    margin: 12px 0;
+    font-size: clamp(1.8rem, 4vw, 2.6rem);
+    letter-spacing: -0.03em;
+  }
+
+  p {
+    color: var(--text-2);
+  }
+
+  .back {
+    display: inline-block;
+    margin-top: 24px;
+    padding: 12px 24px;
+    border-radius: var(--radius-pill);
+    background: var(--accent-gradient);
+    color: white;
+    font-weight: 600;
+    text-decoration: none;
+  }
+</style>

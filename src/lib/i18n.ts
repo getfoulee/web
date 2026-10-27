@@ -55,3 +55,14 @@ export function alternates(path: string): { locale: Locale; path: string }[] {
   const french = Object.entries(translations).find(([fr, en]) => path === fr || path === en);
   return french ? [{ locale: "fr", path: french[0] }, { locale: "en", path: french[1] }] : [];
 }
+
+/** The address a page is served at: the build writes /assistance.html and /index.html, Cloudflare serves them as /assistance and /. */
+export function servedPath(pathname: string): string {
+  return pathname.replace(/(index)?\.html$/, "").replace(/(.)\/$/, "$1");
+}
+
+/** Where the language switch leads from `path`: the same page in the other language, or that language's home while it has none. */
+export function switchTarget(path: string, locale: Locale): { locale: Locale; path: string } {
+  const other: Locale = locale === "fr" ? "en" : "fr";
+  return { locale: other, path: alternates(path).find((alternate) => alternate.locale === other)?.path ?? locales[other].home };
+}

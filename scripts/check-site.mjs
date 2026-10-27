@@ -23,6 +23,7 @@ const pages = [
   "en/support/garmin.html",
   "en/privacy.html",
   "en/legal-notice.html",
+  "en/404.html",
 ];
 const failures = [];
 const analytics = process.env.ANALYTICS === "true";
@@ -91,7 +92,16 @@ for (const page of htmlFiles) {
   if (!html.includes(`<meta property="og:locale" content="${locale === "en" ? "en_US" : "fr_FR"}">`)) failures.push(`${page}: og:locale is not ${locale}`);
   const languages = new Map([...html.matchAll(/<link rel="alternate" hreflang="([^"]+)" href="https:\/\/getfoulee\.app(\/[^"]*)">/g)].map(([, lang, path]) => [lang, path]));
   if (languages.size > 0) hreflang.set(address(page).replace(/(.)\/$/, "$1"), languages);
-  else if (locale === "en") failures.push(`${page}: English page without hreflang links to its French page`);
+  else if (locale === "en" && !page.endsWith("404.html")) failures.push(`${page}: English page without hreflang links to its French page`);
+
+  // The language switch, in the header and the footer, keeps the page: its translation, or the other language's home.
+  const other = locale === "en" ? "fr" : "en";
+  const target = languages.get(other) ?? (other === "en" ? "/en" : "/");
+  const switches = [...html.matchAll(/<a [^>]*href="([^"]*)" hreflang="([^"]+)"[^>]*data-language-switch/g)];
+  if (switches.length !== 2) failures.push(`${page}: ${switches.length} language switches instead of 2`);
+  for (const [, href, lang] of switches) {
+    if (href !== target || lang !== other) failures.push(`${page}: language switch leads to ${href} (${lang}) instead of ${target} (${other})`);
+  }
 
   // The canonical address is the one Cloudflare serves, without .html.
   const canonical = `https://getfoulee.app${address(page)}`;
