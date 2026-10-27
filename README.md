@@ -54,11 +54,14 @@ npm run build
 npm test          # the built site: every page present, every internal link resolves, metadata on each page
 npm run lighthouse  # every page, mobile then desktop: performance, accessibility, best practices and SEO at 95 or more
 npm run test:a11y   # axe on every page and the keyboard paths, light and dark (Playwright)
+npm run test:visual # every page at 375 px and 1440 px, light and dark, against its reference screenshot
 ```
 
 `npm run lighthouse` needs Chrome; point `CHROME_PATH` at another Chromium browser (Edge) if Chrome is not installed. The reports land in `.lighthouseci/`, and CI audits mobile and desktop in two parallel jobs and keeps their reports as the `lighthouse-mobile` and `lighthouse-desktop` artifacts of each run. `npm run lighthouse:mobile` or `npm run lighthouse:desktop` runs one of them.
 
-`npm run test:a11y` serves `dist/` with `astro preview` on port 4322. The first time, download its browser with `npx playwright install chromium`.
+`npm run test:a11y` and `npm run test:visual` serve `dist/` with `astro preview` on port 4322. The first time, download their browser with `npx playwright install chromium`.
+
+The reference screenshots in `tests/__screenshots__/` are CI's Linux rendering: fonts differ on macOS and Windows, so compare there only inside Linux. When a pull request fails the comparison, its `screenshot-diffs` artifact holds the capture, the reference and their difference for each page. To accept a change on purpose, run the CI workflow by hand on the branch with « update-screenshots » ticked (`gh workflow run ci.yml --ref <branch> -f update-screenshots=true`), then commit the `screenshots` artifact into `tests/__screenshots__/`.
 
 ## Deploy
 
