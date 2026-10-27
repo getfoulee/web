@@ -1,4 +1,8 @@
+# Scripts from the site only, plus the audience beacon. The build adds the
+# hash of every inline script to script-src (src/integrations/csp.ts). Styles
+# stay 'unsafe-inline': the mockups pass values in style attributes.
 /*
+  Content-Security-Policy: default-src 'self'; script-src 'self' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline'; img-src 'self'; font-src 'self'; connect-src 'self' https://cloudflareinsights.com; object-src 'none'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'; upgrade-insecure-requests
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
   X-Frame-Options: DENY

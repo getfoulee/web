@@ -4,11 +4,20 @@
 import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { address, htmlFiles } from "./pages.mjs";
+import { inlineScriptHashes, policyLine } from "../src/lib/csp.mjs";
 
 const dist = "dist";
 const pages = ["index.html", "assistance.html", "assistance/garmin.html", "confidentialite.html", "mentions-legales.html", "presse.html", "apple-watch.html", "garmin.html", "404.html"];
 const failures = [];
 const analytics = process.env.ANALYTICS === "true";
+const headers = readFileSync(join(dist, "_headers"), "utf8");
+const policy = policyLine(headers);
+const scriptSources = policy?.match(/script-src ([^;]*)/)?.[1].split(/\s+/) ?? [];
+if (!policy) failures.push("_headers: no Content-Security-Policy");
+for (const directive of ["default-src 'self'", "object-src 'none'", "base-uri 'none'", "frame-ancestors 'none'"]) {
+  if (policy && !policy.includes(directive)) failures.push(`_headers: Content-Security-Policy without ${directive}`);
+}
+if (scriptSources.some((source) => source.includes("unsafe"))) failures.push("_headers: script-src allows unsafe scripts");
 
 /** `/assistance` is served from assistance.html, `/` from index.html. */
 function resolves(target) {
@@ -81,6 +90,11 @@ for (const page of htmlFiles) {
   }
   requireData(page, "Organization", ["name", "url", "logo"]);
 
+  // Every script the page runs inline is allowed by its hash, and only those.
+  for (const hash of inlineScriptHashes(html)) {
+    if (!scriptSources.includes(hash)) failures.push(`${page}: inline script ${hash} not in the Content-Security-Policy`);
+  }
+
   // The audience beacon ships with the production build only.
   if (html.includes("cloudflareinsights.com") !== analytics) failures.push(`${page}: analytics beacon ${analytics ? "missing" : "outside production"}`);
 }
@@ -142,7 +156,7 @@ if (!kit) {
 
 // Search engines index getfoulee.app only: the pages.dev hosts say noindex.
 const rules = new Map(
-  readFileSync(join(dist, "_headers"), "utf8")
+  headers
     .split(/\n\s*\n/)
     .map((block) => block.split("\n").filter((line) => line.trim() && !line.startsWith("#")))
     .filter((lines) => lines.length > 0)
