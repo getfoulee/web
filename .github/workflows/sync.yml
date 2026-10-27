@@ -1,9 +1,9 @@
 name: Sync
 
-# Every morning, copies the app's privacy policy and Garmin FAQ from
-# getfoulee/foulee into src/content/. A difference opens a pull request (or
-# updates the one already open) and starts CI on it; once the copies match
-# again, the pull request is closed.
+# Every morning, copies the app's privacy policy, Garmin FAQ and release
+# notes from getfoulee/foulee into src/content/. A difference opens a pull
+# request (or updates the one already open) and starts CI on it; once the
+# copies match again, the pull request is closed.
 on:
   schedule:
     - cron: "0 4 * * *"
@@ -62,13 +62,14 @@ jobs:
           git commit --all --quiet --file - <<EOF
           Copy the app's documents again
 
-          The privacy policy or the Garmin FAQ changed in getfoulee/foulee
-          (getfoulee/foulee@$app); the site shows its own copy of each.
+          The privacy policy, the Garmin FAQ or the release notes changed in
+          getfoulee/foulee (getfoulee/foulee@$app); the site shows its own
+          copy of each.
           EOF
           git push --force origin "$BRANCH"
           if [ -z "$pr" ]; then
             gh pr create --base main --head "$BRANCH" \
               --title "Copy the app's documents again" \
-              --body "Copies \`docs/\` from getfoulee/foulee@$app. Opened by the Sync workflow: read the diff before merging."
+              --body "Copies \`docs/\` and the releases from getfoulee/foulee@$app. Opened by the Sync workflow: read the diff before merging."
           fi
           gh workflow run ci.yml --ref "$BRANCH"

@@ -1,0 +1,42 @@
+---
+import Prose from "../layouts/Prose.astro";
+import { site } from "../lib/site";
+import { releases } from "../lib/releases";
+---
+
+<Prose title="Nouveautés" description="Ce qui change dans Foulée à chaque version de l'app, de la plus récente à la plus ancienne.">
+  <h1>Nouveautés</h1>
+  <p class="lead">Ce qui change dans Foulée, version après version. Mets l'app à jour depuis l'App Store pour en profiter.</p>
+
+  {
+    releases.map((release) => (
+      <section aria-labelledby={`v${release.version}`}>
+        <h2 id={`v${release.version}`}>Foulée {release.version}</h2>
+        <p class="day">
+          <time datetime={release.date}>{release.day}</time>
+        </p>
+        <ul>
+          {release.highlights.map((highlight) => (
+            <li>
+              <strong>{highlight.title}</strong> {highlight.text}
+            </li>
+          ))}
+        </ul>
+      </section>
+    ))
+  }
+
+  <hr />
+
+  <p>
+    Chaque version et son code source sont aussi sur <a href={site.releases} rel="noopener">GitHub</a>.
+  </p>
+</Prose>
+
+<style>
+  .day {
+    margin: -8px 0 0;
+    color: var(--text-3);
+    font-size: 0.95rem;
+  }
+</style>
