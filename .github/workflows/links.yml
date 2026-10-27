@@ -1,0 +1,72 @@
+name: Links
+
+# Every Monday, builds the site as getfoulee.app serves it and checks each
+# outside link (App Store, Connect IQ, GitHub, Apple…). A broken link opens an
+# issue, or comments on the one already open; a clean run closes it.
+on:
+  schedule:
+    - cron: "0 5 * * 1"
+  workflow_dispatch:
+
+concurrency:
+  group: links
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  links:
+    name: Check outside links
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: write
+    env:
+      # The production build, with the analytics beacon it loads.
+      ANALYTICS: true
+      GH_TOKEN: ${{ github.token }}
+      TITLE: "[ci] Liens externes cassés"
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .node-version
+          cache: npm
+
+      - run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      # bash, not sh: pipefail keeps the check's exit status through tee.
+      - name: Check outside links
+        id: links
+        shell: bash
+        run: npm run --silent links | tee broken-links.md
+
+      - name: Open or update the issue
+        if: failure() && steps.links.outcome == 'failure'
+        run: |
+          {
+            echo "La vérification du $(date -u +%F) a trouvé des liens externes cassés :"
+            echo
+            cat broken-links.md
+            echo
+            echo "Run : ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          } > body.md
+          issue=$(gh issue list --state open --label ci --search "\"$TITLE\" in:title" --json number --jq '.[0].number')
+          if [ -n "$issue" ]; then
+            gh issue comment "$issue" --body-file body.md
+          else
+            gh issue create --title "$TITLE" --label ci --body-file body.md
+          fi
+
+      - name: Close the issue once the links work again
+        if: steps.links.outcome == 'success'
+        run: |
+          issue=$(gh issue list --state open --label ci --search "\"$TITLE\" in:title" --json number --jq '.[0].number')
+          if [ -n "$issue" ]; then
+            gh issue close "$issue" --comment "Tous les liens externes répondent de nouveau."
+          fi
