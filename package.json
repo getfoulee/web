@@ -14,7 +14,9 @@
     "screenshots": "node scripts/fetch-screenshots.mjs",
     "check": "astro check",
     "test": "node scripts/check-site.mjs",
-    "lighthouse": "lhci autorun && lhci autorun --collect.settings.preset=desktop --upload.outputDir=.lighthouseci/desktop",
+    "lighthouse": "npm run lighthouse:mobile && npm run lighthouse:desktop",
+    "lighthouse:mobile": "lhci autorun",
+    "lighthouse:desktop": "lhci autorun --collect.settings.preset=desktop --upload.outputDir=.lighthouseci/desktop",
     "test:a11y": "playwright test"
   },
   "dependencies": {

@@ -56,7 +56,7 @@ npm run lighthouse  # every page, mobile then desktop: performance, accessibilit
 npm run test:a11y   # axe on every page and the keyboard paths, light and dark (Playwright)
 ```
 
-`npm run lighthouse` needs Chrome; point `CHROME_PATH` at another Chromium browser (Edge) if Chrome is not installed. The reports land in `.lighthouseci/`, and CI keeps them as the `lighthouse` artifact of each run.
+`npm run lighthouse` needs Chrome; point `CHROME_PATH` at another Chromium browser (Edge) if Chrome is not installed. The reports land in `.lighthouseci/`, and CI audits mobile and desktop in two parallel jobs and keeps their reports as the `lighthouse-mobile` and `lighthouse-desktop` artifacts of each run. `npm run lighthouse:mobile` or `npm run lighthouse:desktop` runs one of them.
 
 `npm run test:a11y` serves `dist/` with `astro preview` on port 4322. The first time, download its browser with `npx playwright install chromium`.
 
