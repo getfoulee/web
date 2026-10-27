@@ -20,18 +20,58 @@ const faq = [
     answer: "Non. Foulée n'a ni compte ni serveur : tes données restent sur ton iPhone, ta montre et dans l'app Santé.",
   },
   {
+    question: "Foulée existe-t-elle dans d'autres langues ?",
+    answer: "Pas encore : l'app est en français pour l'instant.",
+  },
+  {
     question: "Pourquoi Foulée demande-t-elle l'accès à Santé ?",
     answer:
       "Ta série, tes pas, tes minutes d'activité et tes sorties viennent de Santé. Foulée y enregistre aussi tes sorties et ton eau, si tu l'acceptes. Tu peux revoir ces autorisations à tout moment dans Réglages › Santé › Accès aux données et appareils › Foulée.",
   },
   {
-    question: "Je ne reçois plus les rappels.",
+    question: "Qu'est-ce qui compte pour ma série ?",
     answer:
-      "Ouvre Réglages dans Foulée (l'engrenage sur l'accueil), puis Notifications : la page indique si iOS bloque les notifications de Foulée, et comment les réactiver.",
+      "Un jour compte quand tes minutes d'activité atteignent ton objectif d'activité, réglé dans Réglages › Objectifs. Tes pas n'entrent pas en compte, et toutes tes activités comptent, marche ou course. Un jour que tu n'as pas coché dans Réglages › Planning › Jours actifs ne casse jamais ta série.",
   },
   {
-    question: "Foulée existe-t-elle dans d'autres langues ?",
-    answer: "Pas encore : l'app est en français pour l'instant.",
+    question: "Mes minutes ne sont pas les mêmes que dans l'app Forme.",
+    answer:
+      "Foulée retient le plus grand de deux chiffres : tes minutes d'exercice dans Santé, ou la durée des séances que tu as enregistrées. Une marche comptée seulement en pas ne donne pas de minutes : pour qu'elle compte, lance une sortie dans Foulée ou sur ta montre.",
+  },
+  {
+    question: "Mes pas ne correspondent pas à ceux de ma montre.",
+    answer:
+      "Foulée lit tes pas dans Santé, qui choisit entre ton iPhone et tes montres selon l'ordre de ses sources. Pour le changer : Santé › Parcourir › Activité › Pas › Sources de données et accès › Modifier, puis place ta montre en premier.",
+  },
+  {
+    question: "Comment Foulée sait-elle si je marche ou si je cours ?",
+    answer:
+      "Tu choisis Marche, Course ou Les deux dans Réglages › Objectifs › Activité. Avec Les deux, Foulée reconnaît seule les portions de marche et de course grâce aux capteurs de mouvement. Dans le doute, elle compte de la marche.",
+  },
+  {
+    question: "Mon widget n'est pas à jour.",
+    answer:
+      "Les widgets se mettent à jour toutes les 10 minutes entre 8 h et 20 h, dans la limite qu'iOS leur accorde, et après chaque sortie ou chaque verre d'eau. Ouvre Foulée : tous tes widgets se mettent à jour aussitôt.",
+  },
+  {
+    question: "L'app Apple Watch fonctionne-t-elle sans iPhone ?",
+    answer:
+      "Il faut l'app iPhone : c'est elle qui envoie à la montre ta série, tes objectifs et tes réglages. Une fois la montre synchronisée, tu peux lancer une sortie au poignet sans ton iPhone. Si la montre affiche « Ouvre Foulée sur ton iPhone pour synchroniser », fais-le, montre à proximité.",
+  },
+  {
+    question: "Mes verres d'eau ne s'enregistrent pas.",
+    answer:
+      "Foulée écrit ton eau dans Santé. Si la carte Hydratation affiche « Autorise l'eau dans Santé pour compter tes verres », touche Ouvrir Santé et autorise Foulée à écrire l'eau.",
+  },
+  {
+    question: "Je ne reçois plus les rappels.",
+    answer:
+      "Le rappel de sortie arrive 10 minutes avant le début de ta fenêtre horaire (Réglages › Planning), et seulement les jours actifs. Si rien n'arrive, ouvre Réglages dans Foulée (l'engrenage sur l'accueil), puis Notifications : la page indique si iOS bloque les notifications de Foulée, et comment les réactiver.",
+  },
+  {
+    question: "Comment effacer mes données ?",
+    answer:
+      "Tes réglages restent sur ton iPhone et partent avec l'app quand tu la supprimes. Tes sorties et ton eau sont dans Santé : elles y restent après la suppression de l'app, et tu les gères depuis l'app Santé.",
   },
 ];
 ---
