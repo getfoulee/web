@@ -1,5 +1,6 @@
 ---
 import Icon from "./Icon.astro";
+import { pageLocale } from "../lib/i18n";
 
 /* The picture a Bilan is shared as, redrawn from the app's RecapShareImage:
    the heading and period, the goal ring beside the minutes, the week's
@@ -9,39 +10,61 @@ import Icon from "./Icon.astro";
    with). Its background is the app's sheet gradient, in the site's theme. */
 
 const goal = 30;
-const week = [
-  { day: "L", minutes: 34 },
-  { day: "M", minutes: 28 },
-  { day: "M", minutes: 41 },
-  { day: "J", minutes: 31 },
-  { day: "V", minutes: 36 },
-  { day: "S", minutes: 52 },
-  { day: "D", minutes: 30 },
-];
+const minutes = [34, 28, 41, 31, 36, 52, 30];
+const total = minutes.reduce((sum, entry) => sum + entry, 0);
+const met = minutes.filter((entry) => entry >= goal).length;
+const [h, m] = [Math.floor(total / 60), String(total % 60).padStart(2, "0")];
 
-const total = week.reduce((sum, entry) => sum + entry.minutes, 0);
-const met = week.filter((entry) => entry.minutes >= goal).length;
-const hours = `${Math.floor(total / 60)} h ${String(total % 60).padStart(2, "0")}`;
+// In English, the app's own words and the en_US number formats.
+const copy = {
+  fr: {
+    days: ["L", "M", "M", "J", "V", "S", "D"],
+    hours: `${h} h ${m}`,
+    label: `Un bilan de semaine à partager : ${h} h ${m} d'activité, l'objectif tenu ${met} jours sur 7, 41,2 km, 58 410 pas, 9 sorties.`,
+    heading: "Ma semaine",
+    period: "Du 13 au 19 octobre",
+    activity: "d'activité",
+    goal: `Objectif tenu ${met} jours sur 7`,
+    stats: [
+      ["41,2 km", "Distance"],
+      ["58 410", "Pas"],
+      ["9", "Sorties"],
+    ],
+    best: "Samedi 18 · 52 min",
+  },
+  en: {
+    days: ["M", "T", "W", "T", "F", "S", "S"],
+    hours: `${h}h ${m}m`,
+    label: `A weekly recap to share: ${h}h ${m}m of activity, goal met on ${met} of 7 days, 41.2 km, 58,410 steps, 9 workouts.`,
+    heading: "My week",
+    period: "Oct 13 – 19",
+    activity: "of activity",
+    goal: `Goal met on ${met} of 7 days`,
+    stats: [
+      ["41.2 km", "Distance"],
+      ["58,410", "Steps"],
+      ["9", "Workouts"],
+    ],
+    best: "Saturday 18 · 52 min",
+  },
+}[pageLocale(Astro.currentLocale)];
+const week = minutes.map((entry, index) => ({ day: copy.days[index], minutes: entry }));
 
 const circumference = (radius: number) => 2 * Math.PI * radius;
 const heroRing = circumference(34);
 const dayRing = circumference(12);
 
-const stats = [
-  { icon: "pin", value: "41,2 km", label: "Distance" },
-  { icon: "shoe", value: "58 410", label: "Pas" },
-  { icon: "walk", value: "9", label: "Sorties" },
-] as const;
+const stats = (["pin", "shoe", "walk"] as const).map((icon, index) => ({ icon, value: copy.stats[index][0], label: copy.stats[index][1] }));
 ---
 
 <div
   class="share-card"
   role="img"
-  aria-label={`Un bilan de semaine à partager : ${hours} d'activité, l'objectif tenu ${met} jours sur 7, 41,2 km, 58 410 pas, 9 sorties.`}
+  aria-label={copy.label}
 >
   <div class="head">
-    <p class="heading">Ma semaine</p>
-    <p class="period">Du 13 au 19 octobre</p>
+    <p class="heading">{copy.heading}</p>
+    <p class="period">{copy.period}</p>
   </div>
 
   <div class="hero">
@@ -58,9 +81,9 @@ const stats = [
       <text x="42" y="49" class="ring-label">{met}/7</text>
     </svg>
     <div>
-      <p class="minutes numeric">{hours}</p>
-      <p class="sub">d'activité</p>
-      <p class="goal-line">Objectif tenu {met} jours sur 7</p>
+      <p class="minutes numeric">{copy.hours}</p>
+      <p class="sub">{copy.activity}</p>
+      <p class="goal-line">{copy.goal}</p>
     </div>
   </div>
 
@@ -98,7 +121,7 @@ const stats = [
     }
   </div>
 
-  <p class="best"><span aria-hidden="true">🏆</span> Samedi 18 · 52 min</p>
+  <p class="best"><span aria-hidden="true">🏆</span> {copy.best}</p>
 
   <p class="signature">
     <Icon name="walk" size={16} />

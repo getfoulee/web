@@ -1,5 +1,6 @@
 ---
 import Icon from "./Icon.astro";
+import { pageLocale } from "../lib/i18n";
 
 interface Props {
   /** One watch alone, for its own page; both side by side otherwise. */
@@ -7,22 +8,41 @@ interface Props {
 }
 
 const { only } = Astro.props;
+// In English, the apps' own words and the en_US number formats.
+const copy = {
+  fr: {
+    apple: "Une séance de course en cours sur l'Apple Watch : 24 minutes, 3,48 km, 147 battements par minute.",
+    run: "Course",
+    decimal: ",",
+    garmin: "L'app Foulée sur une montre Garmin : une série de 42 jours, 7 842 pas et 22 minutes d'activité.",
+    streak: "jours de série",
+    steps: ["7 842", "pas"],
+  },
+  en: {
+    apple: "A run in progress on Apple Watch: 24 minutes, 3.48 km, 147 beats per minute.",
+    run: "Run",
+    decimal: ".",
+    garmin: "The Foulée app on a Garmin watch: a 42-day streak, 7,842 steps and 22 active minutes.",
+    streak: "day streak",
+    steps: ["7,842", "steps"],
+  },
+}[pageLocale(Astro.currentLocale)];
 ---
 
 <div class="watches">
   {
     only !== "garmin" && (
-      <figure class="apple theme-dark" role="img" aria-label="Une séance de course en cours sur l'Apple Watch : 24 minutes, 3,48 km, 147 battements par minute.">
+      <figure class="apple theme-dark" role="img" aria-label={copy.apple}>
         <div class="band top" aria-hidden="true"></div>
         <div class="case">
           <div class="crown" aria-hidden="true"></div>
           <div class="screen">
             <div class="head">
-              <span class="sport"><Icon name="run" size={14} /> Course</span>
+              <span class="sport"><Icon name="run" size={14} /> {copy.run}</span>
               <span class="numeric clock">12:48</span>
             </div>
-            <p class="elapsed numeric">24:31<small>,08</small></p>
-            <p class="metric numeric">3,48<small>KM</small></p>
+            <p class="elapsed numeric">24:31<small>{copy.decimal}08</small></p>
+            <p class="metric numeric">3{copy.decimal}48<small>KM</small></p>
             <p class="metric numeric pace">5'52"<small>/KM</small></p>
             <p class="metric numeric heart"><Icon name="heart" size={13} />147<small>BPM</small></p>
           </div>
@@ -34,17 +54,17 @@ const { only } = Astro.props;
 
   {
     only !== "apple" && (
-      <figure class="garmin theme-dark" role="img" aria-label="L'app Foulée sur une montre Garmin : une série de 42 jours, 7 842 pas et 22 minutes d'activité.">
+      <figure class="garmin theme-dark" role="img" aria-label={copy.garmin}>
         <div class="bezel">
           <div class="screen">
             <span class="g-flame"><Icon name="flame" size={22} /></span>
             <p class="g-streak numeric">42</p>
-            <p class="g-label">jours de série</p>
+            <p class="g-label">{copy.streak}</p>
             <div class="g-bars">
               <span><i style="--w:78%; --c:var(--steps)"></i></span>
               <span><i style="--w:73%; --c:var(--minutes)"></i></span>
             </div>
-            <p class="g-figures numeric"><b>7 842</b> pas · <b>22</b> min</p>
+            <p class="g-figures numeric"><b>{copy.steps[0]}</b> {copy.steps[1]} · <b>22</b> min</p>
           </div>
         </div>
         <span class="button b1" aria-hidden="true"></span>

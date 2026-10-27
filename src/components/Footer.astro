@@ -1,47 +1,87 @@
 ---
 import { site } from "../lib/site";
+import { locales, pageLocale } from "../lib/i18n";
 
 const year = new Date().getFullYear();
+const locale = pageLocale(Astro.currentLocale);
+const { home, tagline, appStore } = locales[locale];
+// The English home links to the French pages that are not translated yet.
+const copy = {
+  fr: {
+    made: "Conçue et développée en France.",
+    app: "L'app",
+    appleWatch: "Sur Apple Watch",
+    garmin: "Sur Garmin",
+    news: "Nouveautés",
+    source: "Code source",
+    press: "Presse",
+    help: "Aide",
+    support: "Assistance",
+    bug: "Signaler un bug",
+    legalNav: "Informations légales",
+    legal: "Légal",
+    privacy: "Confidentialité",
+    notice: "Mentions légales",
+    trademarks: "Apple, Apple Watch, iPhone et App Store sont des marques d'Apple Inc. Garmin et Connect IQ sont des marques de Garmin Ltd.",
+  },
+  en: {
+    made: "Designed and built in France.",
+    app: "The app",
+    appleWatch: "On Apple Watch",
+    garmin: "On Garmin",
+    news: "What's new",
+    source: "Source code",
+    press: "Press",
+    help: "Help",
+    support: "Support",
+    bug: "Report a bug",
+    legalNav: "Legal information",
+    legal: "Legal",
+    privacy: "Privacy",
+    notice: "Legal notice",
+    trademarks: "Apple, Apple Watch, iPhone and App Store are trademarks of Apple Inc. Garmin and Connect IQ are trademarks of Garmin Ltd.",
+  },
+}[locale];
 ---
 
 <footer class="footer">
   <div class="container grid">
     <div class="about">
-      <a class="brand" href="/">
+      <a class="brand" href={home}>
         <img src="/app-icon-128.png" alt="" width="36" height="36" />
         <span>Foulée</span>
       </a>
-      <p>{site.tagline}</p>
-      <p class="made">Conçue et développée en France.</p>
+      <p>{tagline}</p>
+      <p class="made">{copy.made}</p>
     </div>
 
-    <nav aria-label="L'app">
-      <h2>L'app</h2>
-      <a href={site.appStore} rel="noopener">App Store</a>
+    <nav aria-label={copy.app}>
+      <h2>{copy.app}</h2>
+      <a href={appStore} rel="noopener">App Store</a>
       <a href={site.connectIQ} rel="noopener">Garmin Connect IQ</a>
-      <a href="/apple-watch">Sur Apple Watch</a>
-      <a href="/garmin">Sur Garmin</a>
-      <a href="/nouveautes">Nouveautés</a>
-      <a href={site.repository} rel="noopener">Code source</a>
-      <a href="/presse">Presse</a>
+      <a href="/apple-watch">{copy.appleWatch}</a>
+      <a href="/garmin">{copy.garmin}</a>
+      <a href="/nouveautes">{copy.news}</a>
+      <a href={site.repository} rel="noopener">{copy.source}</a>
+      <a href="/presse">{copy.press}</a>
     </nav>
 
-    <nav aria-label="Aide">
-      <h2>Aide</h2>
-      <a href="/assistance">Assistance</a>
+    <nav aria-label={copy.help}>
+      <h2>{copy.help}</h2>
+      <a href="/assistance">{copy.support}</a>
       <a href={`mailto:${site.email}`}>{site.email}</a>
-      <a href={site.issues} rel="noopener">Signaler un bug</a>
+      <a href={site.issues} rel="noopener">{copy.bug}</a>
     </nav>
 
-    <nav aria-label="Informations légales">
-      <h2>Légal</h2>
-      <a href="/confidentialite">Confidentialité</a>
-      <a href="/mentions-legales">Mentions légales</a>
+    <nav aria-label={copy.legalNav}>
+      <h2>{copy.legal}</h2>
+      <a href="/confidentialite">{copy.privacy}</a>
+      <a href="/mentions-legales">{copy.notice}</a>
     </nav>
   </div>
 
   <div class="container fineprint">
-    <p>© {year} Foulée. Apple, Apple Watch, iPhone et App Store sont des marques d'Apple Inc. Garmin et Connect IQ sont des marques de Garmin Ltd.</p>
+    <p>© {year} Foulée. {copy.trademarks}</p>
   </div>
 </footer>
 

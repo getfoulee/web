@@ -7,7 +7,7 @@ import { address, htmlFiles } from "./pages.mjs";
 import { inlineScriptHashes, policyLine } from "../src/lib/csp.mjs";
 
 const dist = "dist";
-const pages = ["index.html", "assistance.html", "assistance/garmin.html", "confidentialite.html", "mentions-legales.html", "presse.html", "apple-watch.html", "garmin.html", "nouveautes.html", "404.html"];
+const pages = ["index.html", "assistance.html", "assistance/garmin.html", "confidentialite.html", "mentions-legales.html", "presse.html", "apple-watch.html", "garmin.html", "nouveautes.html", "404.html", "en.html"];
 const failures = [];
 const analytics = process.env.ANALYTICS === "true";
 const headers = readFileSync(join(dist, "_headers"), "utf8");
@@ -125,16 +125,26 @@ for (const [image, sharing] of shareImages) {
   if (image && sharing.length > 1) failures.push(`${sharing.join(", ")}: same share image ${image}`);
 }
 
-const home = readFileSync(join(dist, "index.html"), "utf8");
-for (const store of ["apps.apple.com", "apps.garmin.com"]) {
-  if (!home.includes(store)) failures.push(`index.html: no link to ${store}`);
-}
-const app = requireData("index.html", "MobileApplication", ["name", "operatingSystem", "applicationCategory", "offers"]);
-if (app && app.offers.price !== "0") failures.push("index.html: MobileApplication is not free");
+// The home page in each language, with Apple's badge in that language.
+for (const [page, appStoreBadge] of [
+  ["index.html", "/badges/app-store.svg"],
+  ["en.html", "/badges/app-store-en.svg"],
+]) {
+  const home = readFileSync(join(dist, page), "utf8");
+  for (const store of ["apps.apple.com", "apps.garmin.com"]) {
+    if (!home.includes(store)) failures.push(`${page}: no link to ${store}`);
+  }
+  const app = requireData(page, "MobileApplication", ["name", "operatingSystem", "applicationCategory", "offers"]);
+  if (app && app.offers.price !== "0") failures.push(`${page}: MobileApplication is not free`);
 
-// The watch pages are reached from the home page, not only from the footer.
-for (const watch of ["/apple-watch", "/garmin"]) {
-  if (!home.includes(`class="read-more" href="${watch}"`)) failures.push(`index.html: no link to ${watch} in the watches section`);
+  // The watch pages are reached from the home page, not only from the footer.
+  for (const watch of ["/apple-watch", "/garmin"]) {
+    if (!home.includes(`class="read-more" href="${watch}"`)) failures.push(`${page}: no link to ${watch} in the watches section`);
+  }
+
+  // The official store badges, App Store first as Apple asks.
+  const badges = [appStoreBadge, "/badges/connect-iq.svg"].map((badge) => home.indexOf(`src="${badge}"`));
+  if (badges.includes(-1) || badges[0] > badges[1]) failures.push(`${page}: official store badges missing or out of order`);
 }
 
 // One structured question per question shown, each with its answer.
@@ -143,10 +153,6 @@ const shown = readFileSync(join(dist, "assistance.html"), "utf8").match(/<detail
 if (faq && (faq.mainEntity.length !== shown || faq.mainEntity.some((item) => !item.name || !item.acceptedAnswer?.text))) {
   failures.push("assistance.html: FAQPage does not match the questions on the page");
 }
-
-// The official store badges, App Store first as Apple asks.
-const badges = ["/badges/app-store.svg", "/badges/connect-iq.svg"].map((badge) => home.indexOf(`src="${badge}"`));
-if (badges.includes(-1) || badges[0] > badges[1]) failures.push("index.html: official store badges missing or out of order");
 
 /** The entry names of a zip, read from its central directory. */
 function zipEntries(file) {

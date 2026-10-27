@@ -1,23 +1,36 @@
 ---
 import { site } from "../lib/site";
+import { locales, pageLocale } from "../lib/i18n";
 
 interface Props {
   align?: "start" | "center";
 }
 
 const { align = "start" } = Astro.props;
+const locale = pageLocale(Astro.currentLocale);
+const copy = {
+  fr: {
+    badge: { src: "/badges/app-store.svg", alt: "Télécharger dans l'App Store", width: 158 },
+    connectIQ: "Disponible sur le Connect IQ Store, pour montre Garmin",
+  },
+  en: {
+    badge: { src: "/badges/app-store-en.svg", alt: "Download on the App Store", width: 150 },
+    connectIQ: "Available on the Connect IQ Store, for Garmin watches",
+  },
+}[locale];
 
 // The official badges, untouched. Apple asks for its black badge, placed first,
 // whenever another store's badge sits next to it, and forbids animating it;
-// Garmin's black badge matches it. Neither has a theme variant here.
+// Garmin's black badge matches it. Neither has a theme variant here. Apple's
+// badge comes in each language; Garmin's is the same in both.
 ---
 
 <div class:list={["buttons", align]}>
-  <a href={site.appStore} rel="noopener">
-    <img src="/badges/app-store.svg" alt="Télécharger dans l'App Store" width="158" height="50" />
+  <a href={locales[locale].appStore} rel="noopener">
+    <img src={copy.badge.src} alt={copy.badge.alt} width={copy.badge.width} height="50" />
   </a>
   <a href={site.connectIQ} rel="noopener">
-    <img src="/badges/connect-iq.svg" alt="Disponible sur le Connect IQ Store, pour montre Garmin" width="146" height="50" />
+    <img src="/badges/connect-iq.svg" alt={copy.connectIQ} width="146" height="50" />
   </a>
 </div>
 

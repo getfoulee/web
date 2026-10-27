@@ -1,5 +1,6 @@
 ---
 import Icon from "./Icon.astro";
+import { pageLocale } from "../lib/i18n";
 
 /* The app's home screen, redrawn in HTML: the dual ring (steps outside,
    minutes inside), the streak badge, the stat tiles and hydration card.
@@ -7,9 +8,35 @@ import Icon from "./Icon.astro";
 const ring = (radius: number) => 2 * Math.PI * radius;
 const outer = ring(52);
 const inner = ring(38);
+
+// In English, the app's own words and the en_US number formats.
+const copy = {
+  fr: {
+    label: "L'écran Aujourd'hui de Foulée : une série de 42 jours, 7 842 pas et 22 minutes d'activité.",
+    date: "Mardi 14 octobre",
+    title: "Aujourd'hui",
+    left: ["Encore ", " d'activité"],
+    slot: "Ton créneau : 12:15 – 13:30",
+    steps: ["7 842", "pas"],
+    distance: "5,4",
+    hydration: ["Hydratation", "1,25 L"],
+    start: "Commencer une sortie",
+  },
+  en: {
+    label: "Foulée's Today screen: a 42-day streak, 7,842 steps and 22 active minutes.",
+    date: "Tuesday, October 14",
+    title: "Today",
+    left: ["", " of activity to go"],
+    slot: "Your time slot: 12:15 – 1:30 PM",
+    steps: ["7,842", "steps"],
+    distance: "5.4",
+    hydration: ["Hydration", "1.25 L"],
+    start: "Start your workout",
+  },
+}[pageLocale(Astro.currentLocale)];
 ---
 
-<div class="phone" role="img" aria-label="L'écran Aujourd'hui de Foulée : une série de 42 jours, 7 842 pas et 22 minutes d'activité.">
+<div class="phone" role="img" aria-label={copy.label}>
   <div class="screen">
     <div class="wallpaper" aria-hidden="true">
       <span></span><span></span><span></span><span></span>
@@ -27,8 +54,8 @@ const inner = ring(38);
     <div class="content">
       <div class="top">
         <div>
-          <p class="date">Mardi 14 octobre</p>
-          <p class="title">Aujourd'hui</p>
+          <p class="date">{copy.date}</p>
+          <p class="title">{copy.title}</p>
         </div>
         <span class="streak numeric"><Icon name="flame" size={14} />42</span>
       </div>
@@ -53,29 +80,29 @@ const inner = ring(38);
           <circle cx="64" cy="64" r="38" class="arc inner" stroke="url(#phone-activity)" style={`--len:${inner};--to:${inner * 0.27}`}></circle>
         </svg>
         <div class="hero-text">
-          <p class="lead">Encore <strong class="minutes">8 min</strong> d'activité</p>
-          <p class="sub">Ton créneau : 12:15 – 13:30</p>
+          <p class="lead">{copy.left[0]}<strong class="minutes">8 min</strong>{copy.left[1]}</p>
+          <p class="sub">{copy.slot}</p>
         </div>
       </div>
 
       <div class="tiles">
-        <div class="card tile"><Icon name="shoe" size={15} class="steps" /><strong class="numeric">7 842</strong><span>pas</span></div>
+        <div class="card tile"><Icon name="shoe" size={15} class="steps" /><strong class="numeric">{copy.steps[0]}</strong><span>{copy.steps[1]}</span></div>
         <div class="card tile"><Icon name="timer" size={15} class="minutes" /><strong class="numeric">22</strong><span>min</span></div>
-        <div class="card tile"><Icon name="pin" size={15} class="distance" /><strong class="numeric">5,4</strong><span>km</span></div>
+        <div class="card tile"><Icon name="pin" size={15} class="distance" /><strong class="numeric">{copy.distance}</strong><span>km</span></div>
         <div class="card tile"><Icon name="flame" size={15} class="calories" /><strong class="numeric">312</strong><span>kcal</span></div>
       </div>
 
       <div class="card water">
         <div class="water-head">
-          <span><Icon name="drop" size={13} /> Hydratation</span>
-          <span class="numeric">1,25 L</span>
+          <span><Icon name="drop" size={13} /> {copy.hydration[0]}</span>
+          <span class="numeric">{copy.hydration[1]}</span>
         </div>
         <div class="glasses" aria-hidden="true">
           {Array.from({ length: 8 }, (_, index) => <i class:list={{ full: index < 5 }} style={`--i:${index}`}></i>)}
         </div>
       </div>
 
-      <div class="start"><Icon name="play" size={14} /> Commencer une sortie</div>
+      <div class="start"><Icon name="play" size={14} /> {copy.start}</div>
     </div>
   </div>
 </div>
