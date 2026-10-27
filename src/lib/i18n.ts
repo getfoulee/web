@@ -39,7 +39,16 @@ export function pageLocale(current: string | undefined): Locale {
  */
 export const translations: Record<string, string> = {
   "/": "/en",
+  "/assistance": "/en/support",
+  "/assistance/garmin": "/en/support/garmin",
+  "/confidentialite": "/en/privacy",
+  "/mentions-legales": "/en/legal-notice",
 };
+
+/** A French page's address in `locale`: its translation, or the French page itself while it has none. */
+export function localePath(path: string, locale: Locale): string {
+  return locale === "en" ? (translations[path] ?? path) : path;
+}
 
 /** The page in each language it is published in, its own included; empty when it has no translation. */
 export function alternates(path: string): { locale: Locale; path: string }[] {

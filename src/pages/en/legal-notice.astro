@@ -1,0 +1,31 @@
+---
+import Prose from "../../layouts/Prose.astro";
+import { site } from "../../lib/site";
+---
+
+<Prose title="Legal notice" description="The publisher and the host of getfoulee.app.">
+  <h1>Legal notice</h1>
+
+  <h2>Publisher</h2>
+  <p>
+    This website is published by Matthieu Marquette, the developer of the Foulée app, in a personal capacity.<br />
+    Contact: <a href={`mailto:${site.email}`}>{site.email}</a>
+  </p>
+
+  <h2>Host</h2>
+  <p>
+    Cloudflare, Inc.<br />
+    101 Townsend St, San Francisco, CA 94107, United States<br />
+    <a href={site.host} rel="noopener">cloudflare.com</a>
+  </p>
+
+  <h2>Intellectual property</h2>
+  <p>
+    The Foulée name, its icon and the content of this website belong to their author. The app's source code is published under the MIT license on
+    <a href={site.repository} rel="noopener">GitHub</a>. Apple, Apple Watch, iPhone and App Store are trademarks of Apple Inc. Garmin and Connect IQ are
+    trademarks of Garmin Ltd.
+  </p>
+
+  <h2>Personal data</h2>
+  <p>This website measures its audience without cookies and collects no personal data. It is all explained in the <a href="/en/privacy">privacy policy</a>.</p>
+</Prose>

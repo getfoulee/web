@@ -49,6 +49,16 @@ const { title, description } = Astro.props;
     font-size: 1.2rem;
   }
 
+  /* A link back to the parent page, above the title. */
+  .prose :global(.back) {
+    margin: 0 0 20px;
+  }
+
+  .prose :global(.back a) {
+    color: var(--text-2);
+    text-decoration: none;
+  }
+
   .prose :global(.cards) {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));

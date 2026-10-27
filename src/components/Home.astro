@@ -11,7 +11,7 @@ import { site } from "../lib/site";
 import { mobileApplication } from "../lib/structured-data";
 import { screenshots } from "../lib/screenshots";
 import { latest } from "../lib/releases";
-import { locales, pageLocale } from "../lib/i18n";
+import { localePath, locales, pageLocale } from "../lib/i18n";
 
 /* The home page in each language, served at / and /en. Headings keep their
    line breaks and highlights as HTML. The English page links to the French
@@ -465,7 +465,7 @@ const privacyIcons = ["check", "server", "health"] as const;
             ))
           }
         </ul>
-        <a class="read-more" href="/confidentialite">{copy.privacy.link}</a>
+        <a class="read-more" href={localePath("/confidentialite", locale)}>{copy.privacy.link}</a>
       </div>
     </div>
   </section>

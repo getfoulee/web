@@ -1,9 +1,8 @@
 ---
-import { locales, pageLocale } from "../lib/i18n";
+import { localePath, locales, pageLocale } from "../lib/i18n";
 
 const locale = pageLocale(Astro.currentLocale);
 const { home, anchors, appStore } = locales[locale];
-// The English home links to the French pages that are not translated yet.
 const copy = {
   fr: {
     skip: "Aller au contenu",
@@ -38,7 +37,7 @@ const copy = {
     <nav aria-label={copy.nav}>
       <a href={`${home}#${anchors.features}`}>{copy.features}</a>
       <a href={`${home}#${anchors.watches}`}>{copy.watches}</a>
-      <a href="/assistance">{copy.support}</a>
+      <a href={localePath("/assistance", locale)}>{copy.support}</a>
     </nav>
     <button class="theme-toggle" type="button" aria-label={copy.theme} title={copy.theme}>
       <svg class="sun" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
