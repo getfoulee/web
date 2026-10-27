@@ -1,0 +1,74 @@
+name: Sync
+
+# Every morning, copies the app's privacy policy and Garmin FAQ from
+# getfoulee/foulee into src/content/. A difference opens a pull request (or
+# updates the one already open) and starts CI on it; once the copies match
+# again, the pull request is closed.
+on:
+  schedule:
+    - cron: "0 4 * * *"
+  workflow_dispatch:
+
+concurrency:
+  group: sync
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  sync:
+    name: Copy the app's documents
+    runs-on: ubuntu-latest
+    permissions:
+      # Push the branch, open or close its pull request, and start CI on it:
+      # a pull request opened with this token does not start workflows itself.
+      contents: write
+      pull-requests: write
+      actions: write
+    env:
+      GH_TOKEN: ${{ github.token }}
+      BRANCH: sync-app-docs
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          repository: getfoulee/foulee
+          path: .foulee
+          sparse-checkout: docs
+          persist-credentials: false
+
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .node-version
+
+      - name: Copy the documents
+        run: node scripts/sync-content.mjs .foulee
+
+      - name: Open or update the pull request
+        run: |
+          pr=$(gh pr list --state open --head "$BRANCH" --json number --jq '.[0].number')
+          if git diff --quiet; then
+            if [ -n "$pr" ]; then
+              gh pr close "$pr" --delete-branch --comment "The copies match the app's documents again."
+            fi
+            exit 0
+          fi
+          app=$(git -C .foulee rev-parse --short HEAD)
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git switch -C "$BRANCH"
+          git commit --all --quiet --file - <<EOF
+          Copy the app's documents again
+
+          The privacy policy or the Garmin FAQ changed in getfoulee/foulee
+          (getfoulee/foulee@$app); the site shows its own copy of each.
+          EOF
+          git push --force origin "$BRANCH"
+          if [ -z "$pr" ]; then
+            gh pr create --base main --head "$BRANCH" \
+              --title "Copy the app's documents again" \
+              --body "Copies \`docs/\` from getfoulee/foulee@$app. Opened by the Sync workflow: read the diff before merging."
+          fi
+          gh workflow run ci.yml --ref "$BRANCH"

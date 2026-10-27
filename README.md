@@ -38,7 +38,7 @@ The app repository is the source of truth:
 - `src/content/privacy.md` is `docs/privacy.md`;
 - `src/content/faq-garmin.md` is `docs/faq-garmin.md`, with its link to the policy pointing at `/confidentialite`.
 
-Copy them again when they change in the app.
+`npm run sync` copies them again from `../foulee` (or the checkout given as `npm run sync -- <path>`). Every morning, the Sync workflow does the same from the app's `main` and opens a pull request when they differ.
 
 ## Icons and share cards
 

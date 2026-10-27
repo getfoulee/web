@@ -15,6 +15,7 @@
     "check": "astro check",
     "test": "node scripts/check-site.mjs",
     "links": "node scripts/check-links.mjs",
+    "sync": "node scripts/sync-content.mjs",
     "lighthouse": "npm run lighthouse:mobile && npm run lighthouse:desktop",
     "lighthouse:mobile": "lhci autorun",
     "lighthouse:desktop": "lhci autorun --collect.settings.preset=desktop --upload.outputDir=.lighthouseci/desktop",
