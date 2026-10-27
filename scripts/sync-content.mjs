@@ -1,10 +1,10 @@
-// Copies the app's documents that the site shows into src/content/, from a
-// checkout of getfoulee/foulee (`../foulee` by default, or the path given as
-// the first argument). Links between the app's documents become the site's
-// addresses. Also writes the app's GitHub releases to
-// src/content/releases.json, for the « Nouveautés » page (GH_TOKEN, when set,
-// lifts the API's rate limit). Prints each file that changed; the sync
-// workflow turns a change into a pull request.
+// Copies the app's documents that the site shows, and the Garmin watches it
+// supports, into src/content/, from a checkout of getfoulee/foulee
+// (`../foulee` by default, or the path given as the first argument). Links
+// between the app's documents become the site's addresses. Also writes the
+// app's GitHub releases to src/content/releases.json, for the « Nouveautés »
+// page (GH_TOKEN, when set, lifts the API's rate limit). Prints each file
+// that changed; the sync workflow turns a change into a pull request.
 import { readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 
@@ -14,18 +14,21 @@ const app = process.argv[2] ?? "../foulee";
 const copies = [
   { from: "docs/privacy.md", to: "src/content/privacy.md" },
   { from: "docs/faq-garmin.md", to: "src/content/faq-garmin.md", links: { "privacy.md": "/confidentialite" } },
+  { from: "FouleeConnectIQ/devices.json", to: "src/content/garmin-devices.json" },
 ];
+
+/** A file's text with LF line endings: a Windows checkout turns LF into CRLF. */
+const read = (path) => readFileSync(path, "utf8").replaceAll("\r\n", "\n");
 
 /** Writes the file when its content changed, and says so. */
 function update(to, text, from) {
-  // Compare without line endings: a Windows checkout turns LF into CRLF.
-  if (readFileSync(to, "utf8").replaceAll("\r\n", "\n") === text) return;
+  if (read(to) === text) return;
   writeFileSync(to, text);
   console.log(`${to} ← ${from}`);
 }
 
 for (const { from, to, links = {} } of copies) {
-  let text = readFileSync(join(app, from), "utf8");
+  let text = read(join(app, from));
   for (const [link, address] of Object.entries(links)) {
     text = text.replaceAll(`](${link})`, `](${address})`);
   }

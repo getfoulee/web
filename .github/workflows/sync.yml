@@ -1,9 +1,11 @@
 name: Sync
 
-# Every morning, copies the app's privacy policy, Garmin FAQ and release
-# notes from getfoulee/foulee into src/content/. A difference opens a pull
-# request (or updates the one already open) and starts CI on it; once the
-# copies match again, the pull request is closed.
+# Every morning, copies the app's privacy policy, Garmin FAQ, Garmin watch
+# list and release notes from getfoulee/foulee into src/content/. A
+# difference opens a pull request (or updates the one already open) and
+# starts CI on it, whose build fails if a new watch fits in none of the
+# ranges /garmin shows (src/lib/garmin.ts); once the copies match again, the
+# pull request is closed.
 on:
   schedule:
     - cron: "0 4 * * *"
@@ -36,7 +38,11 @@ jobs:
         with:
           repository: getfoulee/foulee
           path: .foulee
-          sparse-checkout: docs
+          # docs/ and the watch list, not the whole Connect IQ app.
+          sparse-checkout: |
+            /docs/
+            /FouleeConnectIQ/devices.json
+          sparse-checkout-cone-mode: false
           persist-credentials: false
 
       - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
@@ -62,14 +68,14 @@ jobs:
           git commit --all --quiet --file - <<EOF
           Copy the app's documents again
 
-          The privacy policy, the Garmin FAQ or the release notes changed in
-          getfoulee/foulee (getfoulee/foulee@$app); the site shows its own
-          copy of each.
+          The privacy policy, the Garmin FAQ, the Garmin watch list or the
+          release notes changed in getfoulee/foulee (getfoulee/foulee@$app);
+          the site shows its own copy of each.
           EOF
           git push --force origin "$BRANCH"
           if [ -z "$pr" ]; then
             gh pr create --base main --head "$BRANCH" \
               --title "Copy the app's documents again" \
-              --body "Copies \`docs/\` and the releases from getfoulee/foulee@$app. Opened by the Sync workflow: read the diff before merging."
+              --body "Copies \`docs/\`, \`FouleeConnectIQ/devices.json\` and the releases from getfoulee/foulee@$app. Opened by the Sync workflow: read the diff before merging."
           fi
           gh workflow run ci.yml --ref "$BRANCH"
