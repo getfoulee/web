@@ -163,6 +163,10 @@ for (const [page, appStoreBadge, prefix] of [
   for (const store of ["apps.apple.com", "apps.garmin.com"]) {
     if (!home.includes(store)) failures.push(`${page}: no link to ${store}`);
   }
+  // Each App Store button names its campaign, for App Store Connect's Sources.
+  for (const campaign of ["hero", "cta", "header", "footer"]) {
+    if (!home.includes(`ct=site-${campaign}&`)) failures.push(`${page}: no App Store link for campaign site-${campaign}`);
+  }
   const app = requireData(page, "MobileApplication", ["name", "operatingSystem", "applicationCategory", "offers"]);
   if (app && app.offers.price !== "0") failures.push(`${page}: MobileApplication is not free`);
 

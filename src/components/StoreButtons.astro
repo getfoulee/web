@@ -1,12 +1,13 @@
 ---
-import { site } from "../lib/site";
+import { campaignLink, site, type Campaign } from "../lib/site";
 import { locales, pageLocale } from "../lib/i18n";
 
 interface Props {
   align?: "start" | "center";
+  campaign: Campaign;
 }
 
-const { align = "start" } = Astro.props;
+const { align = "start", campaign } = Astro.props;
 const locale = pageLocale(Astro.currentLocale);
 const copy = {
   fr: {
@@ -26,7 +27,7 @@ const copy = {
 ---
 
 <div class:list={["buttons", align]}>
-  <a href={locales[locale].appStore} rel="noopener">
+  <a href={campaignLink(locales[locale].appStore, campaign)} rel="noopener">
     <img src={copy.badge.src} alt={copy.badge.alt} width={copy.badge.width} height="50" />
   </a>
   <a href={site.connectIQ} rel="noopener">

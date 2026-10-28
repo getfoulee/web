@@ -2,7 +2,7 @@
 import Prose from "../layouts/Prose.astro";
 import LinkCard from "./LinkCard.astro";
 import { press } from "../lib/press";
-import { site } from "../lib/site";
+import { campaignLink, site } from "../lib/site";
 import { locales, pageLocale } from "../lib/i18n";
 
 /* The press page in each language, served at /presse and /en/press. Its
@@ -43,7 +43,7 @@ const copy = {
   <div class="cards">
     <LinkCard href={`/presse/${archive.name}.zip`} title={copy.kit[0]} detail={copy.kit[1]} download />
     <LinkCard href={`mailto:${site.email}`} title={contact} detail={site.email} />
-    <LinkCard href={locales[locale].appStore} title={copy.store[0]} detail={copy.store[1]} external />
+    <LinkCard href={campaignLink(locales[locale].appStore, "press")} title={copy.store[0]} detail={copy.store[1]} external />
   </div>
 
   <h2>{factsTitle}</h2>
