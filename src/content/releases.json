@@ -1,5 +1,31 @@
 [
   {
+    "version": "1.57.0",
+    "date": "2026-10-28",
+    "highlights": [
+      {
+        "title": "Foulée se lit avec VoiceOver.",
+        "text": "Chaque écran se lit dans l'ordre, et chaque chiffre dit ce qu'il mesure, sur l'iPhone, la montre, les widgets et l'activité en direct."
+      },
+      {
+        "title": "Du texte en grand, sans rien de coupé.",
+        "text": "Jusqu'aux plus grandes tailles de texte, les écrans s'adaptent et tout reste lisible."
+      },
+      {
+        "title": "Plus lisible en mode clair.",
+        "text": "Les verts, les orange, les libellés colorés et les boutons gagnent en contraste, encore plus avec « Augmenter le contraste »."
+      },
+      {
+        "title": "Moins d'animations si tu préfères.",
+        "text": "Avec « Réduire les animations », les anneaux et les célébrations restent calmes."
+      },
+      {
+        "title": "Toute l'app en anglais.",
+        "text": "Les derniers mots restés en français dans l'app anglaise sont traduits."
+      }
+    ]
+  },
+  {
     "version": "1.56.0",
     "date": "2026-10-27",
     "highlights": [
