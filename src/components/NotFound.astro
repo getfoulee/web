@@ -1,5 +1,5 @@
 ---
-import Base from "../layouts/Base.astro";
+import Notice from "./Notice.astro";
 import { locales, pageLocale } from "../lib/i18n";
 
 /* The error page in each language. Cloudflare serves the closest 404.html,
@@ -21,21 +21,13 @@ const copy = {
 }[locale];
 ---
 
-<Base title={copy.title}>
-  <section class="container lost">
-    <p class="code numeric">404</p>
-    <h1>{copy.heading}</h1>
-    <p>{copy.lead}</p>
-    <a class="back" href={locales[locale].home}>{copy.back}</a>
-  </section>
-</Base>
+<Notice title={copy.title} heading={copy.heading}>
+  <p slot="above" class="code numeric">404</p>
+  <p>{copy.lead}</p>
+  <a class="back" href={locales[locale].home}>{copy.back}</a>
+</Notice>
 
 <style>
-  .lost {
-    padding-block: clamp(80px, 14vw, 180px);
-    text-align: center;
-  }
-
   .code {
     margin: 0;
     font-size: clamp(6rem, 20vw, 11rem);
@@ -46,16 +38,6 @@ const copy = {
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
-  }
-
-  h1 {
-    margin: 12px 0;
-    font-size: clamp(1.8rem, 4vw, 2.6rem);
-    letter-spacing: -0.03em;
-  }
-
-  p {
-    color: var(--text-2);
   }
 
   .back {

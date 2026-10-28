@@ -29,7 +29,7 @@ export const site = {
 } as const;
 
 /** The App Store buttons, each its own campaign in App Store Connect › Analytics › Sources. */
-export type Campaign = "hero" | "cta" | "header" | "footer" | "press" | "watch" | "garmin";
+export type Campaign = "hero" | "cta" | "header" | "footer" | "press" | "watch" | "garmin" | "link";
 
 /** A store link that tells App Store Connect which button brought the visitor. */
 export function campaignLink(store: string, campaign: Campaign): string {

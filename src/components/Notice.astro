@@ -1,0 +1,36 @@
+---
+import Base from "../layouts/Base.astro";
+
+/* A short centred page: a heading, a few lines, an action. The 404 and the
+   Universal Links' fallback pages. */
+interface Props {
+  title: string;
+  heading: string;
+  appArgument?: string;
+}
+
+const { title, heading, appArgument } = Astro.props;
+---
+
+<Base title={title} appArgument={appArgument}>
+  <section class="container notice">
+    <slot name="above" />
+    <h1>{heading}</h1>
+    <slot />
+  </section>
+</Base>
+
+<style>
+  .notice {
+    padding-block: clamp(80px, 14vw, 180px);
+    text-align: center;
+    color: var(--text-2);
+  }
+
+  h1 {
+    margin: 12px 0;
+    color: var(--text);
+    font-size: clamp(1.8rem, 4vw, 2.6rem);
+    letter-spacing: -0.03em;
+  }
+</style>
