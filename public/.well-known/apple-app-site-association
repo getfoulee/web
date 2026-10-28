@@ -1,0 +1,14 @@
+{
+  "applinks": {
+    "details": [
+      {
+        "appIDs": ["9U4EJ5RF35.com.eno33.foulee"],
+        "components": [
+          { "/": "/ouvrir", "comment": "Home" },
+          { "/": "/bilan", "comment": "Weekly review" },
+          { "/": "/hydratation", "comment": "Hydration" }
+        ]
+      }
+    ]
+  }
+}
