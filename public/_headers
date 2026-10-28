@@ -12,6 +12,11 @@
 /_astro/*
   Cache-Control: public, max-age=31536000, immutable
 
+# Universal Links: iOS reads this file as JSON, served as is (no extension, no
+# redirect). Paths and Team ID come from the app (getfoulee/foulee#627).
+/.well-known/apple-app-site-association
+  Content-Type: application/json
+
 # Only getfoulee.app is indexed: the Cloudflare address (getfoulee.pages.dev)
 # and every branch preview (<branch>.getfoulee.pages.dev) are not. A host
 # placeholder stops at a dot, hence one rule each.

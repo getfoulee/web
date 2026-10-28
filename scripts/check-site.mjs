@@ -237,6 +237,19 @@ for (const [pattern, headers] of rules) {
   if (!pattern.includes("pages.dev") && headers.some((header) => header.startsWith("X-Robots-Tag"))) failures.push(`_headers: ${pattern} hides getfoulee.app from search engines`);
 }
 
+// Universal Links: the association file ships as JSON and names the app.
+const association = ".well-known/apple-app-site-association";
+if (!existsSync(join(dist, association))) failures.push(`${association}: missing`);
+else {
+  try {
+    const appIDs = JSON.parse(readFileSync(join(dist, association), "utf8")).applinks?.details?.flatMap((detail) => detail.appIDs ?? []) ?? [];
+    if (!appIDs.includes("9U4EJ5RF35.com.eno33.foulee")) failures.push(`${association}: Foulée's app ID is missing`);
+  } catch {
+    failures.push(`${association}: not valid JSON`);
+  }
+}
+if (!rules.get(`/${association}`)?.includes("Content-Type: application/json")) failures.push(`_headers: ${association} is not served as JSON`);
+
 if (failures.length > 0) {
   console.error(failures.join("\n"));
   process.exit(1);
