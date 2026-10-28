@@ -1,5 +1,6 @@
 ---
 import LanguageSwitch from "./LanguageSwitch.astro";
+import { campaignLink } from "../lib/site";
 import { localePath, locales, pageLocale } from "../lib/i18n";
 
 const locale = pageLocale(Astro.currentLocale);
@@ -52,7 +53,7 @@ const copy = {
         </svg>
       </button>
     </div>
-    <a class="cta" href={appStore} rel="noopener">{copy.download}</a>
+    <a class="cta" href={campaignLink(appStore, "header")} rel="noopener">{copy.download}</a>
   </div>
 </header>
 

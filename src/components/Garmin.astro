@@ -2,7 +2,7 @@
 import Prose from "../layouts/Prose.astro";
 import LinkCard from "./LinkCard.astro";
 import Watches from "./Watches.astro";
-import { site } from "../lib/site";
+import { campaignLink, site } from "../lib/site";
 import { garminWatchCount, garminWatches } from "../lib/garmin";
 import { localePath, locales, pageLocale } from "../lib/i18n";
 
@@ -90,7 +90,7 @@ const guide = localePath("/assistance/garmin", locale);
 
   <div class="cards">
     <LinkCard href={site.connectIQ} title="Connect IQ" detail={copy.connectIQ} external />
-    <LinkCard href={locales[locale].appStore} title="App Store" detail={copy.store} external />
+    <LinkCard href={campaignLink(locales[locale].appStore, "garmin")} title="App Store" detail={copy.store} external />
     <LinkCard href={guide} title={copy.guide[0]} detail={copy.guide[1]} />
   </div>
 

@@ -219,7 +219,7 @@ const privacyIcons = ["check", "server", "health"] as const;
           <span class="line gradient-text">{copy.title[1]}</span>
         </h1>
         <p class="hero-sub" data-reveal="load" style="--delay:0.16s">{copy.sub}</p>
-        <div data-reveal="load" style="--delay:0.24s"><StoreButtons /></div>
+        <div data-reveal="load" style="--delay:0.24s"><StoreButtons campaign="hero" /></div>
         <p class="hero-note" data-reveal="load" style="--delay:0.3s">{copy.note}</p>
         {
           latest && copy.news && (
@@ -478,7 +478,7 @@ const privacyIcons = ["check", "server", "health"] as const;
         <img class="final-icon" src="/app-icon-512.png" alt={copy.final.icon} width="112" height="112" loading="lazy" />
         <h2 set:html={copy.final.title} />
         <p>{copy.final.text}</p>
-        <StoreButtons align="center" />
+        <StoreButtons align="center" campaign="cta" />
       </div>
     </div>
   </section>

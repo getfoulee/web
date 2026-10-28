@@ -1,6 +1,6 @@
 ---
 import LanguageSwitch from "./LanguageSwitch.astro";
-import { site } from "../lib/site";
+import { campaignLink, site } from "../lib/site";
 import { localePath, locales, pageLocale } from "../lib/i18n";
 
 const year = new Date().getFullYear();
@@ -58,7 +58,7 @@ const copy = {
 
     <nav aria-label={copy.app}>
       <h2>{copy.app}</h2>
-      <a href={appStore} rel="noopener">App Store</a>
+      <a href={campaignLink(appStore, "footer")} rel="noopener">App Store</a>
       <a href={site.connectIQ} rel="noopener">Garmin Connect IQ</a>
       <a href={localePath("/apple-watch", locale)}>{copy.appleWatch}</a>
       <a href={localePath("/garmin", locale)}>{copy.garmin}</a>

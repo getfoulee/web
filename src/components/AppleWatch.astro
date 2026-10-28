@@ -2,7 +2,7 @@
 import Prose from "../layouts/Prose.astro";
 import LinkCard from "./LinkCard.astro";
 import Watches from "./Watches.astro";
-import { site } from "../lib/site";
+import { campaignLink, site } from "../lib/site";
 import { localePath, locales, pageLocale } from "../lib/i18n";
 
 /* The Apple Watch page in each language, served at /apple-watch and /en/apple-watch. */
@@ -88,7 +88,7 @@ const copy = {
   </div>
 
   <div class="cards">
-    <LinkCard href={locales[locale].appStore} title="App Store" detail={copy.store} external />
+    <LinkCard href={campaignLink(locales[locale].appStore, "watch")} title="App Store" detail={copy.store} external />
     <LinkCard href={localePath("/garmin", locale)} title={copy.garmin[0]} detail={copy.garmin[1]} />
     <LinkCard href={localePath("/assistance", locale)} title={copy.support[0]} detail={copy.support[1]} />
   </div>

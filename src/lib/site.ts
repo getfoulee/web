@@ -11,6 +11,8 @@ export const site = {
   appStore: "https://apps.apple.com/fr/app/foul%C3%A9e-marche-s%C3%A9rie/id6774594192",
   /** The same listing without a country: Apple opens the visitor's own store. */
   appStoreAnyCountry: "https://apps.apple.com/app/id6774594192",
+  /** App Store Connect's provider token, the same in every campaign link. */
+  appStoreProvider: "119685869",
   connectIQ: "https://apps.garmin.com/apps/8c11aa2c-7fc7-4e3d-8441-b2771626cbc7",
   repository: "https://github.com/getfoulee/foulee",
   issues: "https://github.com/getfoulee/foulee/issues/new",
@@ -25,3 +27,11 @@ export const site = {
     token: "b9063e7d935c463aa4888d37c83e4686",
   },
 } as const;
+
+/** The App Store buttons, each its own campaign in App Store Connect › Analytics › Sources. */
+export type Campaign = "hero" | "cta" | "header" | "footer" | "press" | "watch" | "garmin";
+
+/** A store link that tells App Store Connect which button brought the visitor. */
+export function campaignLink(store: string, campaign: Campaign): string {
+  return `${store}?pt=${site.appStoreProvider}&ct=site-${campaign}&mt=8`;
+}
