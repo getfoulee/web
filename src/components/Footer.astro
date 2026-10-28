@@ -64,7 +64,7 @@ const copy = {
       <a href="/garmin">{copy.garmin}</a>
       <a href="/nouveautes">{copy.news}</a>
       <a href={site.repository} rel="noopener">{copy.source}</a>
-      <a href="/presse">{copy.press}</a>
+      <a href={localePath("/presse", locale)}>{copy.press}</a>
     </nav>
 
     <nav aria-label={copy.help}>

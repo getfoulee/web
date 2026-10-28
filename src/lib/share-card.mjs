@@ -25,6 +25,12 @@ const themes = {
   light: { bg: "#fbf7ff", blob1: "#f7d6ff", blob2: "#ffe6f3", text: "#1d1233", sub: "#1d1233", link: "#7c3aed", gradient: ["#bf5af2", "#7c3aed", "#5e5ce6"] },
 };
 
+/** The line under the title, in the page's language. */
+const platforms = {
+  fr: "Foulée · iPhone, Apple Watch et Garmin",
+  en: "Foulée · iPhone, Apple Watch and Garmin",
+};
+
 /** Title sizes from largest down, with the characters a line holds left of the icon. */
 const sizes = [
   { size: 92, chars: 14 },
@@ -48,9 +54,9 @@ function wrap(text, chars) {
 const escape = (text) => text.replace(/[&<>"']/g, (char) => `&#${char.charCodeAt(0)};`);
 
 /** The card for `title` and the page at `address` (getfoulee.app/…), drawn at
- *  `scale`, as PNG. The last line of the title takes the accent gradient.
- *  @param {{ title: string, address: string, theme?: "dark" | "light", scale?: number }} card */
-export async function shareCard({ title, address, theme = "dark", scale = 1 }) {
+ *  `scale`, as PNG, in `locale`. The last line of the title takes the accent gradient.
+ *  @param {{ title: string, address: string, theme?: "dark" | "light", scale?: number, locale?: "fr" | "en" }} card */
+export async function shareCard({ title, address, theme = "dark", scale = 1, locale = "fr" }) {
   const c = themes[theme];
   const fit = sizes.find(({ chars }) => wrap(title, chars).length <= 2) ?? sizes.at(-1);
   const lines = wrap(title, fit.chars);
@@ -75,7 +81,7 @@ export async function shareCard({ title, address, theme = "dark", scale = 1 }) {
   <rect width="100%" height="100%" fill="url(#a)"/>
   <rect width="100%" height="100%" fill="url(#b)"/>
   ${titleLines}
-  <text x="80" y="480" ${font} font-size="32" fill="${c.sub}" fill-opacity="0.7">Foulée · iPhone, Apple Watch et Garmin</text>
+  <text x="80" y="480" ${font} font-size="32" fill="${c.sub}" fill-opacity="0.7">${platforms[locale]}</text>
   <text x="80" y="560" ${font} font-size="26" font-weight="600" fill="${c.link}">${escape(address)}</text>
 </svg>`);
 

@@ -1,9 +1,11 @@
-// Packs the press kit (visuals and texts) into one zip in dist/presse/ after
-// every build, so the archive on /presse never lags behind the page.
+// Packs each language's press kit (visuals and texts) into one zip in
+// dist/presse/ after every build, so the archives on /presse and /en/press
+// never lag behind the pages.
 import type { AstroIntegration } from "astro";
 import { readFile, writeFile } from "node:fs/promises";
 import { crc32 } from "node:zlib";
-import { archive, textsMarkdown, visuals } from "../lib/press";
+import { press, textsMarkdown } from "../lib/press";
+import type { Locale } from "../lib/i18n";
 
 /** A zip with stored (uncompressed) entries: the PNGs are compressed already.
  *  Every entry is dated 1980-01-01 so the same kit gives the same bytes. */
@@ -60,13 +62,16 @@ export default function pressKit(): AstroIntegration {
     hooks: {
       "astro:build:done": async ({ dir, logger }) => {
         const folder = new URL("presse/", dir);
-        const files = [
-          ...(await Promise.all(visuals.map(async ({ file }) => ({ name: file, data: await readFile(new URL(file, folder)) })))),
-          { name: archive.textFile, data: Buffer.from(textsMarkdown(), "utf8") },
-        ].map(({ name, data }) => ({ name: `${archive.name}/${name}`, data }));
+        for (const locale of Object.keys(press) as Locale[]) {
+          const { archive, visuals } = press[locale];
+          const files = [
+            ...(await Promise.all(visuals.map(async ({ file }) => ({ name: file, data: await readFile(new URL(file, folder)) })))),
+            { name: archive.textFile, data: Buffer.from(textsMarkdown(locale), "utf8") },
+          ].map(({ name, data }) => ({ name: `${archive.name}/${name}`, data }));
 
-        await writeFile(new URL(`${archive.name}.zip`, folder), zip(files));
-        logger.info(`presse/${archive.name}.zip: ${files.length} files`);
+          await writeFile(new URL(`${archive.name}.zip`, folder), zip(files));
+          logger.info(`presse/${archive.name}.zip: ${files.length} files`);
+        }
       },
     },
   };

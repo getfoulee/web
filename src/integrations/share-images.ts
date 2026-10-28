@@ -1,6 +1,6 @@
 // Draws each page's share card after every build, from the page's own
 // metadata: og:image is where the card goes, og:image:alt its title, og:url
-// the address it shows. A new page gets its card without a list to keep.
+// the address it shows, <html lang> its language. A new page gets its card without a list to keep.
 import type { AstroIntegration } from "astro";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { dirname } from "node:path";
@@ -27,11 +27,12 @@ export default function shareImages(): AstroIntegration {
           const image = meta(html, "og:image");
           const title = meta(html, "og:image:alt");
           const url = meta(html, "og:url");
+          const locale = html.includes('<html lang="en"') ? "en" : "fr";
           if (!image?.startsWith(`${site.url}/`) || !title || !url) continue;
 
           const file = fileURLToPath(new URL(image.slice(site.url.length + 1), dir));
           await mkdir(dirname(file), { recursive: true });
-          await writeFile(file, await shareCard({ title, address: url.replace(/^https:\/\//, "").replace(/\/$/, "") }));
+          await writeFile(file, await shareCard({ title, address: url.replace(/^https:\/\//, "").replace(/\/$/, ""), locale }));
           count++;
         }
         logger.info(`${count} share cards`);

@@ -43,6 +43,7 @@ export const translations: Record<string, string> = {
   "/assistance/garmin": "/en/support/garmin",
   "/confidentialite": "/en/privacy",
   "/mentions-legales": "/en/legal-notice",
+  "/presse": "/en/press",
 };
 
 /** A French page's address in `locale`: its translation, or the French page itself while it has none. */
