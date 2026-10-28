@@ -1,0 +1,126 @@
+---
+import Prose from "../layouts/Prose.astro";
+import LinkCard from "./LinkCard.astro";
+import Watches from "./Watches.astro";
+import { site } from "../lib/site";
+import { localePath, locales, pageLocale } from "../lib/i18n";
+
+/* The Apple Watch page in each language, served at /apple-watch and /en/apple-watch. */
+const locale = pageLocale(Astro.currentLocale);
+const copy = {
+  fr: {
+    title: "Foulée sur Apple Watch",
+    description: "Lance ta marche ou ta course au poignet, retrouve-la sur l'iPhone, et garde ta série sur ton cadran. Foulée sur Apple Watch, gratuite.",
+    lead: "Lance ta marche ou ta course au poignet, sans sortir l'iPhone. Ta série, tes compteurs du jour et ton eau restent à un coup d'œil.",
+    store: "Gratuite, avec l'app iPhone",
+    garmin: ["Une Garmin ?", "Foulée marche aussi avec elle"],
+    support: ["Assistance", "Les questions fréquentes"],
+    workoutTitle: "La séance au poignet",
+    workout:
+      "L'accueil de la montre montre ta série, tes compteurs du jour et ton eau. Le bouton « Démarrer » reste en bas de l'écran : pas besoin de faire défiler pour partir.",
+    features: [
+      [
+        "Marche ou course :",
+        "Foulée reconnaît ce que tu fais. Si tu passes de l'un à l'autre, la montre ouvre une nouvelle séance, comme l'app Exercice. Santé garde une marche et une course, pas une sortie mal étiquetée.",
+      ],
+      ["Pendant la séance :", "chrono, distance, allure et fréquence cardiaque."],
+      ["À chaque kilomètre :", "un tapotement au poignet, et le kilomètre qui vient de finir s'affiche."],
+      ["Tout à un geste :", "la pause et l'arrêt d'un côté, la musique de l'autre, puis ton parcours sur une carte et ta journée, avec ton eau."],
+    ],
+    iPhoneTitle: "Retrouve-la sur l'iPhone",
+    iPhone: [
+      "Une sortie lancée sur la montre s'affiche sur l'iPhone : les chiffres, et le parcours sur une carte quand le GPS a capté. L'iPhone dit de quand date chaque chiffre plutôt que de faire semblant d'être en direct.",
+      "L'inverse marche aussi. Lance ta sortie sur l'iPhone : la montre affiche les chiffres, le parcours, et les boutons pause et arrêt. L'iPhone l'enregistre en une seule séance. Pendant ce temps, une Live Activity garde l'essentiel sur l'écran verrouillé et dans la Dynamic Island.",
+    ],
+    faceTitle: "Sur ton cadran",
+    face: "Trois complications, en rond, en rectangle ou en une ligne :",
+    complications: [
+      ["Série", "Le nombre de jours d'affilée où tu as bougé."],
+      ["Statistique", "Une donnée du jour, au choix : pas, activité, distance ou calories."],
+      ["Hydratation", "Ton eau bue du jour, face à ton objectif."],
+    ],
+    needTitle: "Ce qu'il te faut",
+    need: `Une Apple Watch avec watchOS ${site.minimumOS} ou plus récent, et un iPhone avec iOS ${site.minimumOS} ou plus récent. Foulée est gratuite et sans compte : tes données restent sur ta montre, ton iPhone et dans Santé.`,
+  },
+  en: {
+    title: "Foulée on Apple Watch",
+    description: "Start your walk or run from your wrist, find it on your iPhone, and keep your streak on your watch face. Foulée on Apple Watch, free.",
+    lead: "Start your walk or run from your wrist, without taking out your iPhone. Your streak, today's counters and your water stay one glance away.",
+    store: "Free, with the iPhone app",
+    garmin: ["Got a Garmin?", "Foulée works with it too"],
+    support: ["Support", "Frequently asked questions"],
+    workoutTitle: "Your workout on your wrist",
+    workout:
+      "The watch's home screen shows your streak, today's counters and your water. The Start button stays at the bottom of the screen: no need to scroll to get going.",
+    features: [
+      [
+        "Walk or run:",
+        "Foulée recognizes what you're doing. If you switch from one to the other, the watch opens a new session, like the Workout app. Health keeps a walk and a run, not one mislabeled outing.",
+      ],
+      ["During the workout:", "time, distance, pace and heart rate."],
+      ["At each kilometer:", "a tap on your wrist, and the kilometer you just finished shows up."],
+      ["Everything a swipe away:", "pause and stop on one side, music on the other, then your route on a map and your day, with your water."],
+    ],
+    iPhoneTitle: "Find it on your iPhone",
+    iPhone: [
+      "A workout started on the watch shows up on the iPhone: the numbers, and the route on a map once GPS has a fix. The iPhone tells you how old each number is rather than pretending to be live.",
+      "The other way round works too. Start your workout on the iPhone: the watch shows the numbers, the route, and the pause and stop buttons. The iPhone saves it as a single session. Meanwhile, a Live Activity keeps the essentials on the Lock Screen and in the Dynamic Island.",
+    ],
+    faceTitle: "On your watch face",
+    face: "Three complications, round, rectangular or on one line:",
+    complications: [
+      ["Streak", "The number of days in a row you've moved."],
+      ["Stat", "One of today's figures, your pick: steps, activity, distance or calories."],
+      ["Hydration", "The water you've had today, against your goal."],
+    ],
+    needTitle: "What you need",
+    need: `An Apple Watch with watchOS ${site.minimumOS} or later, and an iPhone with iOS ${site.minimumOS} or later. Foulée is free and needs no account: your data stays on your watch, your iPhone and in Health.`,
+  },
+}[locale];
+---
+
+<Prose title={copy.title} description={copy.description}>
+  <h1>{copy.title}</h1>
+  <p class="lead">{copy.lead}</p>
+
+  <div class="device">
+    <Watches only="apple" />
+  </div>
+
+  <div class="cards">
+    <LinkCard href={locales[locale].appStore} title="App Store" detail={copy.store} external />
+    <LinkCard href={localePath("/garmin", locale)} title={copy.garmin[0]} detail={copy.garmin[1]} />
+    <LinkCard href={localePath("/assistance", locale)} title={copy.support[0]} detail={copy.support[1]} />
+  </div>
+
+  <h2>{copy.workoutTitle}</h2>
+  <p>{copy.workout}</p>
+  <ul>
+    {
+      copy.features.map(([label, text]) => (
+        <li>
+          <strong>{label}</strong> {text}
+        </li>
+      ))
+    }
+  </ul>
+
+  <h2>{copy.iPhoneTitle}</h2>
+  {copy.iPhone.map((paragraph) => <p>{paragraph}</p>)}
+
+  <h2>{copy.faceTitle}</h2>
+  <p>{copy.face}</p>
+  <dl class="facts">
+    {
+      copy.complications.map(([term, detail]) => (
+        <div>
+          <dt>{term}</dt>
+          <dd>{detail}</dd>
+        </div>
+      ))
+    }
+  </dl>
+
+  <h2>{copy.needTitle}</h2>
+  <p>{copy.need}</p>
+</Prose>

@@ -39,9 +39,11 @@ export function pageLocale(current: string | undefined): Locale {
  */
 export const translations: Record<string, string> = {
   "/": "/en",
+  "/apple-watch": "/en/apple-watch",
   "/assistance": "/en/support",
   "/assistance/garmin": "/en/support/garmin",
   "/confidentialite": "/en/privacy",
+  "/garmin": "/en/garmin",
   "/mentions-legales": "/en/legal-notice",
   "/presse": "/en/press",
 };

@@ -60,8 +60,8 @@ const copy = {
       <h2>{copy.app}</h2>
       <a href={appStore} rel="noopener">App Store</a>
       <a href={site.connectIQ} rel="noopener">Garmin Connect IQ</a>
-      <a href="/apple-watch">{copy.appleWatch}</a>
-      <a href="/garmin">{copy.garmin}</a>
+      <a href={localePath("/apple-watch", locale)}>{copy.appleWatch}</a>
+      <a href={localePath("/garmin", locale)}>{copy.garmin}</a>
       <a href="/nouveautes">{copy.news}</a>
       <a href={site.repository} rel="noopener">{copy.source}</a>
       <a href={localePath("/presse", locale)}>{copy.press}</a>

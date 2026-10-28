@@ -24,6 +24,8 @@ const pages = [
   "en/privacy.html",
   "en/legal-notice.html",
   "en/press.html",
+  "en/apple-watch.html",
+  "en/garmin.html",
   "en/404.html",
 ];
 const failures = [];
@@ -153,9 +155,9 @@ for (const [image, sharing] of shareImages) {
 }
 
 // The home page in each language, with Apple's badge in that language.
-for (const [page, appStoreBadge] of [
-  ["index.html", "/badges/app-store.svg"],
-  ["en.html", "/badges/app-store-en.svg"],
+for (const [page, appStoreBadge, prefix] of [
+  ["index.html", "/badges/app-store.svg", ""],
+  ["en.html", "/badges/app-store-en.svg", "/en"],
 ]) {
   const home = readFileSync(join(dist, page), "utf8");
   for (const store of ["apps.apple.com", "apps.garmin.com"]) {
@@ -164,8 +166,8 @@ for (const [page, appStoreBadge] of [
   const app = requireData(page, "MobileApplication", ["name", "operatingSystem", "applicationCategory", "offers"]);
   if (app && app.offers.price !== "0") failures.push(`${page}: MobileApplication is not free`);
 
-  // The watch pages are reached from the home page, not only from the footer.
-  for (const watch of ["/apple-watch", "/garmin"]) {
+  // The watch pages, in the home page's language, are reached from it, not only from the footer.
+  for (const watch of ["/apple-watch", "/garmin"].map((path) => prefix + path)) {
     if (!home.includes(`class="read-more" href="${watch}"`)) failures.push(`${page}: no link to ${watch} in the watches section`);
   }
 

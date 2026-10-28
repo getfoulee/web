@@ -1,0 +1,127 @@
+---
+import Prose from "../layouts/Prose.astro";
+import LinkCard from "./LinkCard.astro";
+import Watches from "./Watches.astro";
+import { site } from "../lib/site";
+import { garminWatchCount, garminWatches } from "../lib/garmin";
+import { localePath, locales, pageLocale } from "../lib/i18n";
+
+/* The Garmin page in each language, served at /garmin and /en/garmin. The
+   watches come from src/content/garmin-devices.json, as the app's do. */
+const locale = pageLocale(Astro.currentLocale);
+const copy = {
+  fr: {
+    title: "Foulée sur Garmin",
+    description: `L'app Connect IQ de Foulée met ta série au poignet et envoie tes séances à l'iPhone. Les ${garminWatchCount} montres compatibles, et la synchro avec Santé.`,
+    lead: "Ta Garmin fait avancer ta série de deux façons : par Santé, sans rien installer sur la montre, et avec l'app Connect IQ de Foulée, qui met ta série au poignet.",
+    connectIQ: "L'app montre, gratuite",
+    store: "L'app iPhone, gratuite",
+    guide: ["Dépannage", "Le guide Garmin pas à pas"],
+    appTitle: "L'app Connect IQ",
+    features: [
+      ["D'un coup d'œil :", "ta série et tes minutes du jour face à ton objectif, sans ouvrir l'app."],
+      ["L'accueil :", "ta série, tes pas et tes minutes face à tes objectifs, tes kilomètres et tes calories."],
+      [
+        "Démarrer :",
+        "lance une marche ou une course depuis la montre. Chrono, distance, allure, fréquence cardiaque, et une vibration à chaque kilomètre. Sur les montres à cartes, une page suit ton parcours.",
+      ],
+      ["La pause :", "reprends, enregistre ou supprime ta séance."],
+      ["J'ai bu :", "un verre d'eau noté depuis la montre, que l'iPhone écrit dans Santé."],
+      ["Ta série sur ton cadran :", "en complication, pour les cadrans qui les acceptent, Face It compris."],
+    ],
+    iPhoneTitle: "Avec ton iPhone",
+    iPhone: [
+      "À la fin d'une séance, la montre envoie son résumé et ton parcours à l'iPhone. S'il n'est pas à portée, elle les garde et réessaie. Pendant la séance, l'iPhone la suit et peut l'arrêter.",
+      "L'iPhone envoie à la montre ta série et tes objectifs. Tes minutes d'intensité Garmin comptent pour ta série, sans être comptées deux fois.",
+    ],
+    healthTitle: "Sans l'app : la synchro avec Santé",
+    health: [
+      "Garmin Connect écrit tes pas, ta distance, tes activités et ton eau dans Santé, où Foulée les lit. Tout se passe sur ton iPhone : Foulée ne parle jamais aux serveurs Garmin.",
+      "Deux choses à savoir. Garmin Connect doit être ouverte pour envoyer tes données. Et une marche ne compte en minutes que si ta montre l'a enregistrée comme activité.",
+    ],
+    guideLink: "Le guide pas à pas, et que faire si tes données n'arrivent pas →",
+    watchesTitle: `${garminWatchCount} montres compatibles`,
+    watches: "Toutes les Garmin à écran couleur qui ont Connect IQ 5 ou plus récent.",
+  },
+  en: {
+    title: "Foulée on Garmin",
+    description: `Foulée's Connect IQ app puts your streak on your wrist and sends your workouts to your iPhone. The ${garminWatchCount} compatible watches, and the sync with Health.`,
+    lead: "Your Garmin moves your streak forward in two ways: through Health, with nothing to install on the watch, and with Foulée's Connect IQ app, which puts your streak on your wrist.",
+    connectIQ: "The watch app, free",
+    store: "The iPhone app, free",
+    guide: ["Troubleshooting", "The step-by-step Garmin guide"],
+    appTitle: "The Connect IQ app",
+    features: [
+      ["At a glance:", "your streak and today's minutes against your goal, without opening the app."],
+      ["Home:", "your streak, your steps and your minutes against your goals, your kilometers and your calories."],
+      [
+        "Start:",
+        "start a walk or a run from the watch. Time, distance, pace, heart rate, and a buzz at each kilometer. On watches with maps, a page follows your route.",
+      ],
+      ["Pause:", "resume, save or discard your session."],
+      ["Log a glass:", "a glass of water logged from the watch, which the iPhone writes to Health."],
+      ["Your streak on your watch face:", "as a complication, on the watch faces that take them, Face It included."],
+    ],
+    iPhoneTitle: "With your iPhone",
+    iPhone: [
+      "At the end of a session, the watch sends its summary and your route to the iPhone. If it's out of range, the watch keeps them and tries again. During the session, the iPhone follows it and can stop it.",
+      "The iPhone sends your streak and your goals to the watch. Your Garmin intensity minutes count toward your streak, without being counted twice.",
+    ],
+    healthTitle: "Without the app: the sync with Health",
+    health: [
+      "Garmin Connect writes your steps, distance, activities and water to Health, where Foulée reads them. It all happens on your iPhone: Foulée never talks to Garmin's servers.",
+      "Two things to know. Garmin Connect has to be open to send your data. And a walk only counts as minutes if your watch recorded it as an activity.",
+    ],
+    guideLink: "The step-by-step guide, and what to do if your data doesn't arrive →",
+    watchesTitle: `${garminWatchCount} compatible watches`,
+    watches: "Every Garmin with a color screen and Connect IQ 5 or later.",
+  },
+}[locale];
+const guide = localePath("/assistance/garmin", locale);
+---
+
+<Prose title={copy.title} description={copy.description}>
+  <h1>{copy.title}</h1>
+  <p class="lead">{copy.lead}</p>
+
+  <div class="device">
+    <Watches only="garmin" />
+  </div>
+
+  <div class="cards">
+    <LinkCard href={site.connectIQ} title="Connect IQ" detail={copy.connectIQ} external />
+    <LinkCard href={locales[locale].appStore} title="App Store" detail={copy.store} external />
+    <LinkCard href={guide} title={copy.guide[0]} detail={copy.guide[1]} />
+  </div>
+
+  <h2>{copy.appTitle}</h2>
+  <ul>
+    {
+      copy.features.map(([label, text]) => (
+        <li>
+          <strong>{label}</strong> {text}
+        </li>
+      ))
+    }
+  </ul>
+
+  <h2>{copy.iPhoneTitle}</h2>
+  {copy.iPhone.map((paragraph) => <p>{paragraph}</p>)}
+
+  <h2>{copy.healthTitle}</h2>
+  {copy.health.map((paragraph) => <p>{paragraph}</p>)}
+  <p><a href={guide}>{copy.guideLink}</a></p>
+
+  <h2>{copy.watchesTitle}</h2>
+  <p>{copy.watches}</p>
+  <dl class="facts">
+    {
+      garminWatches.map(({ range, models }) => (
+        <div>
+          <dt>{range}</dt>
+          <dd>{models.join(" · ")}</dd>
+        </div>
+      ))
+    }
+  </dl>
+</Prose>

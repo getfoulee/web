@@ -322,12 +322,12 @@ const privacyIcons = ["check", "server", "health"] as const;
         <p class="kicker">{copy.watches.kicker}</p>
         <h2 set:html={copy.watches.title} />
         <p>{copy.watches.text}</p>
-        <a class="read-more" href="/apple-watch">{copy.watches.appleWatch}</a>
+        <a class="read-more" href={localePath("/apple-watch", locale)}>{copy.watches.appleWatch}</a>
         <div class="garmin-card glass">
           <p class="garmin-title">{copy.watches.garminTitle}</p>
           <p>{copy.watches.garmin}</p>
           <div class="more-links">
-            <a class="read-more" href="/garmin">{copy.watches.garminPage}</a>
+            <a class="read-more" href={localePath("/garmin", locale)}>{copy.watches.garminPage}</a>
             <a class="read-more" href={site.connectIQ} rel="noopener">{copy.watches.connectIQ}</a>
           </div>
         </div>
