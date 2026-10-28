@@ -24,15 +24,13 @@ const { title, heading, appArgument } = Astro.props;
   .notice {
     padding-block: clamp(80px, 14vw, 180px);
     text-align: center;
+    color: var(--text-2);
   }
 
   h1 {
     margin: 12px 0;
+    color: var(--text);
     font-size: clamp(1.8rem, 4vw, 2.6rem);
     letter-spacing: -0.03em;
-  }
-
-  .notice :global(p) {
-    color: var(--text-2);
   }
 </style>
