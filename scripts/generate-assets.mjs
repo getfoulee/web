@@ -13,21 +13,24 @@ await sharp(await rounded(512)).toFile(out("app-icon-512.png"));
 await sharp(await rounded(64)).toFile(out("favicon.png"));
 await sharp(icon).resize(180, 180).png().toFile(out("apple-touch-icon.png"));
 
-/** The home page's card, with the tagline. */
-const card = (theme, scale) => shareCard({ title: "Bouge un peu, chaque jour.", address: "getfoulee.app", theme, scale });
+/** The home page's card in each language, with its tagline, and the names of its files. */
+const cards = [
+  { locale: "fr", title: "Bouge un peu, chaque jour.", address: "getfoulee.app", kit: { dark: "visuel-sombre", light: "visuel-clair" }, preview: "visuel" },
+  { locale: "en", title: "Move a little, every day.", address: "getfoulee.app/en", kit: { dark: "visual-dark", light: "visual-light" }, preview: "visual" },
+];
 
-// The press kit on /presse: the icon as Apple ships it (square, the store
-// rounds it) and rounded, and the card at twice the size in both themes.
+// The press kits on /presse and /en/press: the icon as Apple ships it (square,
+// the store rounds it) and rounded, and the card at twice the size in both themes.
 await mkdir(out("presse"), { recursive: true });
 await sharp(icon).resize(1024, 1024).png().toFile(out("presse/foulee-icone.png"));
 await sharp(await rounded(1024)).toFile(out("presse/foulee-icone-arrondie.png"));
-await writeFile(out("presse/foulee-visuel-sombre.png"), await card("dark", 2));
-await writeFile(out("presse/foulee-visuel-clair.png"), await card("light", 2));
-
-// Light previews for the page, kept out of presse/ so the kit stays the kit.
+// Light previews for the pages, kept out of presse/ so the kit stays the kit.
 await mkdir(out("apercus"), { recursive: true });
-for (const theme of ["dark", "light"]) {
-  await sharp(await card(theme, 1)).resize(800).webp().toFile(out(`apercus/visuel-${theme}.webp`));
+for (const { kit, preview, ...card } of cards) {
+  for (const theme of ["dark", "light"]) {
+    await writeFile(out(`presse/foulee-${kit[theme]}.png`), await shareCard({ ...card, theme, scale: 2 }));
+    await sharp(await shareCard({ ...card, theme })).resize(800).webp().toFile(out(`apercus/${preview}-${theme}.webp`));
+  }
 }
 await sharp(await rounded(320)).webp().toFile(out("apercus/icone.webp"));
 

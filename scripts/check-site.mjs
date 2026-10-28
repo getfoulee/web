@@ -23,6 +23,7 @@ const pages = [
   "en/support/garmin.html",
   "en/privacy.html",
   "en/legal-notice.html",
+  "en/press.html",
   "en/404.html",
 ];
 const failures = [];
@@ -197,16 +198,21 @@ function zipEntries(file) {
   return names;
 }
 
-// The press kit archive holds every visual /presse offers, and the texts.
-const press = readFileSync(join(dist, "presse.html"), "utf8");
-const kit = press.match(/href="\/presse\/([^"]+)\.zip"/)?.[1];
-if (!kit) {
-  failures.push("presse.html: no link to the press kit archive");
-} else if (existsSync(join(dist, "presse", `${kit}.zip`))) {
-  const entries = zipEntries(join(dist, "presse", `${kit}.zip`));
-  const expected = [...new Set([...press.matchAll(/href="\/presse\/([^"/]+\.png)"/g)].map(([, file]) => file)), "foulee-textes.md"];
-  for (const file of expected) {
-    if (!entries.includes(`${kit}/${file}`)) failures.push(`${kit}.zip: missing ${file}`);
+// Each press kit archive holds every visual its page offers, and the texts.
+for (const [page, textFile] of [
+  ["presse.html", "foulee-textes.md"],
+  ["en/press.html", "foulee-texts.md"],
+]) {
+  const press = readFileSync(join(dist, page), "utf8");
+  const kit = press.match(/href="\/presse\/([^"]+)\.zip"/)?.[1];
+  if (!kit) {
+    failures.push(`${page}: no link to the press kit archive`);
+  } else if (existsSync(join(dist, "presse", `${kit}.zip`))) {
+    const entries = zipEntries(join(dist, "presse", `${kit}.zip`));
+    const expected = [...new Set([...press.matchAll(/href="\/presse\/([^"/]+\.png)"/g)].map(([, file]) => file)), textFile];
+    for (const file of expected) {
+      if (!entries.includes(`${kit}/${file}`)) failures.push(`${kit}.zip: missing ${file}`);
+    }
   }
 }
 

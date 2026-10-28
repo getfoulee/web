@@ -1,0 +1,149 @@
+---
+import Prose from "../layouts/Prose.astro";
+import LinkCard from "./LinkCard.astro";
+import { press } from "../lib/press";
+import { site } from "../lib/site";
+import { locales, pageLocale } from "../lib/i18n";
+
+/* The press page in each language, served at /presse and /en/press. Its
+   texts, facts and files come from src/lib/press.ts, as the archive's do. */
+const locale = pageLocale(Astro.currentLocale);
+const { archive, facts, texts, visuals, contact, factsTitle } = press[locale];
+
+const copy = {
+  fr: {
+    title: "Presse",
+    description: "Le kit presse de Foulée : textes prêts à reprendre, faits clés, icône et visuels à télécharger, et le contact presse.",
+    lead: "Tu écris sur Foulée ? Tout ce qu'il te faut est ici : des textes à reprendre, l'icône, des visuels, et une adresse pour nous écrire.",
+    kit: ["Tout le kit", "ZIP : icônes, visuels et textes"],
+    store: ["Fiche App Store", "Description et captures de l'app"],
+    textsTitle: "Textes à reprendre",
+    textsNote: "Libres de reprise, tels quels ou raccourcis.",
+    visualsTitle: "Icône et visuels",
+    visualsNote: "Merci de ne pas modifier l'icône : ni recadrage, ni changement de couleur.",
+  },
+  en: {
+    title: "Press",
+    description: "Foulée's press kit: texts ready to use, key facts, the icon and visuals to download, and the press contact.",
+    lead: "Writing about Foulée? Everything you need is here: texts to reuse, the icon, visuals, and an address to write to us.",
+    kit: ["The whole kit", "ZIP: icons, visuals and texts"],
+    store: ["App Store page", "The app's description and screenshots"],
+    textsTitle: "Texts to reuse",
+    textsNote: "Free to reuse, as they are or shortened.",
+    visualsTitle: "Icon and visuals",
+    visualsNote: "Please don't change the icon: no cropping, no color changes.",
+  },
+}[locale];
+---
+
+<Prose title={copy.title} description={copy.description}>
+  <h1>{copy.title}</h1>
+  <p class="lead">{copy.lead}</p>
+
+  <div class="cards">
+    <LinkCard href={`/presse/${archive.name}.zip`} title={copy.kit[0]} detail={copy.kit[1]} download />
+    <LinkCard href={`mailto:${site.email}`} title={contact} detail={site.email} />
+    <LinkCard href={locales[locale].appStore} title={copy.store[0]} detail={copy.store[1]} external />
+  </div>
+
+  <h2>{factsTitle}</h2>
+  <dl class="facts">
+    {
+      facts.map((fact) => (
+        <div>
+          <dt>{fact.term}</dt>
+          <dd>{fact.detail}</dd>
+        </div>
+      ))
+    }
+  </dl>
+
+  <h2>{copy.textsTitle}</h2>
+  <p>{copy.textsNote}</p>
+  {
+    texts.map((text) => (
+      <section class="text">
+        <h3>{text.title}</h3>
+        {text.paragraphs.map((paragraph) => (
+          <p>{paragraph}</p>
+        ))}
+      </section>
+    ))
+  }
+
+  <h2>{copy.visualsTitle}</h2>
+  <p>{copy.visualsNote}</p>
+  <ul class="visuals">
+    {
+      visuals.map((visual) => (
+        <li>
+          <a class:list={["preview", { wide: visual.wide }]} href={`/presse/${visual.file}`} download tabindex="-1" aria-hidden="true">
+            <img src={visual.preview} width={visual.wide ? 800 : 320} height={visual.wide ? 420 : 320} alt="" loading="lazy" decoding="async" />
+          </a>
+          <LinkCard href={`/presse/${visual.file}`} title={visual.title} detail={visual.detail} download />
+        </li>
+      ))
+    }
+  </ul>
+</Prose>
+
+<style>
+  .text {
+    margin-top: 20px;
+    padding: 4px 24px 8px;
+    border-radius: 20px;
+    background: var(--surface);
+    border: 0.5px solid var(--hairline);
+  }
+
+  .text h3 {
+    margin-top: 20px;
+    font-size: 0.8rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-3);
+  }
+
+  .visuals {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    margin: 24px 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .visuals li {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin: 0;
+  }
+
+  .preview {
+    display: grid;
+    place-items: center;
+    aspect-ratio: 40 / 21;
+    border-radius: 20px;
+    background: var(--surface);
+    border: 0.5px solid var(--hairline);
+    overflow: hidden;
+  }
+
+  .preview img {
+    width: 40%;
+    height: auto;
+  }
+
+  .preview.wide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  @media (max-width: 640px) {
+    .visuals {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
