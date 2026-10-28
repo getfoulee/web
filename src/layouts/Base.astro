@@ -11,10 +11,12 @@ import { alternates, locales, pageLocale, servedPath } from "../lib/i18n";
 interface Props {
   title?: string;
   description?: string;
+  /** The Universal Link this page stands in for: the Smart App Banner's « Ouvrir » goes to the same screen. */
+  appArgument?: string;
 }
 
 const locale = pageLocale(Astro.currentLocale);
-const { title, description = locales[locale].description } = Astro.props;
+const { title, description = locales[locale].description, appArgument } = Astro.props;
 const fullTitle = title ? `${title} · ${site.name}` : `${site.name} · ${locales[locale].tagline}`;
 const path = servedPath(Astro.url.pathname);
 const canonical = new URL(path, site.url).href;
@@ -41,7 +43,7 @@ const ogImage = new URL(`/partage${path === "/" ? "/accueil" : path}.png`, site.
     <meta name="theme-color" content="#fbf7ff" media="(prefers-color-scheme: light)" data-scheme="light" />
     <meta name="theme-color" content="#07040e" media="(prefers-color-scheme: dark)" data-scheme="dark" />
 
-    <meta name="apple-itunes-app" content={`app-id=${site.appStoreId}`} />
+    <meta name="apple-itunes-app" content={`app-id=${site.appStoreId}${appArgument ? `, app-argument=${appArgument}` : ""}`} />
 
     <link rel="icon" href="/favicon.png" type="image/png" sizes="64x64" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />

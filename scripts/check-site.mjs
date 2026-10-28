@@ -17,6 +17,9 @@ const pages = [
   "apple-watch.html",
   "garmin.html",
   "nouveautes.html",
+  "ouvrir.html",
+  "bilan.html",
+  "hydratation.html",
   "404.html",
   "en.html",
   "en/support.html",
@@ -220,6 +223,12 @@ for (const [page, textFile] of [
       if (!entries.includes(`${kit}/${file}`)) failures.push(`${kit}.zip: missing ${file}`);
     }
   }
+}
+
+// A Universal Link's fallback page: its Smart App Banner opens the same screen.
+for (const path of ["ouvrir", "bilan", "hydratation"]) {
+  const banner = readFileSync(join(dist, `${path}.html`), "utf8").match(/<meta name="apple-itunes-app" content="([^"]*)">/)?.[1];
+  if (!banner?.endsWith(`app-argument=https://getfoulee.app/${path}`)) failures.push(`${path}.html: the Smart App Banner does not open /${path}`);
 }
 
 // Search engines index getfoulee.app only: the pages.dev hosts say noindex.

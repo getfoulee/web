@@ -1,0 +1,45 @@
+---
+import Notice from "./Notice.astro";
+import StoreButtons from "./StoreButtons.astro";
+import { site } from "../lib/site";
+import { servedPath } from "../lib/i18n";
+
+/* The page behind a Universal Link (public/.well-known/apple-app-site-association).
+   With Foulée installed, iOS opens the app and this page never shows. Without
+   it, the page says where the link leads and offers the App Store. A link on
+   the same domain does not open the app, so the Smart App Banner carries the
+   « Ouvrir » button, pointed at the same screen through app-argument. */
+interface Props {
+  screen: "ouvrir" | "bilan" | "hydratation";
+}
+
+const copy = {
+  ouvrir: {
+    title: "Ouvrir Foulée",
+    heading: "Ce lien s'ouvre dans Foulée.",
+    lead: "Avec Foulée sur ton iPhone, il t'emmène droit dans l'app.",
+  },
+  bilan: {
+    title: "Bilan de la semaine",
+    heading: "Ton bilan t'attend dans Foulée.",
+    lead: "Le bilan de la semaine et ses sorties s'ouvrent dans l'app, sur ton iPhone.",
+  },
+  hydratation: {
+    title: "Hydratation",
+    heading: "Ton hydratation se suit dans Foulée.",
+    lead: "Le suivi d'hydratation s'ouvre dans l'app, sur ton iPhone.",
+  },
+}[Astro.props.screen];
+---
+
+<Notice title={copy.title} heading={copy.heading} appArgument={new URL(servedPath(Astro.url.pathname), site.url).href}>
+  <p>{copy.lead}</p>
+  <p class="install">Pas encore installée ? Elle t'attend sur l'App Store.</p>
+  <StoreButtons align="center" campaign="link" />
+</Notice>
+
+<style>
+  .install {
+    margin-bottom: 24px;
+  }
+</style>
