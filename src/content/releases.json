@@ -1,5 +1,19 @@
 [
   {
+    "version": "1.56.0",
+    "date": "2026-10-27",
+    "highlights": [
+      {
+        "title": "Foulée parle anglais.",
+        "text": "Si ton iPhone est réglé en anglais, l'app, la montre, les widgets, l'activité en direct, les notifications et Siri le sont aussi."
+      },
+      {
+        "title": "Tes chiffres, à ta façon.",
+        "text": "Distances, durées, heures et dates suivent maintenant les réglages de ton appareil : séparateurs et format horaire."
+      }
+    ]
+  },
+  {
     "version": "1.55.0",
     "date": "2026-10-27",
     "highlights": [
