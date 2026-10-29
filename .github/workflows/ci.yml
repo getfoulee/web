@@ -1,10 +1,15 @@
 name: CI
 
-# Every push and pull request type-checks, builds and tests the site, audits
-# each page with Lighthouse, checks its accessibility and compares each page
-# with its reference screenshots. A push to main then
-# deploys it to Cloudflare Pages (getfoulee.app); a pull request gets its own
-# preview URL, posted in the run summary.
+# Every push and pull request type-checks, builds and tests the site. A pull
+# request, or a run started by hand, also audits each page with Lighthouse,
+# checks its accessibility and compares each page with its reference
+# screenshots; a push to main skips them, its pull request already ran them.
+# A push to main then deploys it to Cloudflare Pages (getfoulee.app); a pull
+# request gets its own preview URL, posted in the run summary.
+#
+# The repository is private: artifacts count against the organization's
+# 500 MB of storage, so they are kept a day, and the Lighthouse reports only
+# when an audit fails.
 on:
   push:
     branches: [main]
@@ -53,11 +58,12 @@ jobs:
         with:
           name: site
           path: dist/
-          retention-days: 7
+          retention-days: 1
 
   lighthouse:
     name: Lighthouse (${{ matrix.preset }})
     needs: build
+    if: github.event_name != 'push'
     runs-on: ubuntu-latest
     # Mobile and desktop run side by side; one failing does not cancel the other.
     strategy:
@@ -84,16 +90,17 @@ jobs:
         run: npm run lighthouse:${{ matrix.preset }}
 
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
-        if: ${{ !cancelled() }}
+        if: failure()
         with:
           name: lighthouse-${{ matrix.preset }}
           path: .lighthouseci/
           include-hidden-files: true
-          retention-days: 7
+          retention-days: 1
 
   browser:
     name: ${{ matrix.suite == 'a11y' && 'Accessibility' || 'Screenshots' }}
     needs: build
+    if: github.event_name != 'push'
     # A fixed image: the reference screenshots are its rendering, and a new
     # Ubuntu would change the fonts under them. Moving it means new references.
     runs-on: ubuntu-24.04
@@ -133,7 +140,7 @@ jobs:
         with:
           name: screenshots
           path: tests/__screenshots__/
-          retention-days: 7
+          retention-days: 1
 
       # The actual capture and its difference with the reference, for each failure.
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
@@ -141,7 +148,7 @@ jobs:
         with:
           name: screenshot-diffs
           path: test-results/
-          retention-days: 7
+          retention-days: 1
 
   deploy:
     name: Deploy to Cloudflare
