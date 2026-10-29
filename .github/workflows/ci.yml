@@ -59,6 +59,9 @@ jobs:
           name: site
           path: dist/
           retention-days: 1
+          # dist/.well-known holds apple-app-site-association: without this,
+          # the artifact drops every dot folder and Universal Links go dark.
+          include-hidden-files: true
 
   lighthouse:
     name: Lighthouse (${{ matrix.preset }})
@@ -174,6 +177,10 @@ jobs:
         with:
           name: site
           path: dist/
+
+      # The site check ran on the build's dist/, not on what reached this job.
+      - name: Check Universal Links survived the artifact
+        run: test -s dist/.well-known/apple-app-site-association
 
       - name: Create the Pages project on the first run
         env:
