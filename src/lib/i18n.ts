@@ -45,6 +45,7 @@ export const translations: Record<string, string> = {
   "/confidentialite": "/en/privacy",
   "/garmin": "/en/garmin",
   "/mentions-legales": "/en/legal-notice",
+  "/nouveautes": "/en/whats-new",
   "/presse": "/en/press",
 };
 
