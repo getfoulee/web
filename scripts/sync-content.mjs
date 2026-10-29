@@ -3,8 +3,9 @@
 // (`../foulee` by default, or the path given as the first argument). Links
 // between the app's documents become the site's addresses. Also writes the
 // app's GitHub releases to src/content/releases.json, for the « Nouveautés »
-// page (GH_TOKEN, when set, lifts the API's rate limit). Prints each file
-// that changed; the sync workflow turns a change into a pull request.
+// and « What's new » pages (GH_TOKEN, when set, lifts the API's rate limit).
+// Prints each file that changed; the sync workflow turns a change into a pull
+// request.
 import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 
@@ -72,12 +73,17 @@ if (!response.ok) throw new Error(`GitHub releases: ${response.status} ${respons
 // `garmin-v…` releases, with notes for the store, not for people.
 const releases = (await response.json())
   .filter((release) => /^v\d+\.\d+\.\d+$/.test(release.tag_name) && !release.draft && !release.prerelease)
-  .map((release) => ({
-    version: release.tag_name.slice(1),
-    date: release.published_at.slice(0, 10),
-    highlights: highlights(release.tag_name, release.body ?? ""),
-  }))
-  .filter((release) => release.highlights.length > 0)
+  .map((release) => {
+    // The French notes, then the English ones under « ## English »: an older
+    // release has the French only.
+    const [fr, en = ""] = (release.body ?? "").split(/^## English[ \t]*\r?$/m);
+    return {
+      version: release.tag_name.slice(1),
+      date: release.published_at.slice(0, 10),
+      highlights: { fr: highlights(release.tag_name, fr), en: highlights(release.tag_name, en) },
+    };
+  })
+  .filter((release) => release.highlights.fr.length > 0)
   .sort((a, b) => b.date.localeCompare(a.date));
 
 update("src/content/releases.json", `${JSON.stringify(releases, null, 2)}\n`, "getfoulee/foulee releases");

@@ -1,64 +1,170 @@
 [
   {
+    "version": "1.58.0",
+    "date": "2026-10-29",
+    "highlights": {
+      "fr": [
+        {
+          "title": "Foulée répond à Siri.",
+          "text": "« Commence une sortie avec Foulée » lance ta marche ou ta course, sur l'iPhone comme sur la montre. « Où j'en suis dans Foulée » te donne ta série, tes pas et tes minutes sans ouvrir l'app."
+        },
+        {
+          "title": "Dans le Centre de contrôle et sur le bouton Action.",
+          "text": "« Commencer une sortie » et « J'ai bu un verre » se lancent d'un geste, depuis l'iPhone ou l'Apple Watch Ultra."
+        },
+        {
+          "title": "Ta sortie à l'abri d'une batterie vide.",
+          "text": "Si ta montre passe sous 5 %, Foulée arrête la sortie et l'enregistre dans Santé avant qu'elle s'éteigne."
+        },
+        {
+          "title": "Quand quelque chose manque, Foulée te le dit.",
+          "text": "Santé, localisation ou mouvements refusés, météo muette : un message clair et le bouton pour régler ça."
+        },
+        {
+          "title": "Signaler un problème, sans rien envoyer en douce.",
+          "text": "Dans Réglages › À propos, joins un résumé de l'app et des derniers incidents à ton signalement. Rien ne part sans toi."
+        }
+      ],
+      "en": [
+        {
+          "title": "Foulée answers Siri.",
+          "text": "“Start an outing with Foulée” starts your walk or run, on your iPhone or your watch. “Where am I at in Foulée” gives you your streak, your steps and your minutes without opening the app."
+        },
+        {
+          "title": "In Control Center and on the Action button.",
+          "text": "“Start an outing” and “I had a glass” start with a single gesture, from the iPhone or the Apple Watch Ultra."
+        },
+        {
+          "title": "Your outing safe from a flat battery.",
+          "text": "If your watch drops below 5%, Foulée ends the outing and saves it to Health before it shuts down."
+        },
+        {
+          "title": "When something is missing, Foulée tells you.",
+          "text": "Health, location or motion denied, weather gone quiet: a clear message and the button to fix it."
+        },
+        {
+          "title": "Report a problem, without sending anything behind your back.",
+          "text": "In Settings › About, attach a summary of the app and its latest incidents to your report. Nothing leaves without you."
+        }
+      ]
+    }
+  },
+  {
     "version": "1.57.0",
     "date": "2026-10-28",
-    "highlights": [
-      {
-        "title": "Foulée se lit avec VoiceOver.",
-        "text": "Chaque écran se lit dans l'ordre, et chaque chiffre dit ce qu'il mesure, sur l'iPhone, la montre, les widgets et l'activité en direct."
-      },
-      {
-        "title": "Du texte en grand, sans rien de coupé.",
-        "text": "Jusqu'aux plus grandes tailles de texte, les écrans s'adaptent et tout reste lisible."
-      },
-      {
-        "title": "Plus lisible en mode clair.",
-        "text": "Les verts, les orange, les libellés colorés et les boutons gagnent en contraste, encore plus avec « Augmenter le contraste »."
-      },
-      {
-        "title": "Moins d'animations si tu préfères.",
-        "text": "Avec « Réduire les animations », les anneaux et les célébrations restent calmes."
-      },
-      {
-        "title": "Toute l'app en anglais.",
-        "text": "Les derniers mots restés en français dans l'app anglaise sont traduits."
-      }
-    ]
+    "highlights": {
+      "fr": [
+        {
+          "title": "Foulée se lit avec VoiceOver.",
+          "text": "Chaque écran se lit dans l'ordre, et chaque chiffre dit ce qu'il mesure, sur l'iPhone, la montre, les widgets et l'activité en direct."
+        },
+        {
+          "title": "Du texte en grand, sans rien de coupé.",
+          "text": "Jusqu'aux plus grandes tailles de texte, les écrans s'adaptent et tout reste lisible."
+        },
+        {
+          "title": "Plus lisible en mode clair.",
+          "text": "Les verts, les orange, les libellés colorés et les boutons gagnent en contraste, encore plus avec « Augmenter le contraste »."
+        },
+        {
+          "title": "Moins d'animations si tu préfères.",
+          "text": "Avec « Réduire les animations », les anneaux et les célébrations restent calmes."
+        },
+        {
+          "title": "Toute l'app en anglais.",
+          "text": "Les derniers mots restés en français dans l'app anglaise sont traduits."
+        }
+      ],
+      "en": [
+        {
+          "title": "Foulée works with VoiceOver.",
+          "text": "Every screen reads in order, and every number says what it measures, on the iPhone, the watch, the widgets and the Live Activity."
+        },
+        {
+          "title": "Large text, nothing cut off.",
+          "text": "Up to the largest text sizes, the screens adapt and everything stays readable."
+        },
+        {
+          "title": "Easier to read in light mode.",
+          "text": "The greens, the oranges, the colored labels and the buttons get more contrast, even more with Increase Contrast."
+        },
+        {
+          "title": "Fewer animations if you prefer.",
+          "text": "With Reduce Motion, the rings and the celebrations stay calm."
+        },
+        {
+          "title": "The whole app in English.",
+          "text": "The last few words still in French in the English app are translated."
+        }
+      ]
+    }
   },
   {
     "version": "1.56.0",
     "date": "2026-10-27",
-    "highlights": [
-      {
-        "title": "Foulée parle anglais.",
-        "text": "Si ton iPhone est réglé en anglais, l'app, la montre, les widgets, l'activité en direct, les notifications et Siri le sont aussi."
-      },
-      {
-        "title": "Tes chiffres, à ta façon.",
-        "text": "Distances, durées, heures et dates suivent maintenant les réglages de ton appareil : séparateurs et format horaire."
-      }
-    ]
+    "highlights": {
+      "fr": [
+        {
+          "title": "Foulée parle anglais.",
+          "text": "Si ton iPhone est réglé en anglais, l'app, la montre, les widgets, l'activité en direct, les notifications et Siri le sont aussi."
+        },
+        {
+          "title": "Tes chiffres, à ta façon.",
+          "text": "Distances, durées, heures et dates suivent maintenant les réglages de ton appareil : séparateurs et format horaire."
+        }
+      ],
+      "en": [
+        {
+          "title": "Foulée speaks English.",
+          "text": "If your iPhone is set to English, so are the app, the watch, the widgets, the Live Activity, the notifications and Siri."
+        },
+        {
+          "title": "Your numbers, your way.",
+          "text": "Distances, durations, times and dates now follow your device's settings: separators and 12- or 24-hour clock."
+        }
+      ]
+    }
   },
   {
     "version": "1.55.0",
     "date": "2026-10-27",
-    "highlights": [
-      {
-        "title": "Le dénivelé, montée et descente.",
-        "text": "Ta sortie affiche maintenant la descente à côté de la montée, et les deux sont enregistrées dans Santé."
-      },
-      {
-        "title": "En direct partout.",
-        "text": "Pendant une séance, tu suis ta montée et ta descente sur la montre, sur l'iPhone et dans l'activité en direct de l'écran verrouillé."
-      },
-      {
-        "title": "Deux sorties qui n'en faisaient qu'une.",
-        "text": "Depuis le détail d'une sortie, fusionne-la avec celle d'avant ou d'après, et sépare-les si tu changes d'avis. Santé n'est pas modifié."
-      },
-      {
-        "title": "Une séance qui survit à l'app.",
-        "text": "Si l'app de la montre redémarre en pleine séance, elle reprend la même sortie au lieu d'en commencer une deuxième."
-      }
-    ]
+    "highlights": {
+      "fr": [
+        {
+          "title": "Le dénivelé, montée et descente.",
+          "text": "Ta sortie affiche maintenant la descente à côté de la montée, et les deux sont enregistrées dans Santé."
+        },
+        {
+          "title": "En direct partout.",
+          "text": "Pendant une séance, tu suis ta montée et ta descente sur la montre, sur l'iPhone et dans l'activité en direct de l'écran verrouillé."
+        },
+        {
+          "title": "Deux sorties qui n'en faisaient qu'une.",
+          "text": "Depuis le détail d'une sortie, fusionne-la avec celle d'avant ou d'après, et sépare-les si tu changes d'avis. Santé n'est pas modifié."
+        },
+        {
+          "title": "Une séance qui survit à l'app.",
+          "text": "Si l'app de la montre redémarre en pleine séance, elle reprend la même sortie au lieu d'en commencer une deuxième."
+        }
+      ],
+      "en": [
+        {
+          "title": "Elevation, up and down.",
+          "text": "Your outing now shows the descent next to the climb, and both are saved to Health."
+        },
+        {
+          "title": "Live everywhere.",
+          "text": "During a workout, follow your climb and descent on the watch, on the iPhone and in the Live Activity on the Lock Screen."
+        },
+        {
+          "title": "Two outings that were really one.",
+          "text": "From an outing's details, merge it with the one before or after, and split them again if you change your mind. Health is left untouched."
+        },
+        {
+          "title": "A workout that outlives the app.",
+          "text": "If the watch app restarts in the middle of a workout, it picks up the same outing instead of starting a second one."
+        }
+      ]
+    }
   }
 ]

@@ -16,9 +16,11 @@ import { localePath, locales, pageLocale } from "../lib/i18n";
 /* The home page in each language, served at / and /en. Headings keep their
    line breaks and highlights as HTML. The English page links to the French
    pages that are not translated yet, and leaves out what only exists in
-   French: the release notes and the App Store screenshots. */
+   French: the App Store screenshots. The « New » banner shows the newest
+   version with notes in the page's language. */
 const locale = pageLocale(Astro.currentLocale);
 const { anchors, description, appStore } = locales[locale];
+const news = latest(locale);
 
 const copy = {
   fr: {
@@ -117,7 +119,7 @@ const copy = {
     title: ["Move a little,", "every day."],
     sub: "Foulée turns today's walk or run into a streak you won't want to break. A reminder before your time slot, a workout tracked right to your wrist, and the day is done.",
     note: `Free · iOS ${site.minimumOS} and watchOS ${site.minimumOS} or later · No account`,
-    news: undefined,
+    news: "New",
     live: "Walk · 1.6 km",
     record: ["New record", "42 days in a row"],
     marquee: ["Streak", "Walk", "Run", "Apple Watch", "Garmin", "Route", "Recap", "Hydration", "Health"],
@@ -222,11 +224,11 @@ const privacyIcons = ["check", "server", "health"] as const;
         <div data-reveal="load" style="--delay:0.24s"><StoreButtons campaign="hero" /></div>
         <p class="hero-note" data-reveal="load" style="--delay:0.3s">{copy.note}</p>
         {
-          latest && copy.news && (
-            <a class="eyebrow news" href="/nouveautes" data-reveal="load" style="--delay:0.36s">
+          news && (
+            <a class="eyebrow news" href={localePath("/nouveautes", locale)} data-reveal="load" style="--delay:0.36s">
               <span class="news-tag">{copy.news}</span>
               <span>
-                Foulée {latest.version} · {latest.highlights[0].title.replace(/\.$/, "")}
+                Foulée {news.version} · {news.highlights[0].title.replace(/\.$/, "")}
               </span>
             </a>
           )

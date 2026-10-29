@@ -1,0 +1,60 @@
+---
+import Prose from "../layouts/Prose.astro";
+import { site } from "../lib/site";
+import { pageLocale } from "../lib/i18n";
+import { releases } from "../lib/releases";
+
+const locale = pageLocale(Astro.currentLocale);
+
+const copy = {
+  fr: {
+    title: "Nouveautés",
+    description: "Ce qui change dans Foulée à chaque version de l'app, de la plus récente à la plus ancienne.",
+    lead: "Ce qui change dans Foulée, version après version. Mets l'app à jour depuis l'App Store pour en profiter.",
+    source: "Chaque version et son code source sont aussi sur",
+  },
+  en: {
+    title: "What's new",
+    description: "What changes in Foulée with each version of the app, from the newest to the oldest.",
+    lead: "What changes in Foulée, version after version. Update the app from the App Store to get it.",
+    source: "Every version and its source code are also on",
+  },
+}[locale];
+---
+
+<Prose title={copy.title} description={copy.description}>
+  <h1>{copy.title}</h1>
+  <p class="lead">{copy.lead}</p>
+
+  {
+    releases(locale).map((release) => (
+      <section aria-labelledby={`v${release.version}`}>
+        <h2 id={`v${release.version}`}>Foulée {release.version}</h2>
+        <p class="day">
+          <time datetime={release.date}>{release.day}</time>
+        </p>
+        <ul>
+          {release.highlights.map((highlight) => (
+            <li>
+              <strong>{highlight.title}</strong> {highlight.text}
+            </li>
+          ))}
+        </ul>
+      </section>
+    ))
+  }
+
+  <hr />
+
+  <p>
+    {copy.source} <a href={site.releases} rel="noopener">GitHub</a>.
+  </p>
+</Prose>
+
+<style>
+  .day {
+    margin: -8px 0 0;
+    color: var(--text-3);
+    font-size: 0.95rem;
+  }
+</style>

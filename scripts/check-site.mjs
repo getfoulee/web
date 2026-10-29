@@ -29,6 +29,7 @@ const pages = [
   "en/press.html",
   "en/apple-watch.html",
   "en/garmin.html",
+  "en/whats-new.html",
   "en/404.html",
 ];
 const failures = [];
@@ -158,9 +159,9 @@ for (const [image, sharing] of shareImages) {
 }
 
 // The home page in each language, with Apple's badge in that language.
-for (const [page, appStoreBadge, prefix] of [
-  ["index.html", "/badges/app-store.svg", ""],
-  ["en.html", "/badges/app-store-en.svg", "/en"],
+for (const [page, appStoreBadge, prefix, news] of [
+  ["index.html", "/badges/app-store.svg", "", "/nouveautes"],
+  ["en.html", "/badges/app-store-en.svg", "/en", "/en/whats-new"],
 ]) {
   const home = readFileSync(join(dist, page), "utf8");
   for (const store of ["apps.apple.com", "apps.garmin.com"]) {
@@ -177,6 +178,9 @@ for (const [page, appStoreBadge, prefix] of [
   for (const watch of ["/apple-watch", "/garmin"].map((path) => prefix + path)) {
     if (!home.includes(`class="read-more" href="${watch}"`)) failures.push(`${page}: no link to ${watch} in the watches section`);
   }
+
+  // The « New » banner leads to the release notes in the page's language.
+  if (!home.includes(`class="eyebrow news" href="${news}"`)) failures.push(`${page}: no « New » banner linking to ${news}`);
 
   // The official store badges, App Store first as Apple asks.
   const badges = [appStoreBadge, "/badges/connect-iq.svg"].map((badge) => home.indexOf(`src="${badge}"`));
