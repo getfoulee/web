@@ -5,7 +5,10 @@ name: Sync
 # difference opens a pull request (or updates the one already open) and
 # starts CI on it, whose build fails if a new watch fits in none of the
 # ranges /garmin shows (src/lib/garmin.ts); once the copies match again, the
-# pull request is closed.
+# pull request is closed. A difference also changes what pages show (a new
+# release reaches /, /en and both release-note pages), so the job captures new
+# reference screenshots and commits them with the copies: the pull request
+# arrives green, and its image diff is part of the review.
 on:
   schedule:
     - cron: "0 4 * * *"
@@ -21,7 +24,8 @@ permissions:
 jobs:
   sync:
     name: Copy the app's documents
-    runs-on: ubuntu-latest
+    # The image CI's Screenshots job runs on: its references are this rendering.
+    runs-on: ubuntu-24.04
     permissions:
       # Push the branch, open or close its pull request, and start CI on it:
       # a pull request opened with this token does not start workflows itself.
@@ -29,10 +33,13 @@ jobs:
       pull-requests: write
       actions: write
     env:
-      GH_TOKEN: ${{ github.token }}
       BRANCH: sync-app-docs
     steps:
+      # The token stays out of .git/config and reaches only the steps that need
+      # it: the capture runs npm packages, which must not be able to push.
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -48,14 +55,35 @@ jobs:
       - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version-file: .node-version
+          cache: npm
 
       - name: Copy the documents
-        run: node scripts/sync-content.mjs .foulee
+        id: copy
+        env:
+          # Lifts the releases API's rate limit; no npm package runs here.
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          node scripts/sync-content.mjs .foulee
+          if [ -n "$(git status --porcelain -- src/content)" ]; then
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      # The same capture as CI's Screenshots job, rewriting only the references
+      # that no longer match.
+      - name: Capture new reference screenshots
+        if: steps.copy.outputs.changed
+        run: |
+          npm ci
+          npm run build
+          npx playwright install --with-deps --only-shell chromium
+          npm run test:visual -- --update-snapshots
 
       - name: Open or update the pull request
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           pr=$(gh pr list --state open --head "$BRANCH" --json number --jq '.[0].number')
-          if git diff --quiet; then
+          if [ -z "${{ steps.copy.outputs.changed }}" ]; then
             if [ -n "$pr" ]; then
               gh pr close "$pr" --delete-branch --comment "The copies match the app's documents again."
             fi
@@ -65,17 +93,21 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git switch -C "$BRANCH"
-          git commit --all --quiet --file - <<EOF
+          # Not --all: .foulee/ is the app's checkout, not part of the site.
+          git add src/content tests/__screenshots__
+          git commit --quiet --file - <<EOF
           Copy the app's documents again
 
           The privacy policy, the Garmin FAQ, the Garmin watch list or the
           release notes changed in getfoulee/foulee (getfoulee/foulee@$app);
-          the site shows its own copy of each.
+          the site shows its own copy of each, and the reference screenshots
+          of the pages that show them follow.
           EOF
+          gh auth setup-git
           git push --force origin "$BRANCH"
           if [ -z "$pr" ]; then
             gh pr create --base main --head "$BRANCH" \
               --title "Copy the app's documents again" \
-              --body "Copies \`docs/\`, \`FouleeConnectIQ/devices.json\` and the releases from getfoulee/foulee@$app. Opened by the Sync workflow: read the diff before merging."
+              --body "Copies \`docs/\`, \`FouleeConnectIQ/devices.json\` and the releases from getfoulee/foulee@$app, with the reference screenshots they change. Opened by the Sync workflow: read the diff, images included, before merging."
           fi
           gh workflow run ci.yml --ref "$BRANCH"

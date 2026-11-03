@@ -17,7 +17,7 @@ on:
   workflow_dispatch:
     inputs:
       update-screenshots:
-        description: Capture new reference screenshots (artifact `screenshots`) instead of comparing
+        description: Capture new reference screenshots and commit them to the branch instead of comparing
         type: boolean
         default: false
 
@@ -137,7 +137,7 @@ jobs:
       - name: Run the ${{ matrix.suite }} tests
         run: npm run test:${{ matrix.suite }} -- ${{ matrix.suite == 'visual' && inputs.update-screenshots && '--update-snapshots' || '' }}
 
-      # The new references, to download and commit.
+      # The new references, for the screenshots job to commit.
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         if: ${{ matrix.suite == 'visual' && inputs.update-screenshots }}
         with:
@@ -152,6 +152,42 @@ jobs:
           name: screenshot-diffs
           path: test-results/
           retention-days: 1
+
+  screenshots:
+    name: Commit the new screenshots
+    needs: browser
+    # The visual suite may pass while the a11y one fails: commit its references anyway.
+    # Never on main, which only changes through pull requests.
+    if: ${{ !cancelled() && inputs.update-screenshots && github.ref != 'refs/heads/main' }}
+    runs-on: ubuntu-latest
+    permissions:
+      # Push the references, then start CI on them: a push with this token
+      # does not start workflows itself.
+      contents: write
+      actions: write
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: screenshots
+          path: tests/__screenshots__/
+
+      - name: Commit and check them
+        run: |
+          if [ -z "$(git status --porcelain -- tests/__screenshots__)" ]; then
+            echo "The references already match." >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add tests/__screenshots__
+          git commit --quiet -m "Update the reference screenshots"             -m "Captured by CI run $GITHUB_RUN_ID, started by hand with update-screenshots."
+          git push origin "HEAD:$GITHUB_REF_NAME"
+          # The last step: the new run, in the same concurrency group, cancels this one.
+          gh workflow run ci.yml --ref "$GITHUB_REF_NAME"
 
   deploy:
     name: Deploy to Cloudflare

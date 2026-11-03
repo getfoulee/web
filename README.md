@@ -61,7 +61,7 @@ npm run test:visual # every page at 375 px and 1440 px, light and dark, against 
 
 `npm run test:a11y` and `npm run test:visual` serve `dist/` with `astro preview` on port 4322. The first time, download their browser with `npx playwright install chromium`.
 
-The reference screenshots in `tests/__screenshots__/` are CI's Linux rendering: fonts differ on macOS and Windows, so compare there only inside Linux. When a pull request fails the comparison, its `screenshot-diffs` artifact holds the capture, the reference and their difference for each page. To accept a change on purpose, run the CI workflow by hand on the branch with « update-screenshots » ticked (`gh workflow run ci.yml --ref <branch> -f update-screenshots=true`), then commit the `screenshots` artifact into `tests/__screenshots__/`.
+The reference screenshots in `tests/__screenshots__/` are CI's Linux rendering: fonts differ on macOS and Windows, so compare there only inside Linux. When a pull request fails the comparison, its `screenshot-diffs` artifact holds the capture, the reference and their difference for each page. To accept a change on purpose, run the CI workflow by hand on the branch with « update-screenshots » ticked (`gh workflow run ci.yml --ref <branch> -f update-screenshots=true`): it commits the new references to the branch and runs CI again on them. The Sync workflow does this by itself: its pull request already holds the references its copies change.
 
 ## Deploy
 
