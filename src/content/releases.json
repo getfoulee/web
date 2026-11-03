@@ -1,5 +1,55 @@
 [
   {
+    "version": "1.59.0",
+    "date": "2026-11-02",
+    "highlights": {
+      "fr": [
+        {
+          "title": "Tes réglages te suivent.",
+          "text": "Objectifs, jours actifs, horaires, thème et rappels sont les mêmes sur chacun de tes iPhone, via iCloud. Un nouvel iPhone ou une réinstallation les retrouve."
+        },
+        {
+          "title": "Tes sorties fusionnées le restent.",
+          "text": "Sur un nouvel iPhone ou après une réinstallation, plus de sortie coupée en deux."
+        },
+        {
+          "title": "Repartir de zéro.",
+          "text": "Réglages › Réinitialiser Foulée remet tout comme au premier jour, ici et sur tes autres iPhone, sans toucher à Santé."
+        },
+        {
+          "title": "Ton bilan, à un lien près.",
+          "text": "Le bilan que tu partages se termine par un lien getfoulee.app : avec Foulée, il ouvre ton bilan ; sans, il mène à l'App Store."
+        },
+        {
+          "title": "Prête pour l'iPhone Duo.",
+          "text": "Écran intérieur ouvert, chaque page se lit en colonne et ta sortie en cours affiche le parcours à côté des chiffres."
+        }
+      ],
+      "en": [
+        {
+          "title": "Your settings follow you.",
+          "text": "Goals, active days, times, theme and reminders are the same on each of your iPhones, through iCloud. A new iPhone or a reinstall gets them back."
+        },
+        {
+          "title": "Merged outings stay merged.",
+          "text": "On a new iPhone or after a reinstall, no outing comes back in two halves."
+        },
+        {
+          "title": "Start afresh.",
+          "text": "Settings › Reset Foulée puts everything back as on day one, here and on your other iPhones, without touching Health."
+        },
+        {
+          "title": "Your recap, one link away.",
+          "text": "The recap you share ends with a getfoulee.app link: with Foulée, it opens your recap; without it, it leads to the App Store."
+        },
+        {
+          "title": "Ready for the iPhone Duo.",
+          "text": "With the inner screen open, every page reads in a column and your outing in progress shows the route beside the figures."
+        }
+      ]
+    }
+  },
+  {
     "version": "1.58.0",
     "date": "2026-10-29",
     "highlights": {
