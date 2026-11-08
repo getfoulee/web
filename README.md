@@ -6,7 +6,7 @@ Static [Astro](https://astro.build) site, French only like the app, hosted on Cl
 
 ## Run locally
 
-Node 22.12 or later.
+Node 22.23.4 or later (CI runs the version in `.node-version`).
 
 ```sh
 npm install

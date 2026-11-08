@@ -25,7 +25,9 @@ export default defineConfig({
     { name: "sombre", use: { colorScheme: "dark" } },
   ],
   webServer: {
-    command: `npm run preview -- --port ${port}`,
+    // --ignore-lock: a one-off server Playwright owns, in the foreground even when
+    // Astro detects an agent, which would otherwise start it in the background.
+    command: `npm run preview -- --port ${port} --ignore-lock`,
     url: baseURL,
     reuseExistingServer: !process.env.CI,
   },
